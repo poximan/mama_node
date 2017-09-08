@@ -85,6 +85,5 @@ bus.on("sincro_inf_pub3", function (evento) {
   evento.data.publicacion.infracciones.estado = estado_inf;
   estado_inf = null;
 
-  console.log("punto de sincronizacion alcanzado");
-  console.log(evento.data.publicacion.infracciones.estado);
+  console.log("punto de sincronizacion alcanzado\n");  
 });

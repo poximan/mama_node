@@ -31,7 +31,7 @@ bus.on("resultadoEnvio", function (evento) {
 })
 
 bus.on("resultadoMedioPago", function (evento) {
-  console.log("medio de pago de la compra " + evento.id + " --> " + evento.data.compra.pago.medio);
+  console.log("resultado medio de pago de la compra " + evento.id + " --> " + evento.data.compra.pago.medio);
 })
 
 bus.on("calcularCosto", function (evento) {
@@ -43,5 +43,9 @@ bus.on("seleccionarMedioPago", function (evento) {
 })
 
 bus.on("resultadoCosto", function (evento) {
+
   console.log("resultado costo adicional por envio de compra " + evento.id + " --> " + evento.data.compra.adic_envio.valor);
+
+  evento.tarea = "seleccionarMedioPago";
+  bus.emit(evento.tarea, evento);
 });
