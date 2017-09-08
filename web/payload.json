@@ -1,0 +1,74 @@
+{
+  "tarea":"nuevaCompra",
+  "id":"",
+  "data" : {
+    "compra" : {
+      "estado" : "",
+      "estados": [
+        "generada",
+        "confirmada",
+        "cancelada",
+        "aceptada"
+      ],
+      "entrega" : {
+        "estado" : "",
+        "estados": [
+          "procesando",
+          "retira",
+          "correo"
+        ]
+      },
+      "adic_envio" : {
+        "valor" : "",
+        "_coment" : "valor >= 0"
+      },
+      "destino" : {
+        "valor" : "",
+        "_coment" : "ciudad destino"
+      },
+      "reserva" : {
+        "estado" : "",
+        "estados": [
+          "procesando",
+          "reservado",
+          "liberado"
+        ]
+      },
+      "cantidad" : {
+        "valor" : "",
+        "_coment" : "valor >= 0 ^ <= cantidad publicada"
+      },
+      "pago" : {
+        "estado" : "",
+        "estados": [
+          "procesando",
+          "autorizado",
+          "rechazado"
+        ]
+      }
+    },
+    "comprador" : {
+      "valor" : "",
+      "_coment" : "nombre"
+    },
+    "publicacion" : {
+      "descripcion" : {
+        "valor" : "",
+        "_coment" : "detalle del producto"
+      },
+      "precio" : "",
+      "cantidad" : "",
+      "vendedor" : {
+        "nombre" : ""
+      },
+      "infracciones" : {
+        "estado" : "",
+        "estados": [
+          "procesando",
+          "con_infr",
+          "sin_infr"
+        ]
+      }
+    }
+  }
+}
