@@ -30,3 +30,13 @@ bus.on("resultadoPublicaciones", function (evento) {
   evento.tarea = "cargarPublicaciones";
   bus.emit(evento.tarea, evento);
 });
+
+bus.on("seleccionarMedioPago", function (evento) {
+
+  evento.tarea = "resultadoMedioPago";
+  bus.emit(evento.tarea, evento);
+
+  console.log("enviando resultado forma de pago compra " + evento.id + " --> " + evento.data.compra.pago.medio);
+
+  publicador("compras", evento);
+});

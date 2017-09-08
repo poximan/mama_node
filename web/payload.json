@@ -44,6 +44,11 @@
           "procesando",
           "autorizado",
           "rechazado"
+        ],
+        "medio" : "",
+        "medios": [
+          "debito",
+          "credito"
         ]
       }
     },

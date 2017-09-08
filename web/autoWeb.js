@@ -87,6 +87,10 @@ bus.on("resultadoEnvio", function (evento) {
   metodoEnvio(evento);
 });
 
+bus.on("resultadoMedioPago", function (evento) {
+  metodoPago(evento);
+});
+
 function confirmaCompra(evento) {
   if(probabilidad() > 30)
     evento.data.compra.estado = evento.data.compra.estados[1];  // confirma
@@ -99,6 +103,13 @@ function metodoEnvio(evento) {
     evento.data.compra.entrega.estado = evento.data.compra.entrega.estados[2];  // correo
   else
     evento.data.compra.entrega.estado = evento.data.compra.entrega.estados[1];  // retira
+}
+
+function metodoPago(evento) {
+  if(probabilidad() > 50)
+    evento.data.compra.pago.medio = evento.data.compra.pago.medios[0];  // debito
+  else
+    evento.data.compra.pago.medio = evento.data.compra.pago.medios[1];  // credito
 }
 
 function probabilidad() {

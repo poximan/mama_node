@@ -23,11 +23,23 @@ bus.on("resultadoEnvio", function (evento) {
 
     evento.tarea = "calcularCosto";
     bus.emit(evento.tarea, evento);
+  } else {
+
+    evento.tarea = "seleccionarMedioPago";
+    bus.emit(evento.tarea, evento);
   }
+})
+
+bus.on("resultadoMedioPago", function (evento) {
+  console.log("medio de pago de la compra " + evento.id + " --> " + evento.data.compra.pago.medio);
 })
 
 bus.on("calcularCosto", function (evento) {
   publicador("envios", evento)
+})
+
+bus.on("seleccionarMedioPago", function (evento) {
+  publicador("web", evento)
 })
 
 bus.on("resultadoCosto", function (evento) {
