@@ -4,6 +4,11 @@ var bus = require('../eventBus');
 var fs = require('fs');
 var async = require('async');
 
+var reservas = [];
+var value = 0, // can be replaced by a fixed value
+    size  = 1000, // can be replaced by a fixed value
+    estado_sincro_inf_pub = Array.apply(null,{length: size}).map(function() { return value; });
+
 bus.on("getPublicaciones", function (evento) {
 
   var msg = []
@@ -37,4 +42,33 @@ bus.on("getPublicaciones", function (evento) {
   async.waterfall(operaciones, function (err, evento) {
     console.log("enviando publicaciones conocidas");
   });
+});
+
+bus.on("publicacionSeleccionada", function (evento) {
+
+  evento.tarea = "resultadoReserva";
+  console.log("producto " + evento.id + " reservado");
+  reservas.push(evento);
+
+  estado_sincro_inf_pub[evento.id] += 1;
+  console.log("sincro_inf_pub"+estado_sincro_inf_pub[evento.id]);
+  bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
+});
+
+bus.on("resultadoInfraccion", function (evento) {
+  estado_sincro_inf_pub[evento.id] += 2;
+  bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
+})
+
+bus.on("sincro_inf_pub1", function (evento) {
+  console.log("esperando resultado infraccion");
+});
+
+bus.on("sincro_inf_pub2", function (evento) {
+  console.log("se obtuvo resultado infraccion");
+  console.log("esperando reserva del producto");
+});
+
+bus.on("sincro_inf_pub3", function (evento) {
+  console.log("punto de sincronizacion alcanzado");
 });

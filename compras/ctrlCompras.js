@@ -8,7 +8,7 @@ bus.on("nuevaCompra", function (evento) {
 
   console.log("\ndelegando calculos de compra " + evento.id + " ");
   evento.tarea = "publicacionSeleccionada";
-  publicador("infracciones.web.ventas", evento)
+  publicador("web.infracciones.publicaciones", evento)
 });
 
 bus.on("resultadoInfraccion", function (evento) {
@@ -31,5 +31,5 @@ bus.on("calcularCosto", function (evento) {
 })
 
 bus.on("resultadoCosto", function (evento) {
-  console.log("resultado costo compra " + evento.id + " --> " + evento.data.compra.adic_envio.valor);
+  console.log("resultado costo adicional por envio de compra " + evento.id + " --> " + evento.data.compra.adic_envio.valor);
 });

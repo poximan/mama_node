@@ -8,5 +8,5 @@ bus.on("publicacionSeleccionada", function (evento) {
   bus.emit(evento.tarea, evento);
 
   console.log("enviando resultado infraccion compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
-  publicador("compras.ventas", evento);
+  publicador("compras.publicaciones", evento);
 });
