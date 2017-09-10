@@ -9,12 +9,12 @@ var operaciones = [
 
     console.log("levantando servidores");
 
-    shell_ejec("start cmd.exe /K \"cd.. && cd web && node autoWeb.js\"");
-    shell_ejec("start cmd.exe /K \"cd.. && cd compras && node autoCompras.js\"");
-    shell_ejec("start cmd.exe /K \"cd.. && cd infracciones && node autoInfracciones.js\"");
-    shell_ejec("start cmd.exe /K \"cd.. && cd publicaciones && node autoPublicaciones.js\"");
-    shell_ejec("start cmd.exe /K \"cd.. && cd envios && node autoEnvios.js\"");
-    //shell_ejec("start cmd.exe /K \"cd.. && cd pagos && node autoPagos.js\"")
+    shell_ejec("start shell /K \"cd web && node autoWeb.js\"");
+    shell_ejec("start shell /K \"cd compras && node autoCompras.js\"");
+    shell_ejec("start shell /K \"cd infracciones && node autoInfracciones.js\"");
+    shell_ejec("start shell /K \"cd publicaciones && node autoPublicaciones.js\"");
+    shell_ejec("start shell /K \"cd envios && node autoEnvios.js\"");
+    shell_ejec("start shell /K \"cd pagos && node autoPagos.js\"")
 
     console.log("todos los servidores activos");
     callback(null);

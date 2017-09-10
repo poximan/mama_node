@@ -8,12 +8,12 @@ var bus = require('../eventBus');
 .............................................................
 */
 
-bus.on("publicacionSeleccionada", function (evento) {
+bus.on("autorizarPago", function (evento) {
 
-  evento.tarea = "resultadoInfraccion";
+  evento.tarea = "resultadoAutorizacion";
   bus.emit(evento.tarea, evento);
 
-  console.log("enviando resultado infraccion compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
+  console.log("enviando resultado autorizacion pago en compra " + evento.id + " --> " + evento.data.compra.pago.estado);
   publicador("compras.publicaciones", evento);
 });
 

@@ -11,7 +11,7 @@ var operaciones = [
     shell_ejec("node crear_cola.js infracciones");
     shell_ejec("node crear_cola.js publicaciones");
     shell_ejec("node crear_cola.js envios");
-    //shell_ejec("node crear_cola.js pagos");
+    shell_ejec("node crear_cola.js pagos");
 
     console.log("todas las colas creadas\n");
     callback(null);

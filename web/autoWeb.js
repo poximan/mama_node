@@ -79,10 +79,6 @@ bus.on("cargarPublicaciones", function (evento) {
   publicaciones = evento.data;
 });
 
-bus.on("resultadoConfirma", function (evento) {
-  confirmaCompra(evento);
-});
-
 bus.on("resultadoEnvio", function (evento) {
   metodoEnvio(evento);
 });
@@ -91,7 +87,11 @@ bus.on("resultadoMedioPago", function (evento) {
   metodoPago(evento);
 });
 
-function confirmaCompra(evento) {
+bus.on("resultadoConfirmar", function (evento) {
+  confirmar(evento);
+});
+
+function confirmar(evento) {
   if(probabilidad() > 30)
     evento.data.compra.estado = evento.data.compra.estados[1];  // confirma
   else
