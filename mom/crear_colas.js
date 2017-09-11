@@ -13,7 +13,7 @@ var operaciones = [
     shell_ejec("node crear_cola.js envios");
     shell_ejec("node crear_cola.js pagos");
 
-    console.log("todas las colas creadas\n");
+    console.log("todas las colas creadas");
     callback(null);
   },
   function(callback) {

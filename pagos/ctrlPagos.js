@@ -4,16 +4,18 @@ var bus = require('../eventBus');
 
 /*
 .............................................................
-... mensajes a MOM
+... mensajes MOM entrada-salida
 .............................................................
 */
 
-bus.on("autorizarPago", function (evento) {
+bus.on("momAutorizarPago", function (evento) {
 
   evento.tarea = "resultadoAutorizacion";
   bus.emit(evento.tarea, evento);
 
-  console.log("enviando resultado autorizacion pago en compra " + evento.id + " --> " + evento.data.compra.pago.estado);
+  console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.pago.estado);
+
+  evento.tarea = "momResultadoAutorizacion";
   publicador("compras.publicaciones", evento);
 });
 

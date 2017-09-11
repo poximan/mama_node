@@ -2,8 +2,7 @@ var amqp = require('amqplib/callback_api');
 var bus = require('../eventBus');
 require('./ctrlEnvios');
 
-//process.env.AMQP_URL = "amqp://localhost";
-process.env.AMQP_URL = 'amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq';
+process.env.AMQP_URL = require("../cfg.json").url.valor;
 
 amqp.connect(process.env.AMQP_URL, function(err, conn) {
   conn.createChannel(function(err, ch) {
@@ -22,6 +21,12 @@ amqp.connect(process.env.AMQP_URL, function(err, conn) {
     });
   });
 });
+
+/*
+.............................................................
+... respuestas simuladas
+.............................................................
+*/
 
 bus.on("resultadoCosto", function (evento) {
   evento.data.compra.adic_envio.valor = costo();

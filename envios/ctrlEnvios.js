@@ -4,24 +4,26 @@ var bus = require('../eventBus');
 
 /*
 .............................................................
-... mensajes a MOM
+... mensajes MOM entrada-salida
 .............................................................
 */
 
-bus.on("calcularCosto", function (evento) {
+bus.on("momCalcularCosto", function (evento) {
 
   evento.tarea = "resultadoCosto";
   bus.emit(evento.tarea, evento);
 
-  console.log("enviando resultado costo compra " + evento.id + " --> " + evento.data.compra.adic_envio.valor);
+  console.log("SAL: compra " + evento.id + " adic correo --> " + evento.data.compra.adic_envio.valor);
+
+  evento.tarea = "momResultadoCosto";
   publicador("compras", evento);
 });
 
-bus.on("agendarEnvio", function (evento) {
+bus.on("momAgendarEnvio", function (evento) {
 
-  console.log("agendado envio de compra " + evento.id);
+  console.log("SAL: compra " + evento.id + " --> agendada");
 
-  evento.tarea = "resultadoAgendar";
+  evento.tarea = "momResultadoAgendarEnvio";
   publicador("publicaciones", evento);
 });
 

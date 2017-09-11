@@ -2,8 +2,8 @@ var amqp = require('amqplib/callback_api');
 var publicador = require("../mod_pub");
 var bus = require('../eventBus');
 
-var value = 0,    // valor inicial
-    size  = 1000, // tamaño del arreglo
+var value = 0,      // valor inicial
+    size  = 10000,  // tamaño del arreglo
     estado_sincro_inf_compr = Array.apply(null,{length: size}).map(function() { return value; });
 
 /*
@@ -15,98 +15,74 @@ var estado_inf = null;
 
 /*
 .............................................................
-... mensajes a MOM
+... mensajes MOM entrada-salida
 .............................................................
 */
 
-bus.on("nuevaCompra", function (evento) {
+bus.on("momNuevaCompra", function (evento) {
 
   evento.data.compra.estado = evento.data.compra.estados[0]; // generada
 
-  console.log("\ndelegando calculos de compra " + evento.id + " ");
-  evento.tarea = "publicacionSeleccionada";
+  console.log("SAL: nueva compra. id " + evento.id + " --> " + evento.data.publicacion.descripcion.valor);
+
+  evento.tarea = "momPublicacionSeleccionada";
   publicador("web.infracciones.publicaciones", evento)
 });
 
+/*
+.............................................................
+... mensajes salientes
+.............................................................
+*/
+
 bus.on("calcularCosto", function (evento) {
+  evento.tarea = "momCalcularCosto";
   publicador("envios", evento)
 })
 
 bus.on("seleccionarMedioPago", function (evento) {
+  evento.tarea = "momSeleccionarMedioPago";
   publicador("web", evento)
 })
 
 bus.on("confirmarCompra", function (evento) {
+  evento.tarea = "momConfirmarCompra";
   publicador("web", evento)
 })
 
 bus.on("informarInfraccion", function (evento) {
-
-  console.log("compra " + evento.id + " cancelada por infraccion");
+  evento.tarea = "momInformarInfraccion";
   publicador("web", evento)
 })
 
 bus.on("informarPagoRechazado", function (evento) {
-
-  console.log("compra " + evento.id + " cancelada por pago rechazado");
+  evento.tarea = "momInformarPagoRechazado";
   publicador("web", evento)
 })
 
 bus.on("autorizarPago", function (evento) {
-
-  console.log("verficando pago en compra " + evento.id);
+  evento.tarea = "momAutorizarPago";
   publicador("pagos", evento)
 })
 
-bus.on("terminarCompra", function (evento) {
-
-  console.log("compra " + evento.id + " terminada. ¡final feliz!");
+bus.on("aceptarCompra", function (evento) {
+  evento.tarea = "momAceptarCompra";
   publicador("web", evento)
 })
 
 bus.on("agendarEnvio", function (evento) {
+  evento.tarea = "momAgendarEnvio";
   publicador("envios", evento)
 })
 
 /*
 .............................................................
-... mensajes internos
+... mensajes entrante
 .............................................................
 */
 
-bus.on("pagoAutorizado", function (evento) {
-
-  evento.tarea = "terminarCompra";
-  bus.emit(evento.tarea, evento);
-
-  // si el cliente elige metodo de envio correo
-  if(evento.data.compra.entrega.estado === evento.data.compra.entrega.estados[2]){
-
-    evento.tarea = "agendarEnvio";
-    bus.emit(evento.tarea, evento);
-  }
-})
-
-bus.on("resultadoAutorizacion", function (evento) {
-  console.log("resultado autorizacion de pago en compra " + evento.id + " --> " + evento.data.compra.pago.estado);
-
-  // si el pago fue rechazado
-  if(evento.data.compra.pago.estado === evento.data.compra.pago.estado[2]){
-
-    evento.tarea = "informarPagoRechazado";
-    bus.emit(evento.tarea, evento);
-  }
-
-  // si el pago fue aceptado
-  if(evento.data.compra.entrega.estado === evento.data.compra.entrega.estados[1]){
-
-    evento.tarea = "pagoAutorizado";
-    bus.emit(evento.tarea, evento);
-  }
-})
-
-bus.on("resultadoEnvio", function (evento) {
-  console.log("resultado envio compra " + evento.id + " --> " + evento.data.compra.entrega.estado);
+bus.on("momResultadoFormaEntrega", function (evento) {
+  console.log("ENT: compra " + evento.id + " entrega --> " + evento.data.compra.entrega.estado);
 
   // si el cliente elige metodo de envio correo
   if(evento.data.compra.entrega.estado === evento.data.compra.entrega.estados[2]){
@@ -123,31 +99,29 @@ bus.on("resultadoEnvio", function (evento) {
   }
 })
 
-bus.on("resultadoMedioPago", function (evento) {
-  console.log("resultado medio de pago de la compra " + evento.id + " --> " + evento.data.compra.pago.medio);
+bus.on("momResultadoMedioPago", function (evento) {
+  console.log("ENT: compra " + evento.id + " pago --> " + evento.data.compra.pago.medio);
 
   evento.tarea = "confirmarCompra";
   bus.emit(evento.tarea, evento);
 })
 
-bus.on("resultadoCosto", function (evento) {
-
-  console.log("resultado costo adicional por envio de compra " + evento.id + " --> " + evento.data.compra.adic_envio.valor);
+bus.on("momResultadoCosto", function (evento) {
+  console.log("ENT: compra " + evento.id + " adic correo --> " + evento.data.compra.adic_envio.valor);
 
   evento.tarea = "seleccionarMedioPago";
   bus.emit(evento.tarea, evento);
 });
 
-bus.on("resultadoConfirmar", function (evento) {
-
-  console.log("resultado de confirmacion compra " + evento.id + " --> " + evento.data.compra.estado);
+bus.on("momResultadoConfirmar", function (evento) {
+  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado);
 
   estado_sincro_inf_compr[evento.id] += 1;
   bus.emit("sincro_inf_compr"+estado_sincro_inf_compr[evento.id], evento);
 });
 
-bus.on("resultadoInfraccion", function (evento) {
-  console.log("resultado infraccion compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
+bus.on("momResultadoInfraccion", function (evento) {
+  console.log("ENT: compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
 
   estado_inf = evento.data.publicacion.infracciones.estado;
 
@@ -155,6 +129,36 @@ bus.on("resultadoInfraccion", function (evento) {
   bus.emit("sincro_inf_compr"+estado_sincro_inf_compr[evento.id], evento);
 })
 
+bus.on("momResultadoAutorizacion", function (evento) {
+  console.log("ENT: compra " + evento.id + " pago --> " + evento.data.compra.pago.estado);
+
+  // si el pago fue rechazado
+  if(evento.data.compra.pago.estado === "rechazado"){
+
+    evento.tarea = "informarPagoRechazado";
+    bus.emit(evento.tarea, evento);
+  }
+
+  // si el pago fue autorizado
+  if(evento.data.compra.pago.estado === "autorizado"){
+
+    evento.tarea = "aceptarCompra";
+    bus.emit(evento.tarea, evento);
+
+    // si el cliente elige metodo de envio correo
+    if(evento.data.compra.entrega.estado === evento.data.compra.entrega.estados[2]){
+
+      evento.tarea = "agendarEnvio";
+      bus.emit(evento.tarea, evento);
+    }
+  }
+})
+
+/*
+.............................................................
+... mensajes internos
+.............................................................
+*/
 
 /*
 .............................................................

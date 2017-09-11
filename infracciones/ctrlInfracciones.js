@@ -4,16 +4,18 @@ var bus = require('../eventBus');
 
 /*
 .............................................................
-... mensajes a MOM
+... mensajes MOM entrada-salida
 .............................................................
 */
 
-bus.on("publicacionSeleccionada", function (evento) {
+bus.on("momPublicacionSeleccionada", function (evento) {
 
   evento.tarea = "resultadoInfraccion";
   bus.emit(evento.tarea, evento);
 
-  console.log("enviando resultado infraccion compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
+  console.log("SAL: compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
+
+  evento.tarea = "momResultadoInfraccion";
   publicador("compras.publicaciones", evento);
 });
 

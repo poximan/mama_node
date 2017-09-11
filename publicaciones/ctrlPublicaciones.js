@@ -6,17 +6,16 @@ var async = require('async');
 
 var reservas = [];
 
-var value = 0,    // valor inicial
-    size  = 1000, // tamaño del arreglo
+var value = 0,      // valor inicial
+    size  = 10000,  // tamaño del arreglo
     estado_sincro_inf_pub = Array.apply(null,{length: size}).map(function() { return value; });
 
-var value = 0,    // valor inicial
-    size  = 1000, // tamaño del arreglo
+var value = 0,      // valor inicial
+    size  = 10000,  // tamaño del arreglo
     estado_sincro_pub_pag = Array.apply(null,{length: size}).map(function() { return value; });
 
-
-var value = 0,    // valor inicial
-    size  = 1000, // tamaño del arreglo
+var value = 0,      // valor inicial
+    size  = 10000,  // tamaño del arreglo
     estado_sincro_pub_env = Array.apply(null,{length: size}).map(function() { return value; });
 
 /*
@@ -30,11 +29,11 @@ var estado_envio = null;
 
 /*
 .............................................................
-... mensajes a MOM
+... mensajes MOM entrada-salida
 .............................................................
 */
 
-bus.on("getPublicaciones", function (evento) {
+bus.on("momGetPublicaciones", function (evento) {
 
   var msg = []
 
@@ -54,7 +53,7 @@ bus.on("getPublicaciones", function (evento) {
       callback(null);
     },
     function(callback) {
-      evento.tarea = "resultadoPublicaciones";
+      evento.tarea = "momResultadoPublicaciones";
       evento.data = msg;
       callback(null);
     },
@@ -65,26 +64,25 @@ bus.on("getPublicaciones", function (evento) {
   ];
 
   async.waterfall(operaciones, function (err, evento) {
-    console.log("enviando publicaciones conocidas");
+    console.log("SAL: enviando publicacione existentes");
   });
 });
 
 /*
 .............................................................
-... mensajes internos
+... mensajes entrante
 .............................................................
 */
 
-bus.on("publicacionSeleccionada", function (evento) {
-
-  console.log("producto " + evento.id + " reservado");
+bus.on("momPublicacionSeleccionada", function (evento) {
+  console.log("ENT: compra " + evento.id + " --> " + "producto reservado");
   reservas.push(evento);
 
   estado_sincro_inf_pub[evento.id] += 1;
   bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
 });
 
-bus.on("resultadoInfraccion", function (evento) {
+bus.on("momResultadoInfraccion", function (evento) {
 
   estado_inf = evento.data.publicacion.infracciones.estado;
 
@@ -92,15 +90,7 @@ bus.on("resultadoInfraccion", function (evento) {
   bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
 })
 
-bus.on("resultadoAgendar", function (evento) {
-
-  estado_envio = evento.data.compra.destino.valor;
-
-  estado_sincro_pub_env[evento.id] += 2;
-  bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
-})
-
-bus.on("resultadoAutorizacion", function (evento) {
+bus.on("momResultadoAutorizacion", function (evento) {
 
   estado_pago = evento.data.compra.pago.estado;
 
@@ -108,9 +98,23 @@ bus.on("resultadoAutorizacion", function (evento) {
   bus.emit("sincro_pub_pag"+estado_sincro_pub_pag[evento.id], evento);
 })
 
+bus.on("momResultadoAgendarEnvio", function (evento) {
+
+  estado_envio = evento.data.compra.destino.valor;
+
+  estado_sincro_pub_env[evento.id] += 2;
+  bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
+})
+
+/*
+.............................................................
+... mensajes internos
+.............................................................
+*/
+
 bus.on("liberarProducto", function (evento) {
 
-  console.log("producto " + evento.id + " liberado. falla condiciones de compra");
+  console.log("INTERNO: compra " + evento.id + " --> " + "liberada");
 
   for (var i = 0; i < reservas.length; i++){
     if (reservas[i].id === evento.id) {
@@ -121,7 +125,7 @@ bus.on("liberarProducto", function (evento) {
 });
 
 bus.on("enviarProducto", function (evento) {
-  console.log("producto " + evento.id + " enviado");
+  console.log("INTERNO: producto " + evento.id + " --> " + "enviado");
 });
 
 /*
@@ -131,13 +135,9 @@ bus.on("enviarProducto", function (evento) {
 */
 
 bus.on("sincro_inf_pub1", function (evento) {
-  console.log("esperando resultado infraccion");
 });
 
 bus.on("sincro_inf_pub2", function (evento) {
-
-  console.log("se obtuvo resultado infraccion");
-  console.log("esperando reserva del producto");
 });
 
 bus.on("sincro_inf_pub3", function (evento) {
@@ -145,7 +145,7 @@ bus.on("sincro_inf_pub3", function (evento) {
   evento.data.publicacion.infracciones.estado = estado_inf;
   estado_inf = null;
 
-  console.log("estado de infracciones y reserva del producto " + evento.data.publicacion.descripcion.valor + " alcanzado");
+  console.log("INTERNO: compra " + evento.id + " --> " + "sincro 1 terminada");
 
   estado_sincro_pub_pag[evento.id] += 1;
   bus.emit("sincro_pub_pag"+estado_sincro_pub_pag[evento.id], evento);
@@ -158,17 +158,14 @@ bus.on("sincro_inf_pub3", function (evento) {
 */
 
 bus.on("sincro_pub_pag1", function (evento) {
-  console.log("esperando resultado autorizacion pago");
 });
 
 bus.on("sincro_pub_pag2", function (evento) {
-
-  console.log("se obtuvo resultado autorizacion pago");
-  console.log("esperando resultados de infracciones y reserva del producto");
 });
 
 bus.on("sincro_pub_pag3", function (evento) {
 
+  console.log("INTERNO: compra " + evento.id + " --> " + "sincro 2 terminada");
   evento.data.compra.pago.estado = estado_pago;
   estado_inf = null;
 
@@ -184,10 +181,8 @@ bus.on("sincro_pub_pag3", function (evento) {
   if(evento.data.publicacion.infracciones.estado === evento.data.publicacion.infracciones.estados[2] ||
     evento.data.compra.pago.estado === evento.data.compra.pago.estados[1]){
 
-    console.log("preparando compra " + evento.id + " por " + evento.data.publicacion.descripcion.valor);
-
-    estado_sincro_pub_env[evento.id] += 1;
-    bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
+      estado_sincro_pub_env[evento.id] += 1;
+      bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
   }
 });
 
@@ -198,16 +193,14 @@ bus.on("sincro_pub_pag3", function (evento) {
 */
 
 bus.on("sincro_pub_env1", function (evento) {
-  console.log("esperando resultado de agendar envio compra " + evento.id);
 });
 
 bus.on("sincro_pub_env2", function (evento) {
-
-  console.log("se obtuvo resultado de agendar envio compra " + evento.id);
-  console.log("esperando aceptacion del pago");
 });
 
 bus.on("sincro_pub_env3", function (evento) {
+
+  console.log("INTERNO: compra " + evento.id + " --> " + "sincro 3 terminada");
 
   evento.data.compra.destino = estado_envio;
   estado_envio = null;

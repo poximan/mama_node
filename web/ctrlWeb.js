@@ -4,67 +4,90 @@ var bus = require('../eventBus');
 
 /*
 .............................................................
-... mensajes a MOM
+... mensajes MOM entrada-salida
 .............................................................
 */
 
-bus.on("publicacionSeleccionada", function (evento) {
+bus.on("momPublicacionSeleccionada", function (evento) {
 
-  evento.tarea = "resultadoEnvio";
+  evento.tarea = "resultadoFormaEntrega";
   bus.emit(evento.tarea, evento);
 
-  console.log("enviando resultado forma de entrega compra " + evento.id + " --> " + evento.data.compra.entrega.estado);
+  console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.entrega.estado);
 
+  evento.tarea = "momResultadoFormaEntrega";
   publicador("compras", evento);
 });
-
-bus.on("nuevaCompra", function (evento) {
-  publicador("compras", evento);
-});
-
 
 bus.on("getPublicaciones", function (evento) {
 
-  console.log("solicitando lista de publicaciones");
+  console.log("SAL: solicitando publicaciones");
+
+  evento.tarea = "momGetPublicaciones";
   publicador("publicaciones", evento)
 });
 
-bus.on("seleccionarMedioPago", function (evento) {
+bus.on("momSeleccionarMedioPago", function (evento) {
 
   evento.tarea = "resultadoMedioPago";
   bus.emit(evento.tarea, evento);
 
-  console.log("enviando resultado forma de pago compra " + evento.id + " --> " + evento.data.compra.pago.medio);
+  console.log("SAL: compra " + evento.id + " pago --> " + evento.data.compra.pago.medio);
 
+  evento.tarea = "momResultadoMedioPago";
   publicador("compras", evento);
 });
 
-bus.on("confirmarCompra", function (evento) {
+bus.on("momConfirmarCompra", function (evento) {
 
   evento.tarea = "resultadoConfirmar";
   bus.emit(evento.tarea, evento);
 
-  console.log("compra " + evento.id + " --> " + evento.data.compra.estado);
+  console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.pago.medio);
 
+  evento.tarea = "momResultadoConfirmar";
   publicador("compras", evento);
 });
 
 /*
 .............................................................
-... mensajes a internos
+... mensajes salientes
 .............................................................
 */
 
-bus.on("resultadoPublicaciones", function (evento) {
+bus.on("nuevaCompra", function (evento) {
+  evento.tarea = "momNuevaCompra";
+  publicador("compras", evento);
+});
 
-  console.log("se conocen nuevas publicaciones");
+/*
+.............................................................
+... mensajes entrante
+.............................................................
+*/
+
+bus.on("momResultadoPublicaciones", function (evento) {
+
+  console.log("SAL: obteniendo nuevas publicaciones");
 
   evento.tarea = "cargarPublicaciones";
   bus.emit(evento.tarea, evento);
 });
 
-bus.on("informarInfraccion", function (evento) {
-
-  console.log("compra " + evento.id + " --> " + evento.data.compra.estado + " por infraccion");
-  publicador("compras", evento);
+bus.on("momInformarInfraccion", function (evento) {
+  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado + " por infraccion");
 });
+
+bus.on("momInformarPagoRechazado", function (evento) {
+  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado + " por pago");
+});
+
+bus.on("momAceptarCompra", function (evento) {
+  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado);
+});
+
+/*
+.............................................................
+... mensajes internos
+.............................................................
+*/

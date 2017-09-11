@@ -3,8 +3,7 @@ var bus = require('../eventBus');
 require('./ctrlWeb');
 var async = require('async');
 
-//process.env.AMQP_URL = 'amqp://localhost';
-process.env.AMQP_URL = 'amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq';
+process.env.AMQP_URL = require("../cfg.json").url.valor;
 
 var publicaciones = [];
 
@@ -31,6 +30,7 @@ amqp.connect(process.env.AMQP_URL, function(err, conn) {
 ... pedir publicaciones por unica vez al servidor responsable
 .............................................................
 */
+
 var get_publicaciones = {
   "tarea":"getPublicaciones",
   "id":"",
@@ -44,6 +44,7 @@ bus.emit(get_publicaciones.tarea, get_publicaciones);
 ... generar nuevas compras usando publicaciones conocidas
 .............................................................
 */
+
 function comprar() {
 
   if(publicaciones.length > 0){
@@ -63,23 +64,23 @@ function comprar() {
       }
     ];
     async.waterfall(operaciones, function (err, evento) {
-      console.log("\nemitiendo compra --> " + evento.data.publicacion.descripcion.valor);
       bus.emit(evento.tarea, evento);
     });
   }
 }
-setInterval(comprar, 1000);
+//setInterval(comprar, 500);
 
 /*
 .............................................................
-... eventos del simulador
+... respuestas simuladas
 .............................................................
 */
+
 bus.on("cargarPublicaciones", function (evento) {
   publicaciones = evento.data;
 });
 
-bus.on("resultadoEnvio", function (evento) {
+bus.on("resultadoFormaEntrega", function (evento) {
   metodoEnvio(evento);
 });
 
@@ -117,5 +118,5 @@ function probabilidad() {
 }
 
 function indicePublicacionElegida() {
-  return Math.floor(Math.random() * 10);
+  return Math.floor(Math.random() * publicaciones.length);
 }
