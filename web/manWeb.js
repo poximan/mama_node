@@ -2,8 +2,12 @@ var amqp = require('amqplib/callback_api');
 var bus = require('../eventBus');
 require('./ctrlWeb');
 var async = require('async');
+var net = require('net');
 
 process.env.AMQP_URL = require("../cfg.json").amqp.url;
+
+var ip_monitor = require("../cfg.json").monitor.ip_monitor;
+var port_monitor = require("../cfg.json").monitor.port_monitor;
 
 var publicaciones = [];
 
@@ -24,6 +28,13 @@ amqp.connect(process.env.AMQP_URL, function(err, conn) {
     });
   });
 });
+
+var server = net.createServer(function(socket) {
+	socket.write('Echo server\r\n');
+	socket.pipe(socket);
+});
+
+server.listen(port_monitor, ip_monitor);
 
 /*
 .............................................................
@@ -68,7 +79,6 @@ function comprar() {
     });
   }
 }
-setInterval(comprar, 1000);
 
 /*
 .............................................................

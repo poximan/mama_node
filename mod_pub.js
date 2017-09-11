@@ -1,7 +1,7 @@
 var amqp = require('amqplib/callback_api');
 var canal = null;
 
-process.env.AMQP_URL = require("./cfg.json").url.valor;
+process.env.AMQP_URL = require("./cfg.json").amqp.url;
 
 //-----------------------------
 var ex = 'exchange';
@@ -19,7 +19,7 @@ var publicar = function(regla_ruteo, msg) {
         canal.publish(ex, regla_ruteo, serializacion, {persistent: true, contentType: 'application/json'});
       });
     });
-  
+
   else{
     var serializacion = Buffer.from(JSON.stringify(msg));
     canal.publish(ex, regla_ruteo, serializacion, {persistent: true, contentType: 'application/json'});

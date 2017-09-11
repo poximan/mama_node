@@ -2,7 +2,7 @@ var amqp = require('amqplib/callback_api');
 var bus = require('../eventBus');
 require('./ctrlPublicaciones');
 
-process.env.AMQP_URL = require("../cfg.json").url.valor;
+process.env.AMQP_URL = require("../cfg.json").amqp.url;
 
 amqp.connect(process.env.AMQP_URL, function(err, conn) {
   conn.createChannel(function(err, ch) {

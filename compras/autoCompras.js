@@ -2,7 +2,7 @@ var amqp = require('amqplib/callback_api');
 var bus = require('../eventBus');
 require('./ctrlCompras');
 
-process.env.AMQP_URL = require("../cfg.json").url.valor;
+process.env.AMQP_URL = require("../cfg.json").amqp.url;
 
 var id_compra = 0;
 

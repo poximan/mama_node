@@ -1,6 +1,10 @@
 {
-  "url" : {
+  "amqp" : {
     "_coment" : "amqp://localhost",
-    "valor" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq"
+    "url" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq?heartbeat=0,5"
+  },
+  "monitor" : {
+    "ip_monitor" : "http://localhost",
+    "port_monitor" : "5000"
   }
 }
