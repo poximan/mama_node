@@ -16,7 +16,8 @@ var operaciones = [
 
     console.log("levantando servidores");
 
-    shell_ejec("start shell /K \"cd web && node \"" + modo_operacion + "\"Web.js\"");
+    //shell_ejec("start shell /K \"cd web && node \"" + modo_operacion + "\"Web.js\"");
+    shell_ejec("start shell /K \"cd web && node manWeb.js\"");
     shell_ejec("start shell /K \"cd compras && node \"" + modo_operacion + "\"Compras.js\"");
     shell_ejec("start shell /K \"cd infracciones && node \"" + modo_operacion + "\"Infracciones.js\"");
     shell_ejec("start shell /K \"cd publicaciones && node \"" + modo_operacion + "\"Publicaciones.js\"");

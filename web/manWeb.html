@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    .flex-container {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-flow: row wrap;
+        flex-flow: row wrap;
+        text-align: center;
+    }
+
+    .flex-container > * {
+        padding: 15px;
+        -webkit-flex: 1 100%;
+        flex: 1 100%;
+    }
+
+    .article { text-align: left; }
+
+    header {background: black;color:white;}
+    footer {background: #aaa;color:white;}
+    .nav {background:#eee;}
+
+    .nav ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .nav ul a {
+        text-decoration: none;
+    }
+
+    @media all and (min-width: 768px) {
+        .nav {text-align:left;-webkit-flex: 1 auto;flex:1 auto;-webkit-order:1;order:1;}
+        .article {-webkit-flex:5 0px;flex:5 0px;-webkit-order:2;order:2;}
+        footer {-webkit-order:3;order:3;}
+    }
+    </style>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(function(){
+            var iosocket = io.connect();
+            iosocket.on('connect', function () {
+
+                <!-- mensajes web -->
+                $('#msgEntranteWeb').append($('<li>conectado</li>'));
+
+                iosocket.on('message', function(message) {
+                    $('#msgEntranteWeb').append($('<li></li>').text(message));
+                });
+                iosocket.on('disconnect', function() {
+                    $('#msgEntranteWeb').append('<li>desconectado</li>');
+                });
+            });
+            <!-- mensajes web -->
+            $('#msgSalienteWeb').keypress(function(event) {
+                if(event.which == 13) {
+                    event.preventDefault();
+                    iosocket.send($('#msgSalienteWeb').val());
+                    $('#msgEntranteWeb').append($('<li></li>').text($('#msgSalienteWeb').val()));
+                    $('#msgSalienteWeb').val('');
+                }
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+
+    <div class="flex-container">
+    <header>
+      <h1>serv web - modo manual</h1>
+    </header>
+
+    <nav class="nav">
+      <ul id="msgEntranteWeb"></ul>
+      <input type="text" id="msgSalienteWeb">
+    </nav>
+
+    <footer>Copyright: yo robandole a W3Schools.com</footer>
+    </div>
+
+  </body>
+</html>

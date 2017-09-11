@@ -2,12 +2,14 @@ var amqp = require('amqplib/callback_api');
 var bus = require('../eventBus');
 require('./ctrlWeb');
 var async = require('async');
-var net = require('net');
+
+var port_web = require("../cfg.json").monitor.port_web;
+
+var fs = require('fs')
+    , http = require('http')
+    , socketio = require('socket.io');
 
 process.env.AMQP_URL = require("../cfg.json").amqp.url;
-
-var ip_monitor = require("../cfg.json").monitor.ip_monitor;
-var port_monitor = require("../cfg.json").monitor.port_monitor;
 
 var publicaciones = [];
 
@@ -29,12 +31,38 @@ amqp.connect(process.env.AMQP_URL, function(err, conn) {
   });
 });
 
-var server = net.createServer(function(socket) {
-	socket.write('Echo server\r\n');
-	socket.pipe(socket);
+/*
+.............................................................
+... escuchar puerto de mantenimiento
+.............................................................
+*/
+
+var server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-type': 'text/html'});
+    res.end(fs.readFileSync(__dirname + '/manWeb.html'));
+
+}).listen(port_web, function() {
+    console.log('...');
 });
 
-server.listen(port_monitor, ip_monitor);
+function escucharPuerto(evento){
+  socketio.listen(server).on('connection', function (socket) {
+
+    socket.on('message', function (msg) {
+
+      if(msg === "nuevaCompra")
+        comprar();
+
+      if((msg.match(/resFormaEntrega/g) || []).length > 0){
+        console.log(evento);
+        var numero = msg.split("=")[1]; // el argumento despues del "="
+        return evento.data.compra.entrega.estados[numero];
+      }
+    });
+  });
+}
+
+escucharPuerto();
 
 /*
 .............................................................
@@ -91,7 +119,8 @@ bus.on("cargarPublicaciones", function (evento) {
 });
 
 bus.on("resultadoFormaEntrega", function (evento) {
-  metodoEnvio(evento);
+  console.log("SAL MAN: compra " + evento.id + " forma de entrega. usar {resFormaEntrega=[1,2]}");
+  evento.data.compra.entrega.estado = escucharPuerto(evento);
 });
 
 bus.on("resultadoMedioPago", function (evento) {
@@ -107,13 +136,6 @@ function confirmar(evento) {
     evento.data.compra.estado = evento.data.compra.estados[1];  // confirma
   else
     evento.data.compra.estado = evento.data.compra.estados[2];  // cancela
-}
-
-function metodoEnvio(evento) {
-  if(probabilidad() > 20)
-    evento.data.compra.entrega.estado = evento.data.compra.entrega.estados[2];  // correo
-  else
-    evento.data.compra.entrega.estado = evento.data.compra.entrega.estados[1];  // retira
 }
 
 function metodoPago(evento) {

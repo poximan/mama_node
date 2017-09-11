@@ -5,6 +5,8 @@
   },
   "monitor" : {
     "ip_monitor" : "http://localhost",
-    "port_monitor" : "5000"
+    "port_web" : "5000",
+    "port_compras" : "5001",
+    "port_infracciones" : "5002"
   }
 }
