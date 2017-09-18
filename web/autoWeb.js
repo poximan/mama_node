@@ -68,7 +68,7 @@ function comprar() {
     });
   }
 }
-setInterval(comprar, 1000);
+setInterval(comprar, 5000);
 
 /*
 .............................................................

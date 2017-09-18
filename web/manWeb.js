@@ -45,24 +45,27 @@ var server = http.createServer(function(req, res) {
     console.log('...');
 });
 
-function escucharPuerto(evento){
-  socketio.listen(server).on('connection', function (socket) {
+var ind_res;
+var id_compra;
+var mem_evento;
 
-    socket.on('message', function (msg) {
+socketio.listen(server).on('connection', function (socket) {
 
-      if(msg === "nuevaCompra")
-        comprar();
+  socket.on('message', function (msg) {
 
-      if((msg.match(/resFormaEntrega/g) || []).length > 0){
-        console.log(evento);
-        var numero = msg.split("=")[1]; // el argumento despues del "="
-        return evento.data.compra.entrega.estados[numero];
-      }
-    });
+    if(msg === "nuevaCompra")
+      comprar();
+
+    if((msg.match(/resFormaEntrega/g) || []).length > 0){
+
+      ind_res = msg.split("=")[1]; // el argumento despues del "="
+      id_compra = msg.split(":")[0]; // el argumento despues del "="
+      console.log("res. " + ind_res + ", en compra " + id_compra);
+
+      mem_evento.data.compra.entrega.estado = mem_evento.data.compra.entrega.estados[ind_res];
+    }
   });
-}
-
-escucharPuerto();
+});
 
 /*
 .............................................................
@@ -119,8 +122,8 @@ bus.on("cargarPublicaciones", function (evento) {
 });
 
 bus.on("resultadoFormaEntrega", function (evento) {
-  console.log("SAL MAN: compra " + evento.id + " forma de entrega. usar {resFormaEntrega=[1,2]}");
-  evento.data.compra.entrega.estado = escucharPuerto(evento);
+  console.log("SAL MAN: compra " + evento.id + " forma de entrega. usar [{id_compra}:resFormaEntrega={1,2}]");
+  mem_evento = evento;
 });
 
 bus.on("resultadoMedioPago", function (evento) {
