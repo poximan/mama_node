@@ -1,44 +1,28 @@
-var amqp = require('amqplib/callback_api');
-var bus = require('../eventBus');
-require('./ctrlPagos');
-
-process.env.AMQP_URL = require("../cfg.json").amqp.url;
-
-amqp.connect(process.env.AMQP_URL, function(err, conn) {
-  conn.createChannel(function(err, ch) {
-
-    ch.checkQueue("cola_pagos", function(err, q) {
-
-      ch.consume(q.queue, function(msg) {
-
-        // msg origianl es {fields, properties, content}
-        var evento = JSON.parse(msg.content.toString());
-
-        // en función del nombre del evento procesa el mensaje de forma automática
-        bus.emit(evento.tarea, evento);
-        ch.ack(msg);
-      }, {noAck: false});
-    });
-  });
-});
-
 /*
-.............................................................
-... respuestas simuladas
-.............................................................
+este modulo conoce y agrupa distintas funcionalidades que en su conjunto, dan vida al servidor ejecutado
+
+- se suscribe a una cola para escuchar mensajes entrantes
+- le avisa a un mediador que debera atender esos mensajes entrantes y convertirlos (marshalling)
+- prepara el control del servidor (la logica que contiene el negocio) para que escucha los eventos
+que se desencadenan a partir del marshalling
+- delega en un experto la toma de decisiones, basado en probabilidades
 */
 
+var suscriptor = require("../mom/momSuscriptor");
+suscriptor("cola_pagos");
+
+require('./ctrlPagos');
+var mediador = require("../mom/momMediador");
+var experto = require('./experto');
+var bus = require('../eventBus');
+
+// ---------
+
+setInterval(mediador.persistir, 60000);
+
 bus.on("resultadoAutorizacion", function (evento) {
-  if(autorizar())
-    evento.data.compra.pago.estado = evento.data.compra.pago.estados[1]; // autorizado
-  else
-    evento.data.compra.pago.estado = evento.data.compra.pago.estados[2]; // rechazado
+  experto.autorizar(evento);
+
+  evento.tarea = "momResultadoAutorizacion";
+  bus.emit(evento.tarea, evento);
 });
-
-function autorizar() {
-  return probabilidad() >= 30;
-}
-
-function probabilidad() {
-  return Math.random() * 100;
-}

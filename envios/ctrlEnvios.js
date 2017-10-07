@@ -1,5 +1,4 @@
-var amqp = require('amqplib/callback_api');
-var publicador = require("../mod_pub");
+var publicador = require("../mom/momPublicador");
 var bus = require('../eventBus');
 
 /*

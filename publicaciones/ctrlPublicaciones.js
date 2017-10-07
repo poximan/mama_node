@@ -1,5 +1,4 @@
-var amqp = require('amqplib/callback_api');
-var publicador = require("../mod_pub");
+var publicador = require("../mom/momPublicador");
 var bus = require('../eventBus');
 var fs = require('fs');
 var async = require('async');
@@ -70,7 +69,7 @@ bus.on("momGetPublicaciones", function (evento) {
 
 /*
 .............................................................
-... mensajes entrante
+... mensajes entrantes
 .............................................................
 */
 

@@ -1,5 +1,4 @@
-var amqp = require('amqplib/callback_api');
-var publicador = require("../mod_pub");
+var publicador = require("../mom/momPublicador");
 var bus = require('../eventBus');
 
 /*
@@ -8,14 +7,28 @@ var bus = require('../eventBus');
 .............................................................
 */
 
+
+/*
+.............................................................
+... mensajes entrantes
+.............................................................
+*/
+
 bus.on("momPublicacionSeleccionada", function (evento) {
 
   evento.tarea = "resultadoInfraccion";
   bus.emit(evento.tarea, evento);
+});
+
+/*
+.............................................................
+... mensajes salientes
+.............................................................
+*/
+
+bus.on("momResultadoInfraccion", function (evento) {
 
   console.log("SAL: compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
-
-  evento.tarea = "momResultadoInfraccion";
   publicador("compras.publicaciones", evento);
 });
 

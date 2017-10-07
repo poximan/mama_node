@@ -1,7 +1,7 @@
 var amqp = require('amqplib/callback_api');
 var canal = null;
 
-process.env.AMQP_URL = require("./cfg.json").amqp.url;
+process.env.AMQP_URL = require("../cfg.json").amqp.url;
 
 //-----------------------------
 var ex = 'exchange';

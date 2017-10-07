@@ -1,28 +1,48 @@
-var amqp = require('amqplib/callback_api');
-var bus = require('../eventBus');
+/*
+este modulo conoce y agrupa distintas funcionalidades que en su conjunto, dan vida al servidor ejecutado
+
+- se suscribe a una cola para escuchar mensajes entrantes
+- le avisa a un mediador que debera atender esos mensajes entrantes y convertirlos (marshalling)
+- prepara el control del servidor (la logica que contiene el negocio) para que escucha los eventos
+que se desencadenan a partir del marshalling
+- delega en un experto la toma de decisiones, basado en probabilidades
+*/
+
+var suscriptor = require("../mom/momSuscriptor");
+suscriptor("cola_web");
+
 require('./ctrlWeb');
+var mediador = require("../mom/momMediador");
+var experto = require('./experto');
+var bus = require('../eventBus');
+
 var async = require('async');
 
-process.env.AMQP_URL = require("../cfg.json").amqp.url;
+// ---------
+
+setInterval(mediador.persistir, 60000);
 
 var publicaciones = [];
 
-amqp.connect(process.env.AMQP_URL, function(err, conn) {
-  conn.createChannel(function(err, ch) {
+bus.on("resultadoFormaEntrega", function (evento) {
+  experto.metodoEnvio(evento);
 
-    ch.checkQueue("cola_web", function(err, q) {
+  evento.tarea = "momResultadoFormaEntrega";
+  bus.emit(evento.tarea, evento);
+});
 
-      ch.consume(q.queue, function(msg) {
+bus.on("resultadoMedioPago", function (evento) {
+  experto.metodoPago(evento);
 
-        // msg origianl es {fields, properties, content}
-        var evento = JSON.parse(msg.content.toString());
+  evento.tarea = "momResultadoMedioPago";
+  bus.emit(evento.tarea, evento);
+});
 
-        // en función del nombre del evento procesa el mensaje de forma automática
-        bus.emit(evento.tarea, evento);
-        ch.ack(msg);
-      }, {noAck: false});
-    });
-  });
+bus.on("resultadoConfirmar", function (evento) {
+  experto.confirmar(evento);
+
+  evento.tarea = "momResultadoConfirmar";
+  bus.emit(evento.tarea, evento);
 });
 
 /*
@@ -32,12 +52,17 @@ amqp.connect(process.env.AMQP_URL, function(err, conn) {
 */
 
 var get_publicaciones = {
-  "tarea":"getPublicaciones",
+  "tarea":"momGetPublicaciones",
   "id":"",
   "data" : {
   }
 }
+
 bus.emit(get_publicaciones.tarea, get_publicaciones);
+
+bus.on("cargarPublicaciones", function (evento) {
+  publicaciones = evento.data;
+});
 
 /*
 .............................................................
@@ -68,54 +93,7 @@ function comprar() {
     });
   }
 }
-setInterval(comprar, 5000);
-
-/*
-.............................................................
-... respuestas simuladas
-.............................................................
-*/
-
-bus.on("cargarPublicaciones", function (evento) {
-  publicaciones = evento.data;
-});
-
-bus.on("resultadoFormaEntrega", function (evento) {
-  metodoEnvio(evento);
-});
-
-bus.on("resultadoMedioPago", function (evento) {
-  metodoPago(evento);
-});
-
-bus.on("resultadoConfirmar", function (evento) {
-  confirmar(evento);
-});
-
-function confirmar(evento) {
-  if(probabilidad() > 30)
-    evento.data.compra.estado = evento.data.compra.estados[1];  // confirma
-  else
-    evento.data.compra.estado = evento.data.compra.estados[2];  // cancela
-}
-
-function metodoEnvio(evento) {
-  if(probabilidad() > 20)
-    evento.data.compra.entrega.estado = evento.data.compra.entrega.estados[2];  // correo
-  else
-    evento.data.compra.entrega.estado = evento.data.compra.entrega.estados[1];  // retira
-}
-
-function metodoPago(evento) {
-  if(probabilidad() > 50)
-    evento.data.compra.pago.medio = evento.data.compra.pago.medios[0];  // debito
-  else
-    evento.data.compra.pago.medio = evento.data.compra.pago.medios[1];  // credito
-}
-
-function probabilidad() {
-  return Math.random() * 100;
-}
+setInterval(comprar, 10000);
 
 function indicePublicacionElegida() {
   return Math.floor(Math.random() * publicaciones.length);
