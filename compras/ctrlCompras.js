@@ -141,6 +141,8 @@ bus.on("momResultadoAutorizacion", function (evento) {
   // si el pago fue autorizado
   if(evento.data.compra.pago.estado === "autorizado"){
 
+    evento.data.compra.estado = evento.data.compra.estados[3]; // aceptada
+
     evento.tarea = "aceptarCompra";
     bus.emit(evento.tarea, evento);
 

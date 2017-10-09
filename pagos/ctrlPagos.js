@@ -15,6 +15,7 @@ var bus = require('../eventBus');
 
 bus.on("momAutorizarPago", function (evento) {
 
+  console.log("ENT: compra " + evento.id + " --> " + "preguntando si autoriza pago");
   evento.tarea = "resultadoAutorizacion";
   bus.emit(evento.tarea, evento);
 });

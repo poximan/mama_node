@@ -16,6 +16,7 @@ var bus = require('../eventBus');
 
 bus.on("momPublicacionSeleccionada", function (evento) {
 
+  console.log("ENT: compra " + evento.id + " --> " + "preguntando si hubo infraccion");
   evento.tarea = "resultadoInfraccion";
   bus.emit(evento.tarea, evento);
 });

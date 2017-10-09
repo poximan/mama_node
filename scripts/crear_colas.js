@@ -1,4 +1,4 @@
-var shell_ejec = require('../shell')
+var shell_ejec = require('./shell')
 var async = require('async');
 
 var operaciones = [

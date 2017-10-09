@@ -93,11 +93,10 @@ $(function() {
 
   // Socket events
 
-  socket.on("vacante", function (evento) {
-
-    var texto = "compra " + evento.id + ": ¿forma de entrega?.";
-    texto += "usar: \"{id compra}:resEntrega={retira|correo}\""
-
-    addChatMessage(texto);
+  socket.on("resEstado", function (preguntas) {
+    preguntas.forEach(function(pregunta) {
+      var texto = "compra " + pregunta.id + " : " + pregunta.data.compra.estado;
+      addChatMessage(texto);
+    });
   });
 });

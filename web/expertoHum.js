@@ -26,14 +26,20 @@ io.on('connection', function (socket) {
     });
   });
 
-  socket.on("comprar", function (msg) {
-    bus.emit("comprar", msg);
+  socket.on("estado", function (msg) {
+
+    console.log("respondiendo estado del servidor");
+    socket.emit("resEstado", preguntas);
   });
 
   socket.on("persistir", function (msg) {
     bus.emit("persistir", msg);
   });
 
+  socket.on("comprar", function (msg) {
+    bus.emit("comprar", msg);
+  });
+  
   socket.on("resEntrega", function (msg) {
     var evento = buscarEvento(msg);
 

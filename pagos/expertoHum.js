@@ -26,6 +26,12 @@ io.on('connection', function (socket) {
     });
   });
 
+  socket.on("estado", function (msg) {
+
+    console.log("respondiendo estado del servidor");
+    socket.emit("resEstado", preguntas);
+  });
+
   socket.on("persistir", function (msg) {
     bus.emit("persistir", msg);
   });
