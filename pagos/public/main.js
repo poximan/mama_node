@@ -93,26 +93,10 @@ $(function() {
 
   // Socket events
 
-  socket.on("resultadoFormaEntrega", function (evento) {
+  socket.on("resultadoAutorizacion", function (evento) {
 
-    var texto = "compra " + evento.id + ": ¿forma de entrega?.";
-    texto += "usar: \"{id compra}:resEntrega={retira|correo}\""
-
-    addChatMessage(texto);
-  });
-
-  socket.on("resultadoMedioPago", function (evento) {
-
-    var texto = "compra " + evento.id + ": ¿medio de pago?.";
-    texto += "usar: \"{id compra}:resPago={debito|credito}\""
-
-    addChatMessage(texto);
-  });
-
-  socket.on("resultadoConfirmar", function (evento) {
-
-    var texto = "compra " + evento.id + ": ¿confirma compra?.";
-    texto += "usar: \"{id compra}:resConfirma={confirmada|cancelada}\""
+    var texto = "compra " + evento.id + ": ¿autorizar?.";
+    texto += "usar: \"{id compra}:resAutorizar={autorizado|rechazado}\""
 
     addChatMessage(texto);
   });

@@ -1,13 +1,15 @@
 {
   "amqp" : {
     "url" : "amqp://localhost",
-    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq?heartbeat=0,5"
+    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq?heartbeat=0,5",
+    "management" : "http://localhost:15672/"
   },
   "monitor" : {
     "ip_monitor" : "http://localhost",
     "port_web" : "5000",
-    "port_compras" : "5001",
-    "port_infracciones" : "5002"
+    "port_publicaciones" : "5001",
+    "port_pagos" : "5002",
+    "port_infracciones" : "5003"
   },
   "probabilidad" : {
     "infraccion" : "30",

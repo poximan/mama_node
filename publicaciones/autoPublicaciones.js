@@ -13,7 +13,7 @@ suscriptor.suscribir("cola_publicaciones");
 
 require('./ctrlPublicaciones');
 var mediador = require("../mom/momMediador");
-require('./experto');
+require('./expertoSim');
 
 // ---------
 

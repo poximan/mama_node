@@ -13,7 +13,7 @@ suscriptor.suscribir("cola_infracciones");
 
 require('./ctrlInfracciones');
 var mediador = require("../mom/momMediador");
-var experto = require('./experto');
+var experto = require('./expertoSim');
 var bus = require('../eventBus');
 
 // ---------

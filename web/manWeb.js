@@ -31,6 +31,14 @@ bus.on("resultadoConfirmar", function (evento) {
   experto.preguntar(evento);
 });
 
+bus.on("comprar", function (evento) {
+  comprar();
+});
+
+bus.on("persistir", function (evento) {  
+  mediador.persistir();
+});
+
 /*
 .............................................................
 ... pedir publicaciones por unica vez al servidor responsable
@@ -81,7 +89,6 @@ function comprar() {
     });
   }
 }
-setInterval(comprar, 5000);
 
 function indicePublicacionElegida() {
   return Math.floor(Math.random() * publicaciones.length);

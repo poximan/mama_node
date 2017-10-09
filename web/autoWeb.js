@@ -93,7 +93,7 @@ function comprar() {
     });
   }
 }
-setInterval(comprar, 10000);
+setInterval(comprar, 2000);
 
 function indicePublicacionElegida() {
   return Math.floor(Math.random() * publicaciones.length);

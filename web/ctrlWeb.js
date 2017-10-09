@@ -40,7 +40,7 @@ bus.on("momInformarInfraccion", function (evento) {
 });
 
 bus.on("momInformarPagoRechazado", function (evento) {
-  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado + " por pago");
+  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.pago.estado + " por pago");
 });
 
 bus.on("momAceptarCompra", function (evento) {
