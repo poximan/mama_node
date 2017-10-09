@@ -9,7 +9,7 @@ que se desencadenan a partir del marshalling
 */
 
 var suscriptor = require("../mom/momSuscriptor");
-suscriptor("cola_pagos");
+suscriptor.suscribir("cola_pagos");
 
 require('./ctrlPagos');
 var mediador = require("../mom/momMediador");

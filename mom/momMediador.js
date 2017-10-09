@@ -13,7 +13,10 @@ bus.on("mom", function (evento) {
 
   if(evento.id !== ""){
 
-    // filtra los que da verdadero
+    /*
+    crea un nuevo array con todos los elementos
+    que cumplan la condición implementada por la función dada.
+    */
     compras = compras.filter(function(item) {
         return item.id !== evento.id;
     })

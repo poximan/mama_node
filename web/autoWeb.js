@@ -9,11 +9,11 @@ que se desencadenan a partir del marshalling
 */
 
 var suscriptor = require("../mom/momSuscriptor");
-suscriptor("cola_web");
+suscriptor.suscribir("cola_web");
 
 require('./ctrlWeb');
 var mediador = require("../mom/momMediador");
-var experto = require('./experto');
+var experto = require('./expertoSim');
 var bus = require('../eventBus');
 
 var async = require('async');

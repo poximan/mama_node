@@ -8,34 +8,27 @@ que se desencadenan a partir del marshalling
 */
 
 var suscriptor = require("../mom/momSuscriptor");
-suscriptor("cola_web");
+suscriptor.suscribir("cola_web");
 
 require('./ctrlWeb');
 var mediador = require("../mom/momMediador");
+var experto = require('./expertoHum');
 var bus = require('../eventBus');
 
 var async = require('async');
 
 // ---------
 
-var publicaciones = [];
-
 bus.on("resultadoFormaEntrega", function (evento) {
-
-  evento.tarea = "momResultadoFormaEntrega";
-  bus.emit(evento.tarea, evento);
+  experto.preguntar(evento);
 });
 
 bus.on("resultadoMedioPago", function (evento) {
-
-  evento.tarea = "momResultadoMedioPago";
-  bus.emit(evento.tarea, evento);
+  experto.preguntar(evento);
 });
 
 bus.on("resultadoConfirmar", function (evento) {
-
-  evento.tarea = "momResultadoConfirmar";
-  bus.emit(evento.tarea, evento);
+  experto.preguntar(evento);
 });
 
 /*
@@ -43,6 +36,8 @@ bus.on("resultadoConfirmar", function (evento) {
 ... pedir publicaciones por unica vez al servidor responsable
 .............................................................
 */
+
+var publicaciones = [];
 
 var get_publicaciones = {
   "tarea":"momGetPublicaciones",
@@ -86,6 +81,7 @@ function comprar() {
     });
   }
 }
+setInterval(comprar, 5000);
 
 function indicePublicacionElegida() {
   return Math.floor(Math.random() * publicaciones.length);

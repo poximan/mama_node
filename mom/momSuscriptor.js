@@ -5,7 +5,7 @@ process.env.AMQP_URL = require("../cfg.json").amqp.url;
 
 var cola;
 
-var suscribir = function(nombre_cola) {
+exports.suscribir = function(nombre_cola) {
   cola = nombre_cola;
 }
 
@@ -26,5 +26,3 @@ amqp.connect(process.env.AMQP_URL, function(err, conn) {
     });
   });
 });
-
-module.exports = suscribir;

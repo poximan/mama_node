@@ -16,18 +16,21 @@ var bus = require('../eventBus');
 
 bus.on("momPublicacionSeleccionada", function (evento) {
 
+  console.log("ENT: compra " + evento.id + " --> " + "preguntando forma de entrega");
   evento.tarea = "resultadoFormaEntrega";
   bus.emit(evento.tarea, evento);
 });
 
 bus.on("momSeleccionarMedioPago", function (evento) {
 
+  console.log("ENT: compra " + evento.id + " --> " + "preguntando medio de pago");
   evento.tarea = "resultadoMedioPago";
   bus.emit(evento.tarea, evento);
 });
 
 bus.on("momConfirmarCompra", function (evento) {
 
+  console.log("ENT: compra " + evento.id + " --> " + "preguntando a cliente si confima");
   evento.tarea = "resultadoConfirmar";
   bus.emit(evento.tarea, evento);
 });
