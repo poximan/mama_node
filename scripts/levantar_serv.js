@@ -16,9 +16,6 @@ var operaciones = [
 
     console.log("levantando servidores");
 
-    // servidor base de datos (hay que crear carpeta C:\data\db)
-    shell_ejec("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd 3.0 && cd bin && mongod.exe\"");
-
     // servidores negocio
     shell_ejec("start ventana /K \"cd compras && node \"" + modo_operacion + "\"Compras.js\"");
     shell_ejec("start ventana /K \"cd envios && node \"" + modo_operacion + "\"Envios.js\"");

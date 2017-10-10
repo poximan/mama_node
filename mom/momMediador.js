@@ -1,6 +1,7 @@
 var bus = require('../eventBus');
 var _ = require("underscore");
 var mongo = require('mongodb');
+// hay que crear carpeta C:\data\db
 
 /*
 .............................................................
