@@ -6,12 +6,11 @@ este modulo conoce y agrupa distintas funcionalidades que en su conjunto, dan vi
 que se desencadenan a partir del marshalling
 */
 
-require('./ctrlPublicaciones');
+require('./ctrlCompras');
 var mediador = require("../mom/momMediador");
-mediador.coleccion("colecc_publicaciones");
+mediador.coleccion("colecc_compras");
 
 require('./expertoHum');
-
 var bus = require('../eventBus');
 
 // ---------

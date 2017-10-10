@@ -1,5 +1,10 @@
+var suscriptor = require("../mom/momSuscriptor");
+suscriptor.suscribir("cola_publicaciones");
 var publicador = require("../mom/momPublicador");
 var bus = require('../eventBus');
+
+// ---------
+
 var fs = require('fs');
 var async = require('async');
 

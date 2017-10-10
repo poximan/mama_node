@@ -1,5 +1,9 @@
+var suscriptor = require("../mom/momSuscriptor");
+suscriptor.suscribir("cola_compras");
 var publicador = require("../mom/momPublicador");
 var bus = require('../eventBus');
+
+// ---------
 
 var value = 0,      // valor inicial
     size  = 10000,  // tamaño del arreglo
@@ -168,13 +172,9 @@ bus.on("momResultadoAutorizacion", function (evento) {
 */
 
 bus.on("sincro_inf_compr1", function (evento) {
-  console.log("esperando resultado infraccion");
 });
 
 bus.on("sincro_inf_compr2", function (evento) {
-
-  console.log("se obtuvo resultado infraccion");
-  console.log("esperando confirmacion compra");
 });
 
 bus.on("sincro_inf_compr3", function (evento) {

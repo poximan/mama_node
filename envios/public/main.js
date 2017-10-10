@@ -93,26 +93,10 @@ $(function() {
 
   // Socket events
 
-  socket.on("resultadoFormaEntrega", function (evento) {
+  socket.on("resultadoCosto", function (evento) {
 
-    var texto = "compra " + evento.id + ": ¿forma de entrega?.";
-    texto += "usar: \"{id compra}:resEntrega={retira|correo}\""
-
-    addChatMessage(texto);
-  });
-
-  socket.on("resultadoMedioPago", function (evento) {
-
-    var texto = "compra " + evento.id + ": ¿medio de pago?.";
-    texto += "usar: \"{id compra}:resPago={debito|credito}\""
-
-    addChatMessage(texto);
-  });
-
-  socket.on("resultadoConfirmar", function (evento) {
-
-    var texto = "compra " + evento.id + ": ¿confirma compra?.";
-    texto += "usar: \"{id compra}:resConfirma={confirmada|cancelada}\""
+    var texto = "compra " + evento.id + ": costo adic correo.";
+    texto += "usar: \"{id compra}:resCosto={numero}\""
 
     addChatMessage(texto);
   });
@@ -120,9 +104,7 @@ $(function() {
   socket.on("resEstado", function (preguntas) {
 
     preguntas.forEach(function(pregunta) {
-
-      var texto = "compra " + pregunta.id + " : " + pregunta.data.compra.entrega.estado;
-      texto += " : " + pregunta.data.compra.pago.medio + " : " + pregunta.data.compra.estado;
+      var texto = "compra " + pregunta.id + " : " + pregunta.data.compra.adic_envio.valor;
 
       addChatMessage(texto);
     });

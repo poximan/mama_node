@@ -1,5 +1,43 @@
+var suscriptor = require("../mom/momSuscriptor");
+suscriptor.suscribir("cola_web");
 var publicador = require("../mom/momPublicador");
 var bus = require('../eventBus');
+
+var async = require('async');
+
+// ---------
+
+var id = 1;
+var publicaciones = [];
+
+exports.comprar = function() {
+
+  if(publicaciones.length > 0){
+
+    var operaciones = [
+      function(callback) {  // el callback siempre es el ultimo parametro
+          var evento = JSON.parse(require('fs').readFileSync('./payload.json', 'utf8'));
+          callback(null, evento);
+      },
+      function(evento, callback) {  // el callback siempre es el ultimo parametro
+          evento.data.publicacion = publicaciones[indicePublicacionElegida()];
+          callback(null, evento);
+      },
+      function(evento, callback) {
+          evento.tarea = "nuevaCompra";
+          callback(null, evento);
+      }
+    ];
+    async.waterfall(operaciones, function (err, evento) {
+      evento.id = id++;
+      bus.emit(evento.tarea, evento);
+    });
+  }
+}
+
+function indicePublicacionElegida() {
+  return Math.floor(Math.random() * publicaciones.length);
+}
 
 /*
 .............................................................
@@ -90,9 +128,13 @@ bus.on("momResultadoConfirmar", function (evento) {
 .............................................................
 */
 
+bus.on("cargarPublicaciones", function (evento) {
+  publicaciones = evento.data;
+});
+
 bus.on("momResultadoPublicaciones", function (evento) {
 
-  console.log("SAL: obteniendo nuevas publicaciones");
+  console.log("INTERNO: obteniendo nuevas publicaciones");
 
   evento.tarea = "cargarPublicaciones";
   bus.emit(evento.tarea, evento);

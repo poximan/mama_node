@@ -1,5 +1,9 @@
+var suscriptor = require("../mom/momSuscriptor");
+suscriptor.suscribir("cola_infracciones");
 var publicador = require("../mom/momPublicador");
 var bus = require('../eventBus');
+
+// ---------
 
 /*
 .............................................................

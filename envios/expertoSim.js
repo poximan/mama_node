@@ -1,4 +1,3 @@
-var bus = require('../eventBus');
 
 /*
 .............................................................
@@ -6,12 +5,8 @@ var bus = require('../eventBus');
 .............................................................
 */
 
-bus.on("resultadoCosto", function (evento) {
-  evento.data.compra.adic_envio.valor = costo();
-});
-
-function costo() {
-  return Math.ceil(probabilidad());
+exports.costo = function(evento) {
+  evento.data.compra.adic_envio.valor = Math.ceil(probabilidad());
 }
 
 function probabilidad() {

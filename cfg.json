@@ -9,7 +9,9 @@
     "port_web" : "5000",
     "port_publicaciones" : "5001",
     "port_pagos" : "5002",
-    "port_infracciones" : "5003"
+    "port_infracciones" : "5003",
+    "port_envios" : "5004",
+    "port_compras" : "5005"
   },
   "probabilidad" : {
     "infraccion" : "30",
