@@ -7,8 +7,9 @@ var operaciones = [
   function(callback) {
     console.log("levantando bd");
 
+    var version_mongo = "3.0";
     // servidor base de datos (hay que crear carpeta C:\data\db)
-    shell_ejec("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd 3.4 && cd bin && mongod.exe\"");
+    shell_ejec("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " + version_mongo +  " && cd bin && mongod.exe\"");
 
     callback(null);
   },

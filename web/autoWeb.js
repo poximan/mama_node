@@ -17,7 +17,8 @@ var bus = require('../eventBus');
 // ---------
 
 setInterval(mediador.persistir, 60000);
-setInterval(control.comprar, 10000);
+setInterval(control.comprar, 5000);
+setInterval(control.comprar, 5000);
 
 // ---------
 
