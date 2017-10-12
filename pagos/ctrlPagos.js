@@ -1,15 +1,17 @@
 var suscriptor = require("../mom/momSuscriptor");
 suscriptor.suscribir("cola_pagos");
 var publicador = require("../mom/momPublicador");
+
 var bus = require('../eventBus');
+var mediador = require("../mom/momMediador");
 
 // ---------
 
-/*
-.............................................................
-... mensajes MOM entrada-salida
-.............................................................
-*/
+mediador.coleccion("colecc_pagos");
+mediador.indice(3);
+
+exports.mediador = mediador;
+exports.bus = bus;
 
 /*
 .............................................................

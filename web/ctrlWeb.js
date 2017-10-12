@@ -1,9 +1,19 @@
 var suscriptor = require("../mom/momSuscriptor");
 suscriptor.suscribir("cola_web");
 var publicador = require("../mom/momPublicador");
+
 var bus = require('../eventBus');
+var mediador = require("../mom/momMediador");
 
 var async = require('async');
+
+// ---------
+
+mediador.coleccion("colecc_web");
+mediador.indice(5);
+
+exports.mediador = mediador;
+exports.bus = bus;
 
 // ---------
 

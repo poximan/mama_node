@@ -19,6 +19,33 @@ var compras = new Array();
 var compra;
 
 /*
+0=serv_compras
+1=serv_envios
+2=serv_infracciones
+3=serv_pagos
+4=serv_publicaciones
+5=serv_web
+*/
+var vector = [0, 100, 200, 300, 400, 500];
+var mi_reloj = 0;
+
+/*
+......... reloj vectorial
+*/
+
+exports.indice = function(indice) {
+  mi_reloj = indice;
+}
+
+exports.incrementar = function(){
+
+  vector[mi_reloj]++;
+  //console.log("reloj " + mi_reloj + " vale: " + vector[mi_reloj]);
+}
+
+//setInterval(this.incrementar, 5000);
+
+/*
 ......... persistencia
 */
 

@@ -1,7 +1,17 @@
 var suscriptor = require("../mom/momSuscriptor");
 suscriptor.suscribir("cola_compras");
 var publicador = require("../mom/momPublicador");
+
 var bus = require('../eventBus');
+var mediador = require("../mom/momMediador");
+
+// ---------
+
+mediador.coleccion("colecc_compras");
+mediador.indice(0);
+
+exports.mediador = mediador;
+exports.bus = bus;
 
 // ---------
 

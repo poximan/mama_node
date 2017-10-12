@@ -1,14 +1,12 @@
 /*
 este modulo conoce y agrupa distintas funcionalidades que en su conjunto, dan vida al servidor ejecutado
 
-- le avisa a un mediador que debera atender esos mensajes entrantes y convertirlos (marshalling)
-- prepara el control del servidor (la logica que contiene el negocio) para que escucha los eventos
-que se desencadenan a partir del marshalling
+- agrega el control principal del servidor, donde corre el nucleo del negocio.
+- pide el mediador que ya fue agregado por el control.
 */
 
-require('./ctrlCompras');
-var mediador = require("../mom/momMediador");
-mediador.coleccion("colecc_compras");
+var control = require('./ctrlCompras');
+var mediador = control.mediador;
 
 // ---------
 
