@@ -21,6 +21,7 @@ exports.bus = bus;
 
 bus.on("momAutorizarPago", function (evento) {
 
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando si autoriza pago");
   evento.tarea = "resultadoAutorizacion";
   bus.emit(evento.tarea, evento);
@@ -34,6 +35,7 @@ bus.on("momAutorizarPago", function (evento) {
 
 bus.on("momResultadoAutorizacion", function (evento) {
 
+  mediador.incrementar();
   console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.pago.estado);
   publicador("compras.publicaciones", evento);
 });

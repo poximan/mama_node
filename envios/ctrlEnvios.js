@@ -21,6 +21,7 @@ exports.bus = bus;
 
 bus.on("momCalcularCosto", function (evento) {
 
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando costo adicional por correo");
   evento.tarea = "resultadoCosto";
   bus.emit(evento.tarea, evento);
@@ -34,12 +35,14 @@ bus.on("momCalcularCosto", function (evento) {
 
 bus.on("momResultadoCosto", function (evento) {
 
+  mediador.incrementar();
   console.log("SAL: compra " + evento.id + " adic correo --> " + evento.data.compra.adic_envio.valor);
   publicador("compras", evento);
 });
 
 bus.on("momAgendarEnvio", function (evento) {
 
+  mediador.incrementar();
   console.log("SAL: compra " + evento.id + " --> agendada");
 
   evento.tarea = "momResultadoAgendarEnvio";

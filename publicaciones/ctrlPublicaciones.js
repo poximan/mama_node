@@ -89,6 +89,8 @@ bus.on("momGetPublicaciones", function (evento) {
 */
 
 bus.on("momPublicacionSeleccionada", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "producto reservado");
   reservas.push(evento);
 
@@ -98,6 +100,7 @@ bus.on("momPublicacionSeleccionada", function (evento) {
 
 bus.on("momResultadoInfraccion", function (evento) {
 
+  mediador.incrementar();
   estado_inf = evento.data.publicacion.infracciones.estado;
 
   estado_sincro_inf_pub[evento.id] += 2;
@@ -106,6 +109,7 @@ bus.on("momResultadoInfraccion", function (evento) {
 
 bus.on("momResultadoAutorizacion", function (evento) {
 
+  mediador.incrementar();
   estado_pago = evento.data.compra.pago.estado;
 
   estado_sincro_pub_pag[evento.id] += 2;
@@ -114,6 +118,7 @@ bus.on("momResultadoAutorizacion", function (evento) {
 
 bus.on("momResultadoAgendarEnvio", function (evento) {
 
+  mediador.incrementar();
   estado_envio = evento.data.compra.destino.valor;
 
   estado_sincro_pub_env[evento.id] += 2;
@@ -128,6 +133,7 @@ bus.on("momResultadoAgendarEnvio", function (evento) {
 
 bus.on("liberarProducto", function (evento) {
 
+  mediador.incrementar();
   console.log("INTERNO: compra " + evento.id + " --> " + "liberada");
 
   for (var i = 0; i < reservas.length; i++){
@@ -139,6 +145,8 @@ bus.on("liberarProducto", function (evento) {
 });
 
 bus.on("enviarProducto", function (evento) {
+
+  mediador.incrementar();
   console.log("INTERNO: producto " + evento.id + " --> " + "enviado");
 });
 
@@ -156,6 +164,7 @@ bus.on("sincro_inf_pub2", function (evento) {
 
 bus.on("sincro_inf_pub3", function (evento) {
 
+  mediador.incrementar();
   evento.data.publicacion.infracciones.estado = estado_inf;
   estado_inf = null;
 
@@ -179,6 +188,7 @@ bus.on("sincro_pub_pag2", function (evento) {
 
 bus.on("sincro_pub_pag3", function (evento) {
 
+  mediador.incrementar();
   console.log("INTERNO: compra " + evento.id + " --> " + "sincro 2 terminada");
   evento.data.compra.pago.estado = estado_pago;
   estado_inf = null;
@@ -214,6 +224,7 @@ bus.on("sincro_pub_env2", function (evento) {
 
 bus.on("sincro_pub_env3", function (evento) {
 
+  mediador.incrementar();
   console.log("INTERNO: compra " + evento.id + " --> " + "sincro 3 terminada");
 
   evento.data.compra.destino = estado_envio;

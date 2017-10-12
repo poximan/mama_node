@@ -34,6 +34,7 @@ var estado_inf = null;
 
 bus.on("momNuevaCompra", function (evento) {
 
+  mediador.incrementar();
   evento.data.compra.estado = evento.data.compra.estados[0]; // generada
 
   console.log("SAL: nueva compra. id " + evento.id + " --> " + evento.data.publicacion.descripcion.valor);
@@ -49,41 +50,57 @@ bus.on("momNuevaCompra", function (evento) {
 */
 
 bus.on("calcularCosto", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momCalcularCosto";
   publicador("envios", evento)
 })
 
 bus.on("seleccionarMedioPago", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momSeleccionarMedioPago";
   publicador("web", evento)
 })
 
 bus.on("confirmarCompra", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momConfirmarCompra";
   publicador("web", evento)
 })
 
 bus.on("informarInfraccion", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momInformarInfraccion";
   publicador("web", evento)
 })
 
 bus.on("informarPagoRechazado", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momInformarPagoRechazado";
   publicador("web", evento)
 })
 
 bus.on("autorizarPago", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momAutorizarPago";
   publicador("pagos", evento)
 })
 
 bus.on("aceptarCompra", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momAceptarCompra";
   publicador("web", evento)
 })
 
 bus.on("agendarEnvio", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momAgendarEnvio";
   publicador("envios", evento)
 })
@@ -95,6 +112,8 @@ bus.on("agendarEnvio", function (evento) {
 */
 
 bus.on("momResultadoFormaEntrega", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " entrega --> " + evento.data.compra.entrega.estado);
 
   // si el cliente elige metodo de envio correo
@@ -113,6 +132,8 @@ bus.on("momResultadoFormaEntrega", function (evento) {
 })
 
 bus.on("momResultadoMedioPago", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " pago --> " + evento.data.compra.pago.medio);
 
   evento.tarea = "confirmarCompra";
@@ -120,6 +141,8 @@ bus.on("momResultadoMedioPago", function (evento) {
 })
 
 bus.on("momResultadoCosto", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " adic correo --> " + evento.data.compra.adic_envio.valor);
 
   evento.tarea = "seleccionarMedioPago";
@@ -127,6 +150,8 @@ bus.on("momResultadoCosto", function (evento) {
 });
 
 bus.on("momResultadoConfirmar", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado);
 
   estado_sincro_inf_compr[evento.id] += 1;
@@ -134,6 +159,8 @@ bus.on("momResultadoConfirmar", function (evento) {
 });
 
 bus.on("momResultadoInfraccion", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.data.publicacion.infracciones.estado);
 
   estado_inf = evento.data.publicacion.infracciones.estado;
@@ -143,6 +170,8 @@ bus.on("momResultadoInfraccion", function (evento) {
 })
 
 bus.on("momResultadoAutorizacion", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " pago --> " + evento.data.compra.pago.estado);
 
   // si el pago fue rechazado
@@ -189,6 +218,7 @@ bus.on("sincro_inf_compr2", function (evento) {
 
 bus.on("sincro_inf_compr3", function (evento) {
 
+  mediador.incrementar();
   evento.data.publicacion.infracciones.estado = estado_inf;
   estado_inf = null;
 

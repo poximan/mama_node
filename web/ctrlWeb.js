@@ -64,6 +64,7 @@ function indicePublicacionElegida() {
 
 bus.on("momPublicacionSeleccionada", function (evento) {
 
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando forma de entrega");
   evento.tarea = "resultadoFormaEntrega";
   bus.emit(evento.tarea, evento);
@@ -71,6 +72,7 @@ bus.on("momPublicacionSeleccionada", function (evento) {
 
 bus.on("momSeleccionarMedioPago", function (evento) {
 
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando medio de pago");
   evento.tarea = "resultadoMedioPago";
   bus.emit(evento.tarea, evento);
@@ -78,20 +80,27 @@ bus.on("momSeleccionarMedioPago", function (evento) {
 
 bus.on("momConfirmarCompra", function (evento) {
 
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando a cliente si confima");
   evento.tarea = "resultadoConfirmar";
   bus.emit(evento.tarea, evento);
 });
 
 bus.on("momInformarInfraccion", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado + " por infraccion");
 });
 
 bus.on("momInformarPagoRechazado", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.pago.estado + " por pago");
 });
 
 bus.on("momAceptarCompra", function (evento) {
+
+  mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado + " en sistema");
 });
 
@@ -110,24 +119,30 @@ bus.on("momGetPublicaciones", function (evento) {
 });
 
 bus.on("nuevaCompra", function (evento) {
+
+  mediador.incrementar();
   evento.tarea = "momNuevaCompra";
   publicador("compras", evento);
 });
 
 bus.on("momResultadoFormaEntrega", function (evento) {
 
+
+  mediador.incrementar();
   console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.entrega.estado);
   publicador("compras", evento);
 });
 
 bus.on("momResultadoMedioPago", function (evento) {
 
+  mediador.incrementar();
   console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.pago.medio);
   publicador("compras", evento);
 });
 
 bus.on("momResultadoConfirmar", function (evento) {
 
+  mediador.incrementar();
   console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.estado + " por cliente");
   publicador("compras", evento);
 });

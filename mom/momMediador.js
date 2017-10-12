@@ -26,7 +26,7 @@ var compra;
 4=serv_publicaciones
 5=serv_web
 */
-var vector = [0, 100, 200, 300, 400, 500];
+var vector = [0, 0, 0, 0, 0, 0];
 var mi_reloj = 0;
 
 /*
@@ -39,11 +39,10 @@ exports.indice = function(indice) {
 
 exports.incrementar = function(){
 
+  console.log("\nreloj" + mi_reloj + " antes\t" + vector);
   vector[mi_reloj]++;
-  //console.log("reloj " + mi_reloj + " vale: " + vector[mi_reloj]);
+  console.log("reloj" + mi_reloj + " despues\t" + vector + "\n");
 }
-
-//setInterval(this.incrementar, 5000);
 
 /*
 ......... persistencia
