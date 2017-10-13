@@ -1,7 +1,4 @@
 var bus = require('../eventBus');
-var _ = require("underscore");
-var mongo = require('mongodb');
-// hay que crear carpeta C:\data\db
 
 /*
 .............................................................
@@ -9,6 +6,7 @@ var mongo = require('mongodb');
 .............................................................
 */
 
+// hay que crear carpeta C:\data\db
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/tatobd";
 
@@ -82,7 +80,6 @@ bus.on("mom", function (evento) {
   if (!compra){
     compras.push(evento);
   }
-
   bus.emit(evento.tarea, evento);
 });
 

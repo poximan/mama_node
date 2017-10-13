@@ -1,7 +1,7 @@
 var amqp = require('amqplib/callback_api');
 var bus = require('../eventBus');
 
-process.env.AMQP_URL = require("../cfg.json").amqp.url;
+var amqp_url = require("../cfg.json").amqp.url;
 
 var cola;
 
@@ -9,7 +9,7 @@ exports.suscribir = function(nombre_cola) {
   cola = nombre_cola;
 }
 
-amqp.connect(process.env.AMQP_URL, function(err, conn) {
+amqp.connect(amqp_url, function(err, conn) {
   conn.createChannel(function(err, ch) {
 
     ch.checkQueue(cola, function(err, q) {

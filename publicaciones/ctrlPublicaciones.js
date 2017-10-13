@@ -49,7 +49,7 @@ var estado_envio = null;
 
 bus.on("momGetPublicaciones", function (evento) {
 
-  var msg = []
+  var msg = [];
 
   var operaciones = [
     function(callback) {  // el callback siempre es el ultimo parametro
@@ -67,11 +67,13 @@ bus.on("momGetPublicaciones", function (evento) {
       callback(null);
     },
     function(callback) {
+
       evento.tarea = "momResultadoPublicaciones";
       evento.data = msg;
       callback(null);
     },
     function(callback) {
+
       publicador("web", evento);
       callback(null);
     }

@@ -16,8 +16,8 @@ var experto = require('./expertoSim');
 // ---------
 
 setInterval(mediador.persistir, 60000);
-setInterval(control.comprar, 1000);
-setInterval(control.comprar, 1000);
+setInterval(control.comprar, 2000);
+setInterval(control.comprar, 2000);
 
 // ---------
 
