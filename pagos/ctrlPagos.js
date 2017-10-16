@@ -1,6 +1,4 @@
-var suscriptor = require("../mom/momSuscriptor");
-suscriptor.suscribir("cola_pagos");
-var publicador = require("../mom/momPublicador");
+require("../mom/momSuscriptor").suscribir("cola_pagos");
 
 var bus = require('../eventBus');
 var mediador = require("../mom/momMediador");
@@ -8,7 +6,7 @@ var mediador = require("../mom/momMediador");
 // ---------
 
 mediador.coleccion("colecc_pagos");
-mediador.indice(3);
+mediador.indice(2);
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -22,6 +20,7 @@ exports.bus = bus;
 bus.on("momAutorizarPago", function (evento) {
 
   mediador.incrementar();
+
   console.log("ENT: compra " + evento.id + " --> " + "preguntando si autoriza pago");
   evento.tarea = "resultadoAutorizacion";
   bus.emit(evento.tarea, evento);
@@ -36,8 +35,9 @@ bus.on("momAutorizarPago", function (evento) {
 bus.on("momResultadoAutorizacion", function (evento) {
 
   mediador.incrementar();
-  console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.pago.estado);
-  publicador("compras.publicaciones", evento);
+
+  console.log("SAL: compra " + evento.id + " --> " + evento.compra.pago);
+  mediador.publicar("compras.publicaciones", evento);
 });
 
 /*

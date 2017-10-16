@@ -1,79 +1,52 @@
 {
-  "tarea":"nuevaCompra",
-  "id":"",
-  "data" : {
-    "compra" : {
-      "estado" : "",
-      "estados": [
-        "generada",
-        "confirmada",
-        "cancelada",
-        "aceptada"
-      ],
-      "entrega" : {
-        "estado" : "",
-        "estados": [
-          "procesando",
-          "retira",
-          "correo"
-        ]
-      },
-      "adic_envio" : {
-        "valor" : "",
-        "_coment" : "valor >= 0"
-      },
-      "destino" : {
-        "valor" : "",
-        "_coment" : "ciudad destino"
-      },
-      "reserva" : {
-        "estado" : "",
-        "estados": [
-          "procesando",
-          "reservado",
-          "liberado"
-        ]
-      },
-      "cantidad" : {
-        "valor" : "",
-        "_coment" : "valor >= 0 ^ <= cantidad publicada"
-      },
-      "pago" : {
-        "estado" : "",
-        "estados": [
-          "procesando",
-          "autorizado",
-          "rechazado"
-        ],
-        "medio" : "",
-        "medios": [
-          "debito",
-          "credito"
-        ]
-      }
-    },
-    "comprador" : {
-      "valor" : "",
-      "_coment" : "nombre"
-    },
-    "publicacion" : {
-      "descripcion" : {
-        "valor" : "",
-        "_coment" : "detalle del producto"
-      },
-      "precio" : "",
-      "cantidad" : "",
-      "vendedor" : {
-        "nombre" : ""
-      },
-      "infracciones" : {
-        "estado" : "",
-        "estados": [
-          "procesando",
-          "con_infr",
-          "sin_infr"
-        ]
-      }
-    }
-  }
+	"tarea": "nuevaCompra",
+	"id": "",
+	"compra": {
+		"estado": "",
+		"estados": [
+			"generada",
+			"confirmada",
+			"cancelada",
+			"aceptada"
+		],
+		"entrega": "",
+		"entrega_valores": [
+			"procesando",
+			"retira",
+			"correo"
+		],
+		"reserva": "",
+		"reserva_valores": [
+			"procesando",
+			"reservado",
+			"liberado"
+		],
+		"pago": "",
+		"pago_valores": [
+			"procesando",
+			"autorizado",
+			"rechazado"
+		],
+		"infracciones": "",
+		"infracciones_valores": [
+			"procesando",
+			"sin_infr",
+      "con_infr"
+		],
+    "medio": "",
+    "medios": [
+      "debito",
+      "credito"
+    ],
+		"adic_envio": "",
+		"destino": "",
+		"cantidad": ""
+	},
+	"comprador": "",
+	"publicacion": {
+		"descripcion": "",
+		"precio": "",
+		"cantidad": "",
+		"vendedor": ""
+	}
 }

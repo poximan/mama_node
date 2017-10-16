@@ -6,7 +6,7 @@
 */
 
 exports.costo = function(evento) {
-  evento.data.compra.adic_envio.valor = Math.ceil(probabilidad());
+  evento.compra.adic_envio = Math.ceil(probabilidad());
 }
 
 function probabilidad() {

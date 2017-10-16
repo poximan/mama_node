@@ -1,6 +1,4 @@
-var suscriptor = require("../mom/momSuscriptor");
-suscriptor.suscribir("cola_web");
-var publicador = require("../mom/momPublicador");
+require("../mom/momSuscriptor").suscribir("cola_web");
 
 var bus = require('../eventBus');
 var mediador = require("../mom/momMediador");
@@ -10,7 +8,7 @@ var async = require('async');
 // ---------
 
 mediador.coleccion("colecc_web");
-mediador.indice(5);
+mediador.indice(0);
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -26,21 +24,24 @@ exports.comprar = function() {
 
     var operaciones = [
       function(callback) {  // el callback siempre es el ultimo parametro
-          var evento = JSON.parse(require('fs').readFileSync('./payload.json', 'utf8'));
-          callback(null, evento);
+          var nueva_compra = JSON.parse(require('fs').readFileSync('./payload.json', 'utf8'));
+          callback(null, nueva_compra);
       },
-      function(evento, callback) {  // el callback siempre es el ultimo parametro
-          evento.data.publicacion = publicaciones[indicePublicacionElegida()];
-          callback(null, evento);
+      function(nueva_compra, callback) {  // el callback siempre es el ultimo parametro
+          nueva_compra.publicacion = publicaciones[indicePublicacionElegida()];
+          callback(null, nueva_compra);
       },
-      function(evento, callback) {
-          evento.tarea = "nuevaCompra";
-          callback(null, evento);
+      function(nueva_compra, callback) {
+          nueva_compra.tarea = "nuevaCompra";
+          callback(null, nueva_compra);
       }
     ];
-    async.waterfall(operaciones, function (err, evento) {
-      evento.id = id++;
-      bus.emit(evento.tarea, evento);
+    async.waterfall(operaciones, function (err, nueva_compra) {
+
+      mediador.incrementar();
+
+      nueva_compra.id = id++;
+      bus.emit(nueva_compra.tarea, nueva_compra);
     });
   }
 }
@@ -65,6 +66,7 @@ function indicePublicacionElegida() {
 bus.on("momPublicacionSeleccionada", function (evento) {
 
   mediador.incrementar();
+
   console.log("ENT: compra " + evento.id + " --> " + "preguntando forma de entrega");
   evento.tarea = "resultadoFormaEntrega";
   bus.emit(evento.tarea, evento);
@@ -73,6 +75,7 @@ bus.on("momPublicacionSeleccionada", function (evento) {
 bus.on("momSeleccionarMedioPago", function (evento) {
 
   mediador.incrementar();
+
   console.log("ENT: compra " + evento.id + " --> " + "preguntando medio de pago");
   evento.tarea = "resultadoMedioPago";
   bus.emit(evento.tarea, evento);
@@ -81,6 +84,7 @@ bus.on("momSeleccionarMedioPago", function (evento) {
 bus.on("momConfirmarCompra", function (evento) {
 
   mediador.incrementar();
+
   console.log("ENT: compra " + evento.id + " --> " + "preguntando a cliente si confima");
   evento.tarea = "resultadoConfirmar";
   bus.emit(evento.tarea, evento);
@@ -89,19 +93,27 @@ bus.on("momConfirmarCompra", function (evento) {
 bus.on("momInformarInfraccion", function (evento) {
 
   mediador.incrementar();
-  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado + " por infraccion");
+  console.log("ENT: compra " + evento.id + " --> " + evento.compra.infracciones + " por infraccion");
 });
 
 bus.on("momInformarPagoRechazado", function (evento) {
 
   mediador.incrementar();
-  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.pago.estado + " por pago");
+  console.log("ENT: compra " + evento.id + " --> " + evento.compra.pago + " por pago");
 });
 
 bus.on("momAceptarCompra", function (evento) {
 
   mediador.incrementar();
-  console.log("ENT: compra " + evento.id + " --> " + evento.data.compra.estado + " en sistema");
+  console.log("ENT: compra " + evento.id + " --> " + evento.compra.estado + " en sistema");
+});
+
+bus.on("momResultadoPublicaciones", function (evento) {
+
+  console.log("INTERNO: obteniendo nuevas publicaciones");
+
+  evento.tarea = "cargarPublicaciones";
+  bus.emit(evento.tarea, evento);
 });
 
 /*
@@ -115,36 +127,39 @@ bus.on("momGetPublicaciones", function (evento) {
   console.log("SAL: solicitando publicaciones");
 
   evento.tarea = "momGetPublicaciones";
-  publicador("publicaciones", evento)
+  mediador.publicar("publicaciones", evento);
 });
 
 bus.on("nuevaCompra", function (evento) {
 
   mediador.incrementar();
+
   evento.tarea = "momNuevaCompra";
-  publicador("compras", evento);
+  mediador.publicar("compras", evento);
 });
 
 bus.on("momResultadoFormaEntrega", function (evento) {
 
-
   mediador.incrementar();
-  console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.entrega.estado);
-  publicador("compras", evento);
+
+  console.log("SAL: compra " + evento.id + " --> " + evento.compra.entrega);
+  mediador.publicar("compras", evento);
 });
 
 bus.on("momResultadoMedioPago", function (evento) {
 
   mediador.incrementar();
-  console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.pago.medio);
-  publicador("compras", evento);
+
+  console.log("SAL: compra " + evento.id + " --> " + evento.compra.medio);
+  mediador.publicar("compras", evento);
 });
 
 bus.on("momResultadoConfirmar", function (evento) {
 
   mediador.incrementar();
-  console.log("SAL: compra " + evento.id + " --> " + evento.data.compra.estado + " por cliente");
-  publicador("compras", evento);
+
+  console.log("SAL: compra " + evento.id + " --> " + evento.compra.estado + " por cliente");
+  mediador.publicar("compras", evento);
 });
 
 /*
@@ -154,13 +169,5 @@ bus.on("momResultadoConfirmar", function (evento) {
 */
 
 bus.on("cargarPublicaciones", function (evento) {
-  publicaciones = evento.data;
-});
-
-bus.on("momResultadoPublicaciones", function (evento) {
-
-  console.log("INTERNO: obteniendo nuevas publicaciones");
-
-  evento.tarea = "cargarPublicaciones";
-  bus.emit(evento.tarea, evento);
+  publicaciones = evento.publicaciones;
 });

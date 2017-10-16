@@ -95,7 +95,7 @@ $(function() {
 
   socket.on("resEstado", function (preguntas) {
     preguntas.forEach(function(pregunta) {
-      var texto = "compra " + pregunta.id + " : " + pregunta.data.compra.estado;
+      var texto = "compra " + pregunta.id + " : " + pregunta.compra.estado;
       addChatMessage(texto);
     });
   });

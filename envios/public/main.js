@@ -104,7 +104,7 @@ $(function() {
   socket.on("resEstado", function (preguntas) {
 
     preguntas.forEach(function(pregunta) {
-      var texto = "compra " + pregunta.id + " : " + pregunta.data.compra.adic_envio.valor;
+      var texto = "compra " + pregunta.id + " : " + pregunta.compra.adic_envio;
 
       addChatMessage(texto);
     });

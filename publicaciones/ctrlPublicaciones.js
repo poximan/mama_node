@@ -1,6 +1,4 @@
-var suscriptor = require("../mom/momSuscriptor");
-suscriptor.suscribir("cola_publicaciones");
-var publicador = require("../mom/momPublicador");
+require("../mom/momSuscriptor").suscribir("cola_publicaciones");
 
 var bus = require('../eventBus');
 var mediador = require("../mom/momMediador");
@@ -8,7 +6,7 @@ var mediador = require("../mom/momMediador");
 // ---------
 
 mediador.coleccion("colecc_publicaciones");
-mediador.indice(4);
+mediador.indice(1);
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -69,12 +67,12 @@ bus.on("momGetPublicaciones", function (evento) {
     function(callback) {
 
       evento.tarea = "momResultadoPublicaciones";
-      evento.data = msg;
+      evento.publicaciones = msg;
       callback(null);
     },
     function(callback) {
 
-      publicador("web", evento);
+      mediador.publicar("web", evento);
       callback(null);
     }
   ];
@@ -103,7 +101,7 @@ bus.on("momPublicacionSeleccionada", function (evento) {
 bus.on("momResultadoInfraccion", function (evento) {
 
   mediador.incrementar();
-  estado_inf = evento.data.publicacion.infracciones.estado;
+  estado_inf = evento.compra.infracciones;
 
   estado_sincro_inf_pub[evento.id] += 2;
   bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
@@ -112,7 +110,7 @@ bus.on("momResultadoInfraccion", function (evento) {
 bus.on("momResultadoAutorizacion", function (evento) {
 
   mediador.incrementar();
-  estado_pago = evento.data.compra.pago.estado;
+  estado_pago = evento.compra.pago;
 
   estado_sincro_pub_pag[evento.id] += 2;
   bus.emit("sincro_pub_pag"+estado_sincro_pub_pag[evento.id], evento);
@@ -121,7 +119,7 @@ bus.on("momResultadoAutorizacion", function (evento) {
 bus.on("momResultadoAgendarEnvio", function (evento) {
 
   mediador.incrementar();
-  estado_envio = evento.data.compra.destino.valor;
+  estado_envio = evento.compra.destino;
 
   estado_sincro_pub_env[evento.id] += 2;
   bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
@@ -167,7 +165,7 @@ bus.on("sincro_inf_pub2", function (evento) {
 bus.on("sincro_inf_pub3", function (evento) {
 
   mediador.incrementar();
-  evento.data.publicacion.infracciones.estado = estado_inf;
+  evento.compra.infracciones = estado_inf;
   estado_inf = null;
 
   console.log("INTERNO: compra " + evento.id + " --> " + "sincro 1 terminada");
@@ -192,20 +190,20 @@ bus.on("sincro_pub_pag3", function (evento) {
 
   mediador.incrementar();
   console.log("INTERNO: compra " + evento.id + " --> " + "sincro 2 terminada");
-  evento.data.compra.pago.estado = estado_pago;
+  evento.compra.pago = estado_pago;
   estado_inf = null;
 
   // si la compra registra infracciones o el pago fue rechazado
-  if(evento.data.publicacion.infracciones.estado === evento.data.publicacion.infracciones.estados[1] ||
-    evento.data.compra.pago.estado === evento.data.compra.pago.estados[2]){
+  if(evento.compra.infracciones === evento.compra.infracciones_valores[2] ||
+    evento.compra.pago === evento.compra.pago_valores[2]){
 
     evento.tarea = "liberarProducto";
     bus.emit(evento.tarea, evento);
   }
 
   // si la compra no registra infracciones y el pago fue aceptado
-  if(evento.data.publicacion.infracciones.estado === evento.data.publicacion.infracciones.estados[2] ||
-    evento.data.compra.pago.estado === evento.data.compra.pago.estados[1]){
+  if(evento.compra.infracciones === evento.compra.infracciones_valores[1] ||
+    evento.compra.pago === evento.compra.pago_valores[1]){
 
       estado_sincro_pub_env[evento.id] += 1;
       bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
@@ -229,7 +227,7 @@ bus.on("sincro_pub_env3", function (evento) {
   mediador.incrementar();
   console.log("INTERNO: compra " + evento.id + " --> " + "sincro 3 terminada");
 
-  evento.data.compra.destino = estado_envio;
+  evento.compra.destino = estado_envio;
   estado_envio = null;
 
   evento.tarea = "enviarProducto";

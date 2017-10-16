@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = require("../cfg.json").monitor.port_web;
+var port = require("../cfg.json").manual.monitor.port_web;
 
 var _ = require("underscore");
 var bus = require('../eventBus');
@@ -44,7 +44,7 @@ io.on('connection', function (socket) {
     var evento = buscarEvento(msg);
 
     if(evento){
-      evento.data.compra.entrega.estado = msg.decision;
+      evento.compra.entrega = msg.decision;
       evento.tarea = "momResultadoFormaEntrega";
       bus.emit(evento.tarea, evento);
     }
@@ -55,7 +55,7 @@ io.on('connection', function (socket) {
     var evento = buscarEvento(msg);
 
     if(evento){
-      evento.data.compra.pago.medio = msg.decision;
+      evento.compra.medio = msg.decision;
       evento.tarea = "momResultadoMedioPago";
       bus.emit(evento.tarea, evento);
     }
@@ -66,7 +66,7 @@ io.on('connection', function (socket) {
     var evento = buscarEvento(msg);
 
     if(evento){
-      evento.data.compra.estado = msg.decision;
+      evento.compra.estado = msg.decision;
       evento.tarea = "momResultadoConfirmar";
       bus.emit(evento.tarea, evento);
     }

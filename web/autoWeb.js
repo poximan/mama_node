@@ -13,11 +13,14 @@ var bus = control.bus;
 
 var experto = require('./expertoSim');
 
+var p_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+var p_comprar = require("../cfg.json").automatico.nueva_compra.periodo;
+
 // ---------
 
-setInterval(mediador.persistir, 60000);
-setInterval(control.comprar, 2000);
-setInterval(control.comprar, 2000);
+setInterval(mediador.persistir, p_persistencia);
+setInterval(control.comprar, p_comprar);
+setInterval(control.comprar, p_comprar);
 
 // ---------
 
@@ -50,9 +53,7 @@ bus.on("resultadoConfirmar", function (evento) {
 
 var get_publicaciones = {
   "tarea":"momGetPublicaciones",
-  "id":"",
-  "data" : {
-  }
+  "publicaciones" : []
 }
 
 bus.emit(get_publicaciones.tarea, get_publicaciones);

@@ -1,4 +1,4 @@
-var p_autorizacion = require("../cfg.json").probabilidad.autorizacion;
+var p_autorizacion = require("../cfg.json").automatico.probabilidad.autorizacion;
 
 /*
 .............................................................
@@ -9,9 +9,9 @@ var p_autorizacion = require("../cfg.json").probabilidad.autorizacion;
 exports.autorizar = function(evento) {
 
   if(probabilidad() <= p_autorizacion)
-    evento.data.compra.pago.estado = evento.data.compra.pago.estados[1]; // autorizado
+    evento.compra.pago = evento.compra.pago_valores[1]; // autorizado
   else
-    evento.data.compra.pago.estado = evento.data.compra.pago.estados[2]; // rechazado
+    evento.compra.pago = evento.compra.pago_valores[2]; // rechazado
 }
 
 function probabilidad() {

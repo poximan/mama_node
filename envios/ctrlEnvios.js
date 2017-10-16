@@ -1,6 +1,4 @@
-var suscriptor = require("../mom/momSuscriptor");
-suscriptor.suscribir("cola_envios");
-var publicador = require("../mom/momPublicador");
+require("../mom/momSuscriptor").suscribir("cola_envios");
 
 var bus = require('../eventBus');
 var mediador = require("../mom/momMediador");
@@ -8,7 +6,7 @@ var mediador = require("../mom/momMediador");
 // ---------
 
 mediador.coleccion("colecc_envios");
-mediador.indice(1);
+mediador.indice(4);
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -22,6 +20,7 @@ exports.bus = bus;
 bus.on("momCalcularCosto", function (evento) {
 
   mediador.incrementar();
+
   console.log("ENT: compra " + evento.id + " --> " + "preguntando costo adicional por correo");
   evento.tarea = "resultadoCosto";
   bus.emit(evento.tarea, evento);
@@ -36,17 +35,18 @@ bus.on("momCalcularCosto", function (evento) {
 bus.on("momResultadoCosto", function (evento) {
 
   mediador.incrementar();
-  console.log("SAL: compra " + evento.id + " adic correo --> " + evento.data.compra.adic_envio.valor);
-  publicador("compras", evento);
+
+  console.log("SAL: compra " + evento.id + " adic correo --> " + evento.compra.adic_envio);
+  mediador.publicar("compras", evento);
 });
 
 bus.on("momAgendarEnvio", function (evento) {
 
   mediador.incrementar();
-  console.log("SAL: compra " + evento.id + " --> agendada");
 
+  console.log("SAL: compra " + evento.id + " --> agendada");
   evento.tarea = "momResultadoAgendarEnvio";
-  publicador("publicaciones", evento);
+  mediador.publicar("publicaciones", evento);
 });
 
 /*

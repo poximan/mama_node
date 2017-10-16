@@ -8,6 +8,10 @@ este modulo conoce y agrupa distintas funcionalidades que en su conjunto, dan vi
 var control = require('./ctrlCompras');
 var mediador = control.mediador;
 
+var p_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+
 // ---------
 
-setInterval(mediador.persistir, 60000);
+setInterval(mediador.persistir, p_persistencia);
+
+// ---------

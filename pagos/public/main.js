@@ -103,7 +103,7 @@ $(function() {
 
   socket.on("resEstado", function (preguntas) {
     preguntas.forEach(function(pregunta) {
-      var texto = "compra " + pregunta.id + " : " + pregunta.data.compra.pago.estado;
+      var texto = "compra " + pregunta.id + " : " + pregunta.compra.pago;
       addChatMessage(texto);
     });
   });

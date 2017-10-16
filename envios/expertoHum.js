@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = require("../cfg.json").monitor.port_envios;
+var port = require("../cfg.json").manual.monitor.port_envios;
 
 var _ = require("underscore");
 var bus = require('../eventBus');
@@ -40,7 +40,7 @@ io.on('connection', function (socket) {
     var evento = buscarEvento(msg);
 
     if(evento){
-      evento.data.compra.adic_envio.valor = msg.decision;
+      evento.compra.adic_envio = msg.decision;
       evento.tarea = "momResultadoCosto";
       bus.emit(evento.tarea, evento);
     }

@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 var amqp = require('amqplib/callback_api');
+var amqp_url = require("../cfg.json").amqp.url;
 
-process.env.AMQP_URL = require("../cfg.json").amqp.url;
-
-amqp.connect(process.env.AMQP_URL, function(err, conn) {
+amqp.connect(amqp_url, function(err, conn) {
   conn.createChannel(function(err, ch) {
 
     var ex = 'exchange';

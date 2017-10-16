@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = require("../cfg.json").monitor.port_pagos;
+var port = require("../cfg.json").manual.monitor.port_pagos;
 
 var _ = require("underscore");
 var bus = require('../eventBus');
@@ -40,7 +40,7 @@ io.on('connection', function (socket) {
     var evento = buscarEvento(msg);
 
     if(evento){
-      evento.data.compra.pago.estado = msg.decision;
+      evento.compra.pago = msg.decision;
       evento.tarea = "momResultadoAutorizacion";
       bus.emit(evento.tarea, evento);
     }

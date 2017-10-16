@@ -12,6 +12,10 @@ var mediador = control.mediador;
 
 require('./expertoSim');
 
+var p_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+
 // ---------
 
-setInterval(mediador.persistir, 60000);
+setInterval(mediador.persistir, p_persistencia);
+
+// ---------

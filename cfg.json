@@ -1,30 +1,45 @@
 {
   "amqp" : {
-    "url" : "amqp://localhost",
-    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq?heartbeat=0,5",
-    "management" : "http://localhost:15672/"
+    "_coment" : "amqp://localhost",
+    "url" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
+    "management" : "http://localhost:15672/",
+    "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
   },
-  "monitor" : {
-    "ip_monitor" : "http://localhost",
-    "port_web" : "5000",
-    "port_publicaciones" : "5001",
-    "port_pagos" : "5002",
-    "port_infracciones" : "5003",
-    "port_envios" : "5004",
-    "port_compras" : "5005"
+  "mongo" : {
+    "url" : "mongodb://localhost:27017/tatobd",
+    "_coment" : "mongodb://localhost:27017/tatobd",
+    "management" : "http://localhost:27017/"
   },
-  "probabilidad" : {
-    "infraccion" : "30",
-    "_coment" : "(30) probabilidad infraccion en compra",
-    "autorizacion" : "70",
-    "_coment" : "(70) probabilidad autorizacion pago de la compra",
-    "cliente" : {
-      "correo" : "80",
-      "_coment" : "(80) probabilidad que cliente elija metodo envio correo",
-      "debito" : "50",
-      "_coment" : "(50) probabilidad que cliente elija metodo pago debito",
-      "confirma" : "70",
-      "_coment" : "(70) probabilidad que cliente confirme compra"
+  "manual" : {
+    "monitor" : {
+      "port_web" : "5000",
+      "port_publicaciones" : "5001",
+      "port_pagos" : "5002",
+      "port_infracciones" : "5003",
+      "port_envios" : "5004",
+      "port_compras" : "5005"
+    }
+  },
+  "automatico" : {
+    "probabilidad" : {
+      "infraccion" : "30",
+      "_coment" : "(30) probabilidad infraccion en compra",
+      "autorizacion" : "70",
+      "_coment" : "(70) probabilidad autorizacion pago de la compra",
+      "cliente" : {
+        "correo" : "80",
+        "_coment" : "(80) probabilidad que cliente elija metodo envio correo",
+        "debito" : "50",
+        "_coment" : "(50) probabilidad que cliente elija metodo pago debito",
+        "confirma" : "70",
+        "_coment" : "(70) probabilidad que cliente confirme compra"
+      }
+    },
+    "nueva_compra" : {
+      "periodo" : "3000"
+    },
+    "persistencia" : {
+      "periodo" : "60000"
     }
   }
 }

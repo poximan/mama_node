@@ -43,9 +43,7 @@ bus.on("persistir", function (evento) {
 
 var get_publicaciones = {
   "tarea":"momGetPublicaciones",
-  "id":"",
-  "data" : {
-  }
+  "publicaciones" : []
 }
 
 bus.emit(get_publicaciones.tarea, get_publicaciones);

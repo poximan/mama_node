@@ -1,190 +1,62 @@
-[{
-  "descripcion" : {
-    "valor" : "piedra espanta osos",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "23",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "lisa simpson"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "suelo lunar en frasco",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "158",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "buzz aldrin"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "teclado sin h",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "400",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "hugo donato"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "ecce homo de borja, restaurado",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "17",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "cecilia zueco"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "libro castellano-cetaceo",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "5",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "dory"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "marcador para pizarra, sin tinta",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "6",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "gabriela olguin"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "nintendo de coco",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "65",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "bart simpson"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "libro guia para armar aviones de papel que vuelan",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "125",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "dios todoPoderoso"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "observatorio espacial para armar",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "1700",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "un chino"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-},
-{
-  "descripcion" : {
-    "valor" : "cable para mouse inalambrico",
-    "_coment" : "detalle del producto"
-  },
-  "precio" : "5",
-  "cantidad" : "",
-  "vendedor" : {
-    "nombre" : "un pillo"
-  },
-  "infracciones" : {
-    "estado" : "",
-    "estados": [
-      "procesando",
-      "con_infr",
-      "sin_infr"
-    ]
-  }
-}]
+[
+   {
+      "descripcion":"piedra espanta osos",
+      "precio":"23",
+      "cantidad":"",
+      "vendedor":"lisa simpson"
+   },
+   {
+      "descripcion":"suelo lunar en frasco",
+      "precio":"158",
+      "cantidad":"",
+      "vendedor":"buzz aldrin"
+   },
+   {
+      "descripcion":"teclado sin h",
+      "precio":"400",
+      "cantidad":"",
+      "vendedor":"hugo donato"
+   },
+   {
+      "descripcion":"ecce homo de borja, restaurado",
+      "precio":"17",
+      "cantidad":"",
+      "vendedor":"cecilia zueco"
+   },
+   {
+      "descripcion":"libro castellano-cetaceo",
+      "precio":"5",
+      "cantidad":"",
+      "vendedor":"dory"
+   },
+   {
+      "descripcion":"marcador para pizarra, sin tinta",
+      "precio":"6",
+      "cantidad":"",
+      "vendedor":"gabriela olguin"
+   },
+   {
+      "descripcion":"nintendo de coco",
+      "precio":"65",
+      "cantidad":"",
+      "vendedor":"bart simpson"
+   },
+   {
+      "descripcion":"libro guia para armar aviones de papel que vuelan",
+      "precio":"125",
+      "cantidad":"",
+      "vendedor":"dios todoPoderoso"
+   },
+   {
+      "descripcion":"observatorio espacial para armar",
+      "precio":"1700",
+      "cantidad":"",
+      "vendedor":"un chino"
+   },
+   {
+      "descripcion":"cable para mouse inalambrico",
+      "precio":"5",
+      "cantidad":"",
+      "vendedor":"un pillo"
+   }
+ ]

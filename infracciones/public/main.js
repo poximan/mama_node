@@ -96,7 +96,7 @@ $(function() {
   socket.on("resultadoInfraccion", function (evento) {
 
     var texto = "compra " + evento.id + ": ¿posee infraccion?.";
-    texto += "usar: \"{id compra}:resInfraccion={con_infr|sin_infr}\""
+    texto += "usar: \"{id compra}:resInfraccion={sin_infr|con_infr}\""
 
     addChatMessage(texto);
   });
@@ -104,7 +104,7 @@ $(function() {
   socket.on("resEstado", function (preguntas) {
 
     preguntas.forEach(function(pregunta) {
-      var texto = "compra " + pregunta.id + " : " + pregunta.data.publicacion.infracciones.estado;
+      var texto = "compra " + pregunta.id + " : " + pregunta.compra.infracciones;
 
       addChatMessage(texto);
     });

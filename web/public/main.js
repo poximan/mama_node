@@ -121,8 +121,8 @@ $(function() {
 
     preguntas.forEach(function(pregunta) {
 
-      var texto = "compra " + pregunta.id + " : " + pregunta.data.compra.entrega.estado;
-      texto += " : " + pregunta.data.compra.pago.medio + " : " + pregunta.data.compra.estado;
+      var texto = "compra " + pregunta.id + " : " + pregunta.compra.entrega;
+      texto += " : " + pregunta.compra.medio + " : " + pregunta.compra.estado;
 
       addChatMessage(texto);
     });

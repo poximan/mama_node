@@ -1,3 +1,4 @@
+var publicador = require("./momPublicador");
 var bus = require('../eventBus');
 
 /*
@@ -8,7 +9,7 @@ var bus = require('../eventBus');
 
 // hay que crear carpeta C:\data\db
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/tatobd";
+var mongo_url = require("../cfg.json").mongo.url;
 
 var instancia_db;
 var coleccion;
@@ -36,10 +37,8 @@ exports.indice = function(indice) {
 }
 
 exports.incrementar = function(){
-
-  console.log("\nreloj" + mi_reloj + " antes\t" + vector);
   vector[mi_reloj]++;
-  console.log("reloj" + mi_reloj + " despues\t" + vector + "\n");
+  console.log("INTERNO: actualizando reloj " + mi_reloj + ": " + vector);
 }
 
 /*
@@ -48,48 +47,48 @@ exports.incrementar = function(){
 
 exports.coleccion = function(nombre_coleccion) {
   coleccion = nombre_coleccion;
-
-  MongoClient.connect(url, function(err, db) {
-
-    if (err) throw err;
-    console.log("conectado a BD");
-
-    instancia_db = db;
-
-    db.createCollection(coleccion, function(err, res) {
-      if (err) throw err;
-      console.log("coleccion creada");
-    });
-  });
 }
 
 /*
 ......... eventos
 */
 
-bus.on("mom", function (evento) {
+bus.on("mom", function (msg) {
+
+  actualizarVector(msg.vector);
 
   /*
   crea un nuevo array con todos los elementos
   que cumplan la condición implementada por la función dada.
   */
   compras = compras.filter(function(item) {
-      return item.id !== evento.id;
+      return item.id !== msg.evento.id;
   })
 
   if (!compra){
-    compras.push(evento);
+    compras.push(msg.evento);
   }
-  bus.emit(evento.tarea, evento);
+  bus.emit(msg.evento.tarea, msg.evento);
 });
 
 exports.persistir = function() {
+  console.log("persistiendo");
+}
 
-  instancia_db.collection(coleccion).update(compras);
-/*
-  instancia_db.collection(coleccion).insertMany(compras, function(err, res) {
-    if (err) throw err;
-    console.log("se insertaron: " + res.insertedCount + " docs en " + coleccion);
-  });
-  */
+exports.publicar = function(reglas_ruteo, evento){
+
+  var msg = {vector, evento};
+  publicador.publicar(reglas_ruteo, msg);
+}
+
+function actualizarVector(nuevo_vector){
+
+  var aux_reloj = vector[mi_reloj];
+  
+  for (var i = 0; i < vector.length; i++) {
+    if(vector[i] < nuevo_vector[i])
+      vector[i] = nuevo_vector[i];
+  }
+  if(aux_reloj < vector[mi_reloj])
+    console.error("error en reloj vectorial");
 }

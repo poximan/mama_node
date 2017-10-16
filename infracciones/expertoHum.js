@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = require("../cfg.json").monitor.port_infracciones;
+var port = require("../cfg.json").manual.monitor.port_infracciones;
 
 var _ = require("underscore");
 var bus = require('../eventBus');
@@ -40,7 +40,7 @@ io.on('connection', function (socket) {
     var evento = buscarEvento(msg);
 
     if(evento){
-      evento.data.publicacion.infracciones.estado = msg.decision;
+      evento.compra.infracciones = msg.decision;
       evento.tarea = "momResultadoInfraccion";
       bus.emit(evento.tarea, evento);
     }

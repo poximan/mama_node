@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = require("../cfg.json").monitor.port_publicaciones;
+var port = require("../cfg.json").manual.monitor.port_publicaciones;
 
 var _ = require("underscore");
 var bus = require('../eventBus');
@@ -31,7 +31,7 @@ io.on('connection', function (socket) {
     console.log("respondiendo estado del servidor");
     socket.emit("resEstado", preguntas);
   });
-  
+
   socket.on("persistir", function (msg) {
     bus.emit("persistir", msg);
   });
