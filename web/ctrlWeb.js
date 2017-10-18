@@ -32,7 +32,7 @@ exports.comprar = function() {
           callback(null, nueva_compra);
       },
       function(nueva_compra, callback) {
-          nueva_compra.tarea = "nuevaCompra";
+          nueva_compra.tarea = "momNuevaCompra";
           callback(null, nueva_compra);
       }
     ];
@@ -130,11 +130,11 @@ bus.on("momGetPublicaciones", function (evento) {
   mediador.publicar("publicaciones", evento);
 });
 
-bus.on("nuevaCompra", function (evento) {
+bus.on("momNuevaCompra", function (evento) {
 
   mediador.incrementar();
 
-  evento.tarea = "momNuevaCompra";
+  console.log("SAL: nueva compra " + evento.id + " --> " + evento.publicacion.descripcion);
   mediador.publicar("compras", evento);
 });
 

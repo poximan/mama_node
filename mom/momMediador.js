@@ -38,7 +38,7 @@ exports.indice = function(indice) {
 
 exports.incrementar = function(){
   vector[mi_reloj]++;
-  console.log("INTERNO: actualizando reloj " + mi_reloj + ": " + vector);
+  console.log("INT: reloj " + mi_reloj + ": " + vector);
 }
 
 /*
@@ -84,7 +84,7 @@ exports.publicar = function(reglas_ruteo, evento){
 function actualizarVector(nuevo_vector){
 
   var aux_reloj = vector[mi_reloj];
-  
+
   for (var i = 0; i < vector.length; i++) {
     if(vector[i] < nuevo_vector[i])
       vector[i] = nuevo_vector[i];

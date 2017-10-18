@@ -38,7 +38,7 @@ bus.on("momNuevaCompra", function (evento) {
 
   evento.compra.estado = evento.compra.estados[0]; // generada
 
-  console.log("SAL: nueva compra. id " + evento.id + " --> " + evento.publicacion.descripcion);
+  console.log("ENT: procesando nueva compra: id " + evento.id + " --> " + evento.publicacion.descripcion);
 
   evento.tarea = "momPublicacionSeleccionada";
   mediador.publicar("web.infracciones.publicaciones", evento);
