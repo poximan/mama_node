@@ -1,4 +1,13 @@
 var port = require("../cfg.json").manual.monitor.port_compras;
+
+const Server = require('socket.io');
+const server = require('http').Server();
+
+var io = Server(port);
+
+io.close(); // Close current server
+io = Server(server);
+
 var _ = require("underscore");
 var bus = require('../eventBus');
 
@@ -8,21 +17,7 @@ exports.preguntar = function(evento) {
   preguntas.push(evento);
 }
 
-var app = require('express')();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
-/*
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/public/*');
-});
-*/
-
 io.on('connection', function (socket) {
-
-  socket.on("entrando", function (msg) {
-    console.log("Se registro conexion entrante");
-  });
 
   socket.on("get", function (msg) {
 
@@ -41,10 +36,29 @@ io.on('connection', function (socket) {
     bus.emit("persistir", msg);
   });
 
+  socket.on("?", function (msg) {
+    socket.emit("res?", msgs_validos);
+  });
+
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
 
   });
+
+  /*
+  .............................................................
+  ... preparar mensajes validos
+  .............................................................
+  */
+
+  var msgs = socket._events;
+  var msgs_validos = [];
+
+  delete msgs.disconnect;
+
+  for (var key in msgs) {
+     msgs_validos.push(key);
+  }
 });
 
 server.listen(port, function () {

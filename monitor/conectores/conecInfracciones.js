@@ -1,33 +1,33 @@
-var ip_envios = require("../../cfg.json").manual.monitor.ip_envios;
-var port_envios = require("../../cfg.json").manual.monitor.port_envios;
+var ip_infracciones = require("../../cfg.json").manual.monitor.ip_infracciones;
+var port_infracciones = require("../../cfg.json").manual.monitor.port_infracciones;
 
-const socket = require('socket.io-client')(ip_envios + ":" + port_envios);
+const socket = require('socket.io-client')(ip_infracciones + ":" + port_infracciones);
 var msgs_validos_remotos;
 
 var socket_monitor;
 
 socket.on('connect', () => {
-  console.log("ServEnvios: conectado");
+  console.log("ServInfracciones: conectado");
 });
 
 socket.on('disconnect', () => {
-  console.log("ServEnvios: desconectado");
+  console.log("ServInfracciones: desconectado");
 });
 
-socket.on("resultadoCosto", (preguntas) => {
-  console.log("ServEnvios: pregunta costo envio");
-  socket_monitor.emit("resultadoCosto", preguntas);
+socket.on("resultadoInfraccion", (preguntas) => {
+  console.log("ServInfracciones: pregunta si existe infraccion");
+  socket_monitor.emit("resultadoInfraccion", preguntas);
 });
 
 socket.on("resEstado", (preguntas) => {
-  console.log("ServEnvios: estado respondido");
+  console.log("ServInfracciones: estado respondido");
   socket_monitor.emit("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServEnvios: mensajes validos son {", msgs_validos_remotos, "}"];
+  var respuesta = ["ServInfracciones: mensajes validos son {", msgs_validos_remotos, "}"];
 
   if(socket_monitor !== undefined)
     socket_monitor.emit("res?", respuesta);
@@ -74,7 +74,7 @@ function esValido(comando){
     if(comando === msg)
       coincidencia = true;
   });
-  console.log("ServEnvios: comando \"" + comando + "\" -->", (coincidencia?"valido":"invalido"));
+  console.log("ServInfracciones: comando \"" + comando + "\" -->", (coincidencia?"valido":"invalido"));
   return coincidencia;
 }
 

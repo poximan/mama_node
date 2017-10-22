@@ -1,4 +1,3 @@
-// Setup basic express server
 var port = require("../cfg.json").manual.monitor.port_envios;
 
 const Server = require('socket.io');
@@ -59,7 +58,6 @@ io.on('connection', function (socket) {
   function buscarEvento(msg){
 
     var evento;
-
     preguntas = _(preguntas).filter(function(item) {
       if(item.id == msg.id)
         evento = item;

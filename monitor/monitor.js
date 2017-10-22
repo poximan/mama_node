@@ -21,7 +21,15 @@ io.on('connection', function (socket) {
 
   socket.on("compras", function (msg) {
 
-    console.log("redireccionando a serv compras");
+    console.log("redireccionando a ServCompras");
+
+    var comando = msg.message;
+    var instancia = msg.instancia;
+
+    if(conectores.c_compras.esValido(comando)){
+      conectores.c_compras.socket.emit(comando, instancia);
+      conectores.c_compras.retorno(socket);
+    }
   });
 
   socket.on("envios", function (msg) {
@@ -38,11 +46,29 @@ io.on('connection', function (socket) {
   });
 
   socket.on("infracciones", function (msg) {
-    console.log("redireccionando a serv infracciones");
+
+    console.log("redireccionando a ServInfracciones");
+
+    var comando = msg.message;
+    var instancia = msg.instancia;
+
+    if(conectores.c_infracciones.esValido(comando)){
+      conectores.c_infracciones.socket.emit(comando, instancia);
+      conectores.c_infracciones.retorno(socket);
+    }
   });
 
   socket.on("pagos", function (msg) {
-    console.log("redireccionando a serv pagos");
+
+    console.log("redireccionando a ServPagos");
+
+    var comando = msg.message;
+    var instancia = msg.instancia;
+
+    if(conectores.c_pagos.esValido(comando)){
+      conectores.c_pagos.socket.emit(comando, instancia);
+      conectores.c_pagos.retorno(socket);
+    }
   });
 
   socket.on("publicaciones", function (msg) {

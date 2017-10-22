@@ -96,6 +96,22 @@ $(function() {
     addChatMessage(texto);
   });
 
+  socket.on("resultadoInfraccion", function (evento) {
+
+    var texto = "compra " + evento.id + ": ¿posee infraccion?.";
+    texto += "usar: \"{id compra}:resInfraccion={sin_infr|con_infr}\""
+
+    addChatMessage(texto);
+  });
+
+  socket.on("resultadoAutorizacion", function (evento) {
+
+    var texto = "compra " + evento.id + ": ¿autorizar?.";
+    texto += "usar: \"{id compra}:resAutorizar={autorizado|rechazado}\""
+
+    addChatMessage(texto);
+  });
+  
   socket.on("resEstado", function (preguntas) {
     preguntas.forEach(function(pregunta) {
 

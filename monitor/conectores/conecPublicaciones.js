@@ -15,7 +15,7 @@ socket.on('disconnect', () => {
 });
 
 socket.on("resultadoCosto", (preguntas) => {
-  console.log("ServEnvios: pregunta costo envio");
+  console.log("ServEnvios: estado respondido");
   socket_monitor.emit("resultadoCosto", preguntas);
 });
 

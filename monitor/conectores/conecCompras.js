@@ -1,33 +1,28 @@
-var ip_envios = require("../../cfg.json").manual.monitor.ip_envios;
-var port_envios = require("../../cfg.json").manual.monitor.port_envios;
+var ip_compras = require("../../cfg.json").manual.monitor.ip_compras;
+var port_compras = require("../../cfg.json").manual.monitor.port_compras;
 
-const socket = require('socket.io-client')(ip_envios + ":" + port_envios);
+const socket = require('socket.io-client')(ip_compras + ":" + port_compras);
 var msgs_validos_remotos;
 
 var socket_monitor;
 
 socket.on('connect', () => {
-  console.log("ServEnvios: conectado");
+  console.log("ServCompras: conectado");
 });
 
 socket.on('disconnect', () => {
-  console.log("ServEnvios: desconectado");
-});
-
-socket.on("resultadoCosto", (preguntas) => {
-  console.log("ServEnvios: pregunta costo envio");
-  socket_monitor.emit("resultadoCosto", preguntas);
+  console.log("ServCompras: desconectado");
 });
 
 socket.on("resEstado", (preguntas) => {
-  console.log("ServEnvios: estado respondido");
+  console.log("ServCompras: estado respondido");
   socket_monitor.emit("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServEnvios: mensajes validos son {", msgs_validos_remotos, "}"];
+  var respuesta = ["ServCompras: mensajes validos son {", msgs_validos_remotos, "}"];
 
   if(socket_monitor !== undefined)
     socket_monitor.emit("res?", respuesta);
@@ -74,7 +69,7 @@ function esValido(comando){
     if(comando === msg)
       coincidencia = true;
   });
-  console.log("ServEnvios: comando \"" + comando + "\" -->", (coincidencia?"valido":"invalido"));
+  console.log("ServCompras: comando \"" + comando + "\" -->", (coincidencia?"valido":"invalido"));
   return coincidencia;
 }
 
