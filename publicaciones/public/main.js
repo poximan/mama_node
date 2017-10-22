@@ -5,7 +5,6 @@ $(function() {
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
 
-
   var connected = false;
   var typing = false;
 

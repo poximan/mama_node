@@ -1,27 +1,27 @@
 $(function() {
 
+  var socket = io();
+
   var FADE_TIME = 150; // ms
   var $window = $(window);
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
-
-  var connected = false;
-  var typing = false;
-
-  var socket = io();
+  var $servidor = $('.servidor').text().trim().split(" ")[1].split(",")[0].toLowerCase();
 
   // Sends a chat message
-  function sendMessage () {
-    var message = $inputMessage.val();
+  function sendMessage (message) {
+
     // Prevent markup from being injected into the message
     message = cleanInput(message);
+
+    var instancia;
+    var msg = {message, instancia};
+
     // if there is a non-empty message and a socket connection
-    if (message && connected) {
+    if (message) {
 
       $inputMessage.val('');
       addChatMessage(message);
-
-      var payload = {};
 
       if((message.match(/:res/) || []).length > 0){
 
@@ -31,14 +31,14 @@ $(function() {
         var particion2 = particion1[1].split("=");
         var decision_compra = particion2[1];  // el argumento despues del "="
 
-        message = particion2[0];  // la parte que quedo en el medio
+        msg.message = particion2[0];  // la parte que quedo en el medio
 
-        payload = {
+        msg.instancia = {
           id : id_compra,
           decision : decision_compra
         }
       }
-      socket.emit(message, payload);
+      socket.emit($servidor, msg);
     }
   }
 
@@ -80,32 +80,38 @@ $(function() {
   // Keyboard events
   $window.keydown(function (event) {
 
+    var message = $inputMessage.val();
     // When the client hits ENTER on their keyboard
-    if (event.which === 13) {
-      if (!connected) {
-        connected = true;
-        log(message);
-      }
-      sendMessage();
-    }
+    if (event.which === 13)
+      sendMessage(message);
   });
 
   // Socket events
 
-  socket.on("resultadoInfraccion", function (evento) {
+  socket.on("resultadoCosto", function (evento) {
 
-    var texto = "compra " + evento.id + ": ¿posee infraccion?.";
-    texto += "usar: \"{id compra}:resInfraccion={sin_infr|con_infr}\""
+    var texto = "compra " + evento.id + ": costo adic correo. ";
+    texto += "usar: \"{id compra}:resCosto={numero}\""
 
     addChatMessage(texto);
   });
 
   socket.on("resEstado", function (preguntas) {
-
     preguntas.forEach(function(pregunta) {
-      var texto = "compra " + pregunta.id + " : " + pregunta.compra.infracciones;
+
+      var texto = "compra " + pregunta.id + " => " +
+      pregunta.compra.estado + " : " +
+      pregunta.compra.entrega + " : " +
+      pregunta.compra.reserva + " : " +
+      pregunta.compra.pago + " : " +
+      pregunta.compra.infracciones + " : " +
+      pregunta.compra.medio;
 
       addChatMessage(texto);
     });
+  });
+
+  socket.on("res?", function (preguntas) {
+    addChatMessage(preguntas);
   });
 });

@@ -5,15 +5,14 @@ $(function() {
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
 
-
   var connected = false;
   var typing = false;
 
   var socket = io();
 
   // Sends a chat message
-  function sendMessage () {
-    var message = $inputMessage.val();
+  function sendMessage (message) {
+
     // Prevent markup from being injected into the message
     message = cleanInput(message);
     // if there is a non-empty message and a socket connection
@@ -81,6 +80,7 @@ $(function() {
   // Keyboard events
   $window.keydown(function (event) {
 
+    var message = $inputMessage.val();
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
       if (!connected) {

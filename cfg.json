@@ -44,7 +44,7 @@
       }
     },
     "nueva_compra" : {
-      "periodo" : "10000"
+      "periodo" : "5000"
     },
     "persistencia" : {
       "periodo" : "60000"

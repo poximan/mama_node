@@ -1,15 +1,16 @@
 // Setup basic express server
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
 var port = require("../cfg.json").manual.monitor.port_envios;
+
+const Server = require('socket.io');
+const server = require('http').Server();
+
+var io = Server(port);
+
+io.close(); // Close current server
+io = Server(server);
 
 var _ = require("underscore");
 var bus = require('../eventBus');
-
-// Routing
-app.use(express.static(__dirname + '/public'));
 
 var preguntas = new Array();
 
@@ -46,6 +47,10 @@ io.on('connection', function (socket) {
     }
   });
 
+  socket.on("?", function (msg) {
+    socket.emit("res?", msgs_validos);
+  });
+
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
 
@@ -60,8 +65,22 @@ io.on('connection', function (socket) {
         evento = item;
       return item.id != msg.id;
     });
-
     return evento;
+  }
+
+  /*
+  .............................................................
+  ... preparar mensajes validos
+  .............................................................
+  */
+
+  var msgs = socket._events;
+  var msgs_validos = [];
+
+  delete msgs.disconnect;
+
+  for (var key in msgs) {
+     msgs_validos.push(key);
   }
 });
 
