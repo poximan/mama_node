@@ -1,7 +1,7 @@
-var ip_pagos = require("../../cfg.json").manual.monitor.ip_pagos;
-var port_pagos = require("../../cfg.json").manual.monitor.port_pagos;
+var ip = require("../../cfg.json").manual.monitor.ip_pagos;
+var port = require("../../cfg.json").manual.monitor.port_pagos;
 
-const socket = require('socket.io-client')(ip_pagos + ":" + port_pagos);
+const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;

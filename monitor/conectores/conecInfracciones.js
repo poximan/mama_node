@@ -1,7 +1,7 @@
-var ip_infracciones = require("../../cfg.json").manual.monitor.ip_infracciones;
-var port_infracciones = require("../../cfg.json").manual.monitor.port_infracciones;
+var ip = require("../../cfg.json").manual.monitor.ip_infracciones;
+var port = require("../../cfg.json").manual.monitor.port_infracciones;
 
-const socket = require('socket.io-client')(ip_infracciones + ":" + port_infracciones);
+const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;

@@ -1,33 +1,43 @@
-var ip_envios = require("../../cfg.json").manual.monitor.ip_envios;
-var port_envios = require("../../cfg.json").manual.monitor.port_envios;
+var ip = require("../../cfg.json").manual.monitor.ip_web;
+var port = require("../../cfg.json").manual.monitor.port_web;
 
-const socket = require('socket.io-client')(ip_envios + ":" + port_envios);
+const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;
 
 socket.on('connect', () => {
-  console.log("ServEnvios: conectado");
+  console.log("ServWeb: conectado");
 });
 
 socket.on('disconnect', () => {
-  console.log("ServEnvios: desconectado");
+  console.log("ServWeb: desconectado");
 });
 
-socket.on("resultadoCosto", (preguntas) => {
-  console.log("ServEnvios: estado respondido");
-  socket_monitor.emit("resultadoCosto", preguntas);
+socket.on("resultadoFormaEntrega", (preguntas) => {
+  console.log("ServWeb: pregunta forma de entrega");
+  socket_monitor.emit("resultadoFormaEntrega", preguntas);
+});
+
+socket.on("resultadoMedioPago", (preguntas) => {
+  console.log("ServWeb: pregunta medio de pago");
+  socket_monitor.emit("resultadoMedioPago", preguntas);
+});
+
+socket.on("resultadoConfirmar", (preguntas) => {
+  console.log("ServWeb: pregunta confirma compra");
+  socket_monitor.emit("resultadoConfirmar", preguntas);
 });
 
 socket.on("resEstado", (preguntas) => {
-  console.log("ServEnvios: estado respondido");
+  console.log("ServWeb: estado respondido");
   socket_monitor.emit("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServEnvios: mensajes validos son {", msgs_validos_remotos, "}"];
+  var respuesta = ["ServWeb: mensajes validos son {", msgs_validos_remotos, "}"];
 
   if(socket_monitor !== undefined)
     socket_monitor.emit("res?", respuesta);
@@ -74,7 +84,7 @@ function esValido(comando){
     if(comando === msg)
       coincidencia = true;
   });
-  console.log("ServEnvios: comando \"" + comando + "\" -->", (coincidencia?"valido":"invalido"));
+  console.log("ServWeb: comando \"" + comando + "\" -->", (coincidencia?"valido":"invalido"));
   return coincidencia;
 }
 

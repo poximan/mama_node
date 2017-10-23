@@ -1,7 +1,7 @@
-var ip_envios = require("../../cfg.json").manual.monitor.ip_envios;
-var port_envios = require("../../cfg.json").manual.monitor.port_envios;
+var ip = require("../../cfg.json").manual.monitor.ip_envios;
+var port = require("../../cfg.json").manual.monitor.port_envios;
 
-const socket = require('socket.io-client')(ip_envios + ":" + port_envios);
+const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;

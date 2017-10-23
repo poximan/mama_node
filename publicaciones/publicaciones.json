@@ -40,23 +40,5 @@
       "precio":"65",
       "cantidad":"",
       "vendedor":"bart simpson"
-   },
-   {
-      "descripcion":"libro guia para armar aviones de papel que vuelan",
-      "precio":"125",
-      "cantidad":"",
-      "vendedor":"dios todoPoderoso"
-   },
-   {
-      "descripcion":"observatorio espacial para armar",
-      "precio":"1700",
-      "cantidad":"",
-      "vendedor":"un chino"
-   },
-   {
-      "descripcion":"cable para mouse inalambrico",
-      "precio":"5",
-      "cantidad":"",
-      "vendedor":"un pillo"
    }
  ]

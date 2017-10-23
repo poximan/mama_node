@@ -72,11 +72,29 @@ io.on('connection', function (socket) {
   });
 
   socket.on("publicaciones", function (msg) {
-    console.log("redireccionando a serv publicaciones");
+
+    console.log("redireccionando a ServPublicaciones");
+
+    var comando = msg.message;
+    var instancia = msg.instancia;
+
+    if(conectores.c_publicaciones.esValido(comando)){
+      conectores.c_publicaciones.socket.emit(comando, instancia);
+      conectores.c_publicaciones.retorno(socket);
+    }
   });
 
   socket.on("web", function (msg) {
-    console.log("redireccionando a serv web");
+
+    console.log("redireccionando a ServWeb");
+
+    var comando = msg.message;
+    var instancia = msg.instancia;
+
+    if(conectores.c_web.esValido(comando)){
+      conectores.c_web.socket.emit(comando, instancia);
+      conectores.c_web.retorno(socket);
+    }
   });
 
   // when the user disconnects.. perform this

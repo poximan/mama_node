@@ -1,7 +1,7 @@
-var ip_compras = require("../../cfg.json").manual.monitor.ip_compras;
-var port_compras = require("../../cfg.json").manual.monitor.port_compras;
+var ip = require("../../cfg.json").manual.monitor.ip_compras;
+var port = require("../../cfg.json").manual.monitor.port_compras;
 
-const socket = require('socket.io-client')(ip_compras + ":" + port_compras);
+const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;
