@@ -10,8 +10,11 @@ $(function() {
 
   var $totales = $(".totales");
   var $aceptadas = $(".aceptadas");
-  var $rechazadas = $(".rechazadas");
+  var $canceladas = $(".canceladas");
   var $en_curso = $(".en_curso");
+
+  var msg = {message:"?resumen", instancia:""};
+  socket.emit($servidor, msg);
 
   // Sends a chat message
   function sendMessage (message) {
@@ -97,7 +100,7 @@ $(function() {
 
     $totales.text(contadores.totales);
     $aceptadas.text(contadores.aceptadas);
-    $rechazadas.text(contadores.rechazadas);
+    $canceladas.text(contadores.canceladas);
     $en_curso.text(contadores.en_curso);
   });
 

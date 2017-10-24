@@ -1,6 +1,6 @@
 var publicador = require("./momPublicador");
 var bus = require('../eventBus');
-var _ = require('lodash');
+var _ = require('underscore');
 
 /*
 .............................................................
@@ -16,10 +16,22 @@ var instancia_db;
 var coleccion;
 
 var compras = new Array();
-exports.compras = compras;
+exports.totales = compras;
 
-exports.estadisticas = { totales:1, aceptadas:0, rechazadas:0, en_curso:0,};
+var estadisticas = { totales:0, aceptadas:0, canceladas:0, en_curso:0,};
+exports.estadisticas = estadisticas;
 
+setInterval ( function() {
+  estadisticas.totales = compras.length;
+
+  compras.forEach(function(evento){
+    if(evento.compra.estado === evento.compra.estados[3])
+      estadisticas.aceptadas++;
+    if(evento.compra.estado === evento.compra.estados[2])
+      estadisticas.canceladas++;
+    estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - estadisticas.canceladas;
+  });
+}, 2000);
 
 /*
 0=serv_compras
@@ -62,15 +74,10 @@ bus.on("mom", function (msg) {
   actualizarVector(msg.vector);
 
   if(msg.evento.tarea !== "momResultadoPublicaciones" &&
-    msg.evento.tarea !== "momGetPublicaciones"){
+    msg.evento.tarea !== "momGetPublicaciones")
 
-    var picked = _.filter(compras, { 'id': msg.evento.id } );
+      actualizarMensaje(msg.evento);
 
-    if(picked.length > 0)
-      msg.evento = merge(msg.evento, picked[0]);
-
-    compras.push(msg.evento);
-  }
   bus.emit(msg.evento.tarea, msg.evento);
 });
 
@@ -86,25 +93,52 @@ exports.publicar = function(reglas_ruteo, evento){
 
 function merge(actualizacion, anterior){
 
-  if(actualizacion.estado === "")
-    actualizacion.estado = anterior.estado;
+  if(actualizacion.compra.estado === "")
+    actualizacion.compra.estado = anterior.compra.estado;
 
-  if(actualizacion.entrega === "")
-    actualizacion.entrega = anterior.entrega;
+  if(actualizacion.compra.entrega === "")
+    actualizacion.compra.entrega = anterior.compra.entrega;
 
-  if(actualizacion.reserva === "")
-    actualizacion.reserva = anterior.reserva;
+  if(actualizacion.compra.reserva === "")
+    actualizacion.compra.reserva = anterior.compra.reserva;
 
-  if(actualizacion.pago === "")
-    actualizacion.pago = anterior.pago;
+  if(actualizacion.compra.pago === "")
+    actualizacion.compra.pago = anterior.compra.pago;
 
-  if(actualizacion.infracciones === "")
-    actualizacion.infracciones = anterior.infracciones;
+  if(actualizacion.compra.infracciones === "")
+    actualizacion.compra.infracciones = anterior.compra.infracciones;
 
-  if(actualizacion.medio === "")
-    actualizacion.medio = anterior.medio;
+  if(actualizacion.compra.medio === "")
+    actualizacion.compra.medio = anterior.compra.medio;
 
   return actualizacion;
+}
+
+function actualizarMensaje(evento){
+
+  var coincidencia = buscarEvento(evento);
+  if(coincidencia !== undefined){
+    console.log(evento);
+    console.log(coincidencia);
+    evento = merge(evento, coincidencia);
+    console.log(evento);
+  }
+
+  compras.push(evento);
+}
+
+function buscarEvento(evento){
+
+  var compra = compras.find(function(element, index, array){
+    return element.id == evento.id;
+  });
+
+  if(compra)
+    compras = _(compras).filter(function(item) {
+      return item.id != evento.id;
+    });
+
+  return compra;
 }
 
 function actualizarVector(nuevo_vector){

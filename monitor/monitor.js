@@ -7,7 +7,6 @@ var port = require("../cfg.json").manual.monitor.port_monitor;
 
 var conectores = require("./conectador").conectores;
 
-var _ = require("underscore");
 var bus = require('../eventBus');
 
 // Routing
@@ -18,6 +17,10 @@ exports.preguntar = function(evento) {
 }
 
 io.on('connection', function (socket) {
+
+  socket.on('connect', () => {
+    console.log("Monitor: conectado");
+  });
 
   socket.on("compras", function (msg) {
 
