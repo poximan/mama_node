@@ -12,6 +12,7 @@ var mediador = control.mediador;
 var bus = control.bus;
 
 var experto = require('./expertoHum');
+experto.mediador(mediador);
 
 // ---------
 

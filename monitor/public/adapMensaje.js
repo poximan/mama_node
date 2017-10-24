@@ -8,6 +8,11 @@ $(function() {
   var $inputMessage = $('.inputMessage'); // Input message input box
   var $servidor = $('.servidor').text().trim().split(" ")[1].split(",")[0].toLowerCase();
 
+  var $totales = $(".totales");
+  var $aceptadas = $(".aceptadas");
+  var $rechazadas = $(".rechazadas");
+  var $en_curso = $(".en_curso");
+
   // Sends a chat message
   function sendMessage (message) {
 
@@ -88,6 +93,14 @@ $(function() {
 
   // Socket events
 
+  socket.on("resumen", function (contadores) {
+
+    $totales.text(contadores.totales);
+    $aceptadas.text(contadores.aceptadas);
+    $rechazadas.text(contadores.rechazadas);
+    $en_curso.text(contadores.en_curso);
+  });
+
   socket.on("resultadoCosto", function (evento) {
 
     var texto = "compra " + evento.id + ": costo adic correo. ";
@@ -135,20 +148,43 @@ $(function() {
 
     addChatMessage(texto);
   });
-  
-  socket.on("resEstado", function (preguntas) {
-    preguntas.forEach(function(pregunta) {
 
-      var texto = "compra " + pregunta.id + " => " +
-      pregunta.compra.estado + " : " +
-      pregunta.compra.entrega + " : " +
-      pregunta.compra.reserva + " : " +
-      pregunta.compra.pago + " : " +
-      pregunta.compra.infracciones + " : " +
-      pregunta.compra.medio;
+  socket.on("resEstado", function (conj_compras) {
 
-      addChatMessage(texto);
-    });
+    var arreglos = { totales:conj_compras[0], pendientes:conj_compras[1] };
+
+    if(arreglos.totales.length > 0 || arreglos.pendientes.length > 0){
+      addChatMessage(" ------ totales ------ ");
+      arreglos.totales.forEach(function(pregunta) {
+
+        var texto = "compra " + pregunta.id + " => " +
+        pregunta.compra.estado + " : " +
+        pregunta.compra.entrega + " : " +
+        pregunta.compra.reserva + " : " +
+        pregunta.compra.pago + " : " +
+        pregunta.compra.infracciones + " : " +
+        pregunta.compra.medio;
+
+        addChatMessage(texto);
+      });
+
+      addChatMessage(" ------ pendientes ------ ");
+      arreglos.pendientes.forEach(function(pregunta) {
+
+        var texto = "compra " + pregunta.id + " => " +
+        pregunta.compra.estado + " : " +
+        pregunta.compra.entrega + " : " +
+        pregunta.compra.reserva + " : " +
+        pregunta.compra.pago + " : " +
+        pregunta.compra.infracciones + " : " +
+        pregunta.compra.medio;
+
+        addChatMessage(texto);
+      });
+    }
+    else {
+      addChatMessage("El servidor no posee nada en memoria");
+    }
   });
 
   socket.on("res?", function (preguntas) {

@@ -47,7 +47,7 @@ exports.comprar = function() {
 }
 
 function indicePublicacionElegida() {
-  return Math.floor(Math.random() * publicaciones.length);
+  return Math.floor(Math.random() * (publicaciones.length - 1));
 }
 
 /*

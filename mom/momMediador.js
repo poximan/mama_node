@@ -1,5 +1,6 @@
 var publicador = require("./momPublicador");
 var bus = require('../eventBus');
+var _ = require('lodash');
 
 /*
 .............................................................
@@ -15,7 +16,10 @@ var instancia_db;
 var coleccion;
 
 var compras = new Array();
-var compra;
+exports.compras = compras;
+
+exports.estadisticas = { totales:1, aceptadas:0, rechazadas:0, en_curso:0,};
+
 
 /*
 0=serv_compras
@@ -57,15 +61,14 @@ bus.on("mom", function (msg) {
 
   actualizarVector(msg.vector);
 
-  /*
-  crea un nuevo array con todos los elementos
-  que cumplan la condición implementada por la función dada.
-  */
-  compras = compras.filter(function(item) {
-      return item.id !== msg.evento.id;
-  })
+  if(msg.evento.tarea !== "momResultadoPublicaciones" &&
+    msg.evento.tarea !== "momGetPublicaciones"){
 
-  if (!compra){
+    var picked = _.filter(compras, { 'id': msg.evento.id } );
+
+    if(picked.length > 0)
+      msg.evento = merge(msg.evento, picked[0]);
+
     compras.push(msg.evento);
   }
   bus.emit(msg.evento.tarea, msg.evento);
@@ -79,6 +82,29 @@ exports.publicar = function(reglas_ruteo, evento){
 
   var msg = {vector, evento};
   publicador.publicar(reglas_ruteo, msg);
+}
+
+function merge(actualizacion, anterior){
+
+  if(actualizacion.estado === "")
+    actualizacion.estado = anterior.estado;
+
+  if(actualizacion.entrega === "")
+    actualizacion.entrega = anterior.entrega;
+
+  if(actualizacion.reserva === "")
+    actualizacion.reserva = anterior.reserva;
+
+  if(actualizacion.pago === "")
+    actualizacion.pago = anterior.pago;
+
+  if(actualizacion.infracciones === "")
+    actualizacion.infracciones = anterior.infracciones;
+
+  if(actualizacion.medio === "")
+    actualizacion.medio = anterior.medio;
+
+  return actualizacion;
 }
 
 function actualizarVector(nuevo_vector){

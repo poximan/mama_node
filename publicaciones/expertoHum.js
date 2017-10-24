@@ -12,6 +12,11 @@ var _ = require("underscore");
 var bus = require('../eventBus');
 
 var preguntas = new Array();
+var mediador;
+
+exports.mediador = function(mom_mediador) {
+  mediador = mom_mediador;
+}
 
 exports.preguntar = function(evento) {
   preguntas.push(evento);
@@ -29,7 +34,7 @@ io.on('connection', function (socket) {
   socket.on("estado", function (msg) {
 
     console.log("respondiendo estado del servidor");
-    socket.emit("resEstado", preguntas);
+    socket.emit("resEstado", [mediador.compras, preguntas]);
   });
 
   socket.on("persistir", function (msg) {

@@ -12,6 +12,11 @@ var _ = require("underscore");
 var bus = require('../eventBus');
 
 var preguntas = new Array();
+var mediador;
+
+exports.mediador = function(mom_mediador) {
+  mediador = mom_mediador;
+}
 
 exports.preguntar = function(evento) {
   preguntas.push(evento);
@@ -29,7 +34,7 @@ io.on('connection', function (socket) {
   socket.on("estado", function (msg) {
 
     console.log("respondiendo estado del servidor");
-    socket.emit("resEstado", preguntas);
+    socket.emit("resEstado", [mediador.compras, preguntas]);
   });
 
   socket.on("persistir", function (msg) {
@@ -50,6 +55,24 @@ io.on('connection', function (socket) {
   ... preparar mensajes validos
   .............................................................
   */
+
+  var reporte = { totales:0, aceptadas:0, rechazadas:0, en_curso:0};
+
+  setInterval ( function() {
+
+    console.log(reporte);
+    console.log(mediador.estadisticas);
+
+    if(reporte.totales !== mediador.estadisticas.totales ||
+        reporte.aceptadas !== mediador.estadisticas.aceptadas ||
+        reporte.rechazadas !== mediador.estadisticas.rechazadas ||
+        reporte.en_curso !== mediador.estadisticas.en_curso){
+
+          reporte = mediador.estadisticas;
+          socket.emit("resumen", reporte);
+        }
+
+  }, 10000);
 
   var msgs = socket._events;
   var msgs_validos = [];

@@ -14,6 +14,10 @@ socket.on('disconnect', () => {
   console.log("ServCompras: desconectado");
 });
 
+socket.on("resumen", (contadores) => {
+  socket_monitor.emit("resumen", contadores);
+});
+
 socket.on("resEstado", (preguntas) => {
   console.log("ServCompras: estado respondido");
   socket_monitor.emit("resEstado", preguntas);

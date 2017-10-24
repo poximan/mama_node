@@ -11,7 +11,8 @@ var control = require('./ctrlCompras');
 var mediador = control.mediador;
 var bus = control.bus;
 
-require('./expertoHum');
+var experto = require('./expertoHum');
+experto.mediador(mediador);
 
 // ---------
 
