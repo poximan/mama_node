@@ -5,23 +5,33 @@ const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;
+var respuestas = [];
 
-socket.on('connect', () => {
-  console.log("ServEnvios: conectado");
-});
+function responderSockMon(nombre_evento, contenido){
 
-socket.on('disconnect', () => {
-  console.log("ServEnvios: desconectado");
-});
+  if(socket_monitor !== undefined){
+
+    socket_monitor.emit(nombre_evento, contenido);
+
+    while(respuestas.length > 0)
+      socket_monitor.emit(respuestas.pop());
+  }
+  else
+      respuestas.push([nombre_evento, contenido]);
+}
 
 socket.on("resultadoCosto", (preguntas) => {
   console.log("ServEnvios: pregunta costo envio");
   socket_monitor.emit("resultadoCosto", preguntas);
 });
 
+socket.on("resumen", (contadores) => {
+  responderSockMon("resumen", contadores);
+});
+
 socket.on("resEstado", (preguntas) => {
   console.log("ServEnvios: estado respondido");
-  socket_monitor.emit("resEstado", preguntas);
+  responderSockMon("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
@@ -29,8 +39,7 @@ socket.on("res?", (msgs_validos) => {
   msgs_validos_remotos = msgs_validos;
   var respuesta = ["ServEnvios: mensajes validos son {", msgs_validos_remotos, "}"];
 
-  if(socket_monitor !== undefined)
-    socket_monitor.emit("res?", respuesta);
+  responderSockMon("res?", respuesta);
 });
 
 /*

@@ -68,7 +68,7 @@ io.on('connection', function (socket) {
 
   /*
   .............................................................
-  ... preparar mensajes validos
+  ... reporte datos del servidor
   .............................................................
   */
 
@@ -86,6 +86,12 @@ io.on('connection', function (socket) {
         }
 
   }, 2000);
+
+  /*
+  .............................................................
+  ... preparar mensajes validos
+  .............................................................
+  */
 
   var msgs = socket._events;
   var msgs_validos = [];

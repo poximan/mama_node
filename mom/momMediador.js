@@ -117,12 +117,8 @@ function merge(actualizacion, anterior){
 function actualizarMensaje(evento){
 
   var coincidencia = buscarEvento(evento);
-  if(coincidencia !== undefined){
-    console.log(evento);
-    console.log(coincidencia);
+  if(coincidencia !== undefined)
     evento = merge(evento, coincidencia);
-    console.log(evento);
-  }
 
   compras.push(evento);
 }

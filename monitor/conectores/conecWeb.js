@@ -5,14 +5,20 @@ const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;
+var respuestas = [];
 
-socket.on('connect', () => {
-  console.log("ServWeb: conectado");
-});
+function responderSockMon(nombre_evento, contenido){
 
-socket.on('disconnect', () => {
-  console.log("ServWeb: desconectado");
-});
+  if(socket_monitor !== undefined){
+
+    socket_monitor.emit(nombre_evento, contenido);
+
+    while(respuestas.length > 0)
+      socket_monitor.emit(respuestas.pop());
+  }
+  else
+      respuestas.push([nombre_evento, contenido]);
+}
 
 socket.on("resultadoFormaEntrega", (preguntas) => {
   console.log("ServWeb: pregunta forma de entrega");
@@ -29,18 +35,21 @@ socket.on("resultadoConfirmar", (preguntas) => {
   socket_monitor.emit("resultadoConfirmar", preguntas);
 });
 
+socket.on("resumen", (contadores) => {
+  responderSockMon("resumen", contadores);
+});
+
 socket.on("resEstado", (preguntas) => {
-  console.log("ServWeb: estado respondido");
-  socket_monitor.emit("resEstado", preguntas);
+  console.log("ServCompras: estado respondido");
+  responderSockMon("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServWeb: mensajes validos son {", msgs_validos_remotos, "}"];
+  var respuesta = ["ServCompras: mensajes validos son {", msgs_validos_remotos, "}"];
 
-  if(socket_monitor !== undefined)
-    socket_monitor.emit("res?", respuesta);
+  responderSockMon("res?", respuesta);
 });
 
 /*

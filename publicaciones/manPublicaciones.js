@@ -58,14 +58,34 @@ io.on('connection', function (socket) {
     bus.emit("persistir", msg);
   });
 
+  socket.on("?resumen", function (msg) {
+    socket.emit("resumen", reporte);
+  });
+
   socket.on("?", function (msg) {
     socket.emit("res?", msgs_validos);
   });
 
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
+  /*
+  .............................................................
+  ... reporte datos del servidor
+  .............................................................
+  */
 
-  });
+  var reporte = { totales:-1, aceptadas:-1, canceladas:-1, en_curso:-1};
+
+  setInterval ( function() {
+
+    if(reporte.totales !== mediador.estadisticas.totales ||
+        reporte.aceptadas !== mediador.estadisticas.aceptadas ||
+        reporte.canceladas !== mediador.estadisticas.canceladas ||
+        reporte.en_curso !== mediador.estadisticas.en_curso){
+
+          reporte = mediador.estadisticas;
+          socket.emit("resumen", reporte);
+        }
+
+  }, 2000);
 
   /*
   .............................................................

@@ -5,23 +5,33 @@ const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
 
 var socket_monitor;
+var respuestas = [];
 
-socket.on('connect', () => {
-  console.log("ServInfracciones: conectado");
-});
+function responderSockMon(nombre_evento, contenido){
 
-socket.on('disconnect', () => {
-  console.log("ServInfracciones: desconectado");
-});
+  if(socket_monitor !== undefined){
+
+    socket_monitor.emit(nombre_evento, contenido);
+
+    while(respuestas.length > 0)
+      socket_monitor.emit(respuestas.pop());
+  }
+  else
+      respuestas.push([nombre_evento, contenido]);
+}
 
 socket.on("resultadoInfraccion", (preguntas) => {
   console.log("ServInfracciones: pregunta si existe infraccion");
   socket_monitor.emit("resultadoInfraccion", preguntas);
 });
 
+socket.on("resumen", (contadores) => {
+  responderSockMon("resumen", contadores);
+});
+
 socket.on("resEstado", (preguntas) => {
   console.log("ServInfracciones: estado respondido");
-  socket_monitor.emit("resEstado", preguntas);
+  responderSockMon("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
@@ -29,8 +39,7 @@ socket.on("res?", (msgs_validos) => {
   msgs_validos_remotos = msgs_validos;
   var respuesta = ["ServInfracciones: mensajes validos son {", msgs_validos_remotos, "}"];
 
-  if(socket_monitor !== undefined)
-    socket_monitor.emit("res?", respuesta);
+  responderSockMon("res?", respuesta);
 });
 
 /*

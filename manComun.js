@@ -6,26 +6,27 @@ este modulo conoce y agrupa distintas funcionalidades que en su conjunto, dan vi
 - pide el bus de mensajes (eventEmitter) que ya fue agregado por el control.
 */
 
-var control = require('./ctrlPagos');
-var mediador = control.mediador;
-var bus = control.bus;
 var _ = require('underscore');
 
 // ---------
 
-var port = require("../cfg.json").manual.monitor.port_pagos;
+var control;
+exports.control = function(control_serv){
+    control = control_serv;
+}
+
+var mediador = control.mediador;
+var bus = control.bus;
+
+var port;
+exports.puerto = function(port_serv){
+    port = port_serv;
+}
+
 const Server = require('socket.io');
 const server = require('http').Server();
 
 // ---------
-
-bus.on("resultadoAutorizacion", function (evento) {
-  preguntar(evento);
-});
-
-bus.on("persistir", function (evento) {
-  mediador.persistir();
-});
 
 /*
 .............................................................
@@ -37,24 +38,12 @@ var io = Server(port);
 
 io.close(); // Close current server
 io = Server(server);
+exports.io = io;
 
 var preguntas = new Array();
-
-preguntar = function(evento) {
-  preguntas.push(evento);
-}
+exports.preguntas = preguntas;
 
 io.on('connection', function (socket) {
-
-  socket.on("resAutorizar", function (msg) {
-    var evento = buscarEvento(msg);
-
-    if(evento){
-      evento.compra.pago = msg.decision;
-      evento.tarea = "momResultadoAutorizacion";
-      bus.emit(evento.tarea, evento);
-    }
-  });
 
   socket.on("get", function (msg) {
 
@@ -81,7 +70,7 @@ io.on('connection', function (socket) {
     socket.emit("res?", msgs_validos);
   });
 
-  function buscarEvento(msg){
+  exports.buscarEvento = function(msg){
 
     var evento;
     preguntas = _(preguntas).filter(function(item) {

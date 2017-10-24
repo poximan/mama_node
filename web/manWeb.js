@@ -71,23 +71,6 @@ preguntar = function(evento) {
 
 io.on('connection', function (socket) {
 
-  socket.on("get", function (msg) {
-
-    preguntas.forEach(function(evento) {
-      socket.emit(evento.tarea, evento);
-    });
-  });
-
-  socket.on("estado", function (msg) {
-
-    console.log("respondiendo estado del servidor");
-    socket.emit("resEstado", [mediador.totales, preguntas]);
-  });
-
-  socket.on("persistir", function (msg) {
-    bus.emit("persistir", msg);
-  });
-
   socket.on("comprar", function (msg) {
     bus.emit("comprar", msg);
   });
@@ -124,13 +107,29 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on("?", function (msg) {
-    socket.emit("res?", msgs_validos);
+  socket.on("get", function (msg) {
+
+    preguntas.forEach(function(evento) {
+      socket.emit(evento.tarea, evento);
+    });
   });
 
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
+  socket.on("estado", function (msg) {
 
+    console.log("respondiendo estado del servidor");
+    socket.emit("resEstado", [mediador.totales, preguntas]);
+  });
+
+  socket.on("persistir", function (msg) {
+    bus.emit("persistir", msg);
+  });
+
+  socket.on("?resumen", function (msg) {
+    socket.emit("resumen", reporte);
+  });
+
+  socket.on("?", function (msg) {
+    socket.emit("res?", msgs_validos);
   });
 
   function buscarEvento(msg){
@@ -144,6 +143,27 @@ io.on('connection', function (socket) {
     return evento;
   }
 
+  /*
+  .............................................................
+  ... reporte datos del servidor
+  .............................................................
+  */
+
+  var reporte = { totales:-1, aceptadas:-1, canceladas:-1, en_curso:-1};
+
+  setInterval ( function() {
+
+    if(reporte.totales !== mediador.estadisticas.totales ||
+        reporte.aceptadas !== mediador.estadisticas.aceptadas ||
+        reporte.canceladas !== mediador.estadisticas.canceladas ||
+        reporte.en_curso !== mediador.estadisticas.en_curso){
+
+          reporte = mediador.estadisticas;
+          socket.emit("resumen", reporte);
+        }
+
+  }, 2000);
+  
   /*
   .............................................................
   ... preparar mensajes validos
