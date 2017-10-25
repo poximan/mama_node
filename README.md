@@ -11,5 +11,5 @@ Existen tres tipos de servidores: de lógica del negocio, de mensajería, y web.
 * cliente mom "amqp" (npm install amqplib). la implementacion es rabbitmq, que sigue esta especificacion
 * utileria "underscore" (npm install underscore)
 * cliente bd "mongodb" (npm install mongodb)
-* web framework "express" (npm install express)
-* socket bidireccional "socketio" (npm install socket.io)
+* socket bidireccional "socketio" (npm install socket.io). aplicacion que se monta sobre socket TCP para brindar servicio de eventos (tal como eventEmitter pero distribuido)
+* web framework "express" (npm install express). 
