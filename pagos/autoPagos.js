@@ -20,7 +20,7 @@ setInterval(mediador.persistir, periodo_persistencia);
 // ---------
 
 bus.on("resultadoAutorizacion", function (evento) {
-  experto.autorizar(evento);
+  autorizar(evento);
 
   evento.tarea = "momResultadoAutorizacion";
   bus.emit(evento.tarea, evento);

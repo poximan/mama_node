@@ -31,7 +31,7 @@ setInterval ( function() {
       estadisticas.canceladas++;
     estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - estadisticas.canceladas;
   });
-}, 2000);
+}, 4000);
 
 /*
 0=serv_compras

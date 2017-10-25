@@ -19,7 +19,7 @@ setInterval(mediador.persistir, periodo_persistencia);
 // ---------
 
 bus.on("resultadoCosto", function (evento) {
-  experto.costo(evento);
+  costo(evento);
 
   evento.tarea = "momResultadoCosto";
   bus.emit(evento.tarea, evento);

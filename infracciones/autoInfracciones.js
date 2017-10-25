@@ -20,7 +20,7 @@ setInterval(mediador.persistir, periodo_persistencia);
 // ---------
 
 bus.on("resultadoInfraccion", function (evento) {
-  experto.existeInfraccion(evento);
+  existeInfraccion(evento);
 
   evento.tarea = "momResultadoInfraccion";
   bus.emit(evento.tarea, evento);

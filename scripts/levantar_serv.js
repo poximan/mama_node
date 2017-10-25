@@ -7,6 +7,8 @@ if (modo_operacion.length == 0) {
   console.log("Usar: levantar_serv.js {man|auto}");
   process.exit(1);
 }
+modo_operacion = modo_operacion[0];
+console.log(modo_operacion);
 
 var operaciones = [
   function(callback) {
@@ -35,8 +37,10 @@ var operaciones = [
 
   function(callback) {
 
-    console.log("levantando monitor");
-    shell_ejec("start ventana /K \"cd monitor && node monitor.js\"");
+    if(modo_operacion == "man"){
+      console.log("levantando monitor");
+      shell_ejec("start ventana /K \"cd monitor && node monitor.js\"");
+    }
     callback(null);
   }
 ];
