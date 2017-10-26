@@ -7,7 +7,7 @@
     "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
   },
   "mongo" : {
-    "url" : "mongodb://localhost:27017/tatobd",
+    "url" : "mongodb://localhost:27017/mlivre",
     "_coment" : "mongodb://localhost:27017/tatobd",
     "management" : "http://localhost:27017/"
   },
@@ -47,7 +47,7 @@
       "periodo" : "5000"
     },
     "persistencia" : {
-      "periodo" : "60000"
+      "periodo" : "10000"
     }
   }
 }

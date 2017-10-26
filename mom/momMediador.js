@@ -13,25 +13,11 @@ var MongoClient = require('mongodb').MongoClient;
 var mongo_url = require("../cfg.json").mongo.url;
 
 var instancia_db;
-var coleccion;
+var instancia_colecc;
 
-var compras = new Array();
-exports.totales = compras;
-
-var estadisticas = { totales:0, aceptadas:0, canceladas:0, en_curso:0,};
-exports.estadisticas = estadisticas;
-
-setInterval ( function() {
-  estadisticas.totales = compras.length;
-
-  compras.forEach(function(evento){
-    if(evento.compra.estado === evento.compra.estados[3])
-      estadisticas.aceptadas++;
-    if(evento.compra.estado === evento.compra.estados[2])
-      estadisticas.canceladas++;
-    estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - estadisticas.canceladas;
-  });
-}, 4000);
+/*
+......... reloj vectorial
+*/
 
 /*
 0=serv_compras
@@ -44,10 +30,6 @@ setInterval ( function() {
 var vector = [0, 0, 0, 0, 0, 0];
 var mi_reloj = 0;
 
-/*
-......... reloj vectorial
-*/
-
 exports.indice = function(indice) {
   mi_reloj = indice;
 }
@@ -57,12 +39,42 @@ exports.incrementar = function(){
   console.log("INT: reloj " + mi_reloj + ": " + vector);
 }
 
+function actualizarVector(nuevo_vector){
+
+  var aux_reloj = vector[mi_reloj];
+
+  for (var i = 0; i < vector.length; i++) {
+    if(vector[i] < nuevo_vector[i])
+      vector[i] = nuevo_vector[i];
+  }
+  if(aux_reloj < vector[mi_reloj])
+    console.error("error en reloj vectorial");
+}
+
 /*
 ......... persistencia
 */
 
 exports.coleccion = function(nombre_coleccion) {
-  coleccion = nombre_coleccion;
+
+  instancia_colecc = nombre_coleccion;
+
+  MongoClient.connect(mongo_url, function(err, db) {
+    instancia_db = db;
+    if(err)
+      throw err;
+    db.createCollection(nombre_coleccion);
+  });
+}
+
+exports.persistir = function() {
+
+  console.log("INT: persistiendo estado");
+  var coleccion = instancia_db.collection(instancia_colecc);
+
+  compras.forEach(function(compra){
+    coleccion.update({_id:compra.id}, {upsert:true});
+  });
 }
 
 /*
@@ -81,38 +93,33 @@ bus.on("mom", function (msg) {
   bus.emit(msg.evento.tarea, msg.evento);
 });
 
-exports.persistir = function() {
-  console.log("persistiendo");
-}
-
 exports.publicar = function(reglas_ruteo, evento){
 
   var msg = {vector, evento};
   publicador.publicar(reglas_ruteo, msg);
 }
 
-function merge(actualizacion, anterior){
+/*
+......... negocio (instancias de compras)
+*/
 
-  if(actualizacion.compra.estado === "")
-    actualizacion.compra.estado = anterior.compra.estado;
+var compras = new Array();
+exports.totales = compras;
 
-  if(actualizacion.compra.entrega === "")
-    actualizacion.compra.entrega = anterior.compra.entrega;
+var estadisticas = { totales:0, aceptadas:0, canceladas:0, en_curso:0,};
+exports.estadisticas = estadisticas;
 
-  if(actualizacion.compra.reserva === "")
-    actualizacion.compra.reserva = anterior.compra.reserva;
+setInterval ( function() {
+  estadisticas.totales = compras.length;
 
-  if(actualizacion.compra.pago === "")
-    actualizacion.compra.pago = anterior.compra.pago;
-
-  if(actualizacion.compra.infracciones === "")
-    actualizacion.compra.infracciones = anterior.compra.infracciones;
-
-  if(actualizacion.compra.medio === "")
-    actualizacion.compra.medio = anterior.compra.medio;
-
-  return actualizacion;
-}
+  compras.forEach(function(evento){
+    if(evento.compra.estado === evento.compra.estados[3])
+      estadisticas.aceptadas++;
+    if(evento.compra.estado === evento.compra.estados[2])
+      estadisticas.canceladas++;
+    estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - estadisticas.canceladas;
+  });
+}, 4000);
 
 function actualizarMensaje(evento){
 
@@ -137,14 +144,25 @@ function buscarEvento(evento){
   return compra;
 }
 
-function actualizarVector(nuevo_vector){
+function merge(actualizacion, anterior){
 
-  var aux_reloj = vector[mi_reloj];
+  if(actualizacion.compra.estado === "")
+    actualizacion.compra.estado = anterior.compra.estado;
 
-  for (var i = 0; i < vector.length; i++) {
-    if(vector[i] < nuevo_vector[i])
-      vector[i] = nuevo_vector[i];
-  }
-  if(aux_reloj < vector[mi_reloj])
-    console.error("error en reloj vectorial");
+  if(actualizacion.compra.entrega === "")
+    actualizacion.compra.entrega = anterior.compra.entrega;
+
+  if(actualizacion.compra.reserva === "")
+    actualizacion.compra.reserva = anterior.compra.reserva;
+
+  if(actualizacion.compra.pago === "")
+    actualizacion.compra.pago = anterior.compra.pago;
+
+  if(actualizacion.compra.infracciones === "")
+    actualizacion.compra.infracciones = anterior.compra.infracciones;
+
+  if(actualizacion.compra.medio === "")
+    actualizacion.compra.medio = anterior.compra.medio;
+
+  return actualizacion;
 }
