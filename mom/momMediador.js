@@ -61,6 +61,7 @@ exports.coleccion = function(nombre_coleccion) {
 
   MongoClient.connect(mongo_url, function(err, db) {
     instancia_db = db;
+
     if(err)
       throw err;
     db.createCollection(nombre_coleccion);
@@ -73,7 +74,7 @@ exports.persistir = function() {
   var coleccion = instancia_db.collection(instancia_colecc);
 
   compras.forEach(function(compra){
-    coleccion.update({_id:compra.id}, {upsert:true});
+    coleccion.update({id:compra.id}, compra, {upsert:true});
   });
 }
 
