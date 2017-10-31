@@ -1,6 +1,7 @@
 var publicador = require("./momPublicador");
 var bus = require('../eventBus');
 var _ = require('underscore');
+var unificador = require("./unificador");
 
 /*
 .............................................................
@@ -9,7 +10,7 @@ var _ = require('underscore');
 */
 
 // hay que crear carpeta C:\data\db
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require("mongodb").MongoClient;
 var mongo_url = require("../cfg.json").mongo.url;
 
 var instancia_db;
@@ -89,7 +90,8 @@ bus.on("mom", function (msg) {
   if(msg.evento.tarea !== "momResultadoPublicaciones" &&
     msg.evento.tarea !== "momGetPublicaciones")
 
-      actualizarMensaje(msg.evento);
+    agregarCompra(msg.evento);
+
 
   bus.emit(msg.evento.tarea, msg.evento);
 });
@@ -104,66 +106,61 @@ exports.publicar = function(reglas_ruteo, evento){
 ......... negocio (instancias de compras)
 */
 
-var compras = new Array();
-exports.totales = compras;
+var compras;
+exports.registroCompras = function(arreglo) {
+  compras = arreglo;
+}
+exports.totales = function(){
+    return compras;
+}
 
 var estadisticas = { totales:0, aceptadas:0, canceladas:0, en_curso:0,};
 exports.estadisticas = estadisticas;
 
-setInterval ( function() {
+setInterval(function() {
   estadisticas.totales = compras.length;
+  estadisticas.aceptadas = estadisticas.canceladas = 0;
 
   compras.forEach(function(evento){
-    if(evento.compra.estado === evento.compra.estados[3])
+    if(evento.compra.estado === evento.compra.estado_valores[3])
       estadisticas.aceptadas++;
-    if(evento.compra.estado === evento.compra.estados[2])
+    if(evento.compra.estado === evento.compra.estado_valores[2])
       estadisticas.canceladas++;
     estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - estadisticas.canceladas;
   });
 }, 4000);
 
-function actualizarMensaje(evento){
+exports.actualizarAtributo = function(evento){
 
-  var coincidencia = buscarEvento(evento);
-  if(coincidencia !== undefined)
-    evento = merge(evento, coincidencia);
+  var ev_antiguo = aislarEvento(evento);
 
+  var antigua = ev_antiguo.compra;
+  var actualizacion = evento.compra;
+
+  actualizacion = unificador.unificar(antigua, actualizacion);
+  evento.compra = actualizacion;
   compras.push(evento);
+
+  return evento;
 }
 
-function buscarEvento(evento){
+function aislarEvento(evento){
 
-  var compra = compras.find(function(element, index, array){
-    return element.id == evento.id;
+  var compra = compras.find(function(item, index, array){
+    return item.id == evento.id;
   });
 
-  if(compra)
-    compras = _(compras).filter(function(item) {
-      return item.id != evento.id;
-    });
+  compras = _(compras).filter(function(item) {
+    return item.id != evento.id;
+  });
 
   return compra;
 }
 
-function merge(actualizacion, anterior){
-
-  if(actualizacion.compra.estado === "")
-    actualizacion.compra.estado = anterior.compra.estado;
-
-  if(actualizacion.compra.entrega === "")
-    actualizacion.compra.entrega = anterior.compra.entrega;
-
-  if(actualizacion.compra.reserva === "")
-    actualizacion.compra.reserva = anterior.compra.reserva;
-
-  if(actualizacion.compra.pago === "")
-    actualizacion.compra.pago = anterior.compra.pago;
-
-  if(actualizacion.compra.infracciones === "")
-    actualizacion.compra.infracciones = anterior.compra.infracciones;
-
-  if(actualizacion.compra.medio === "")
-    actualizacion.compra.medio = anterior.compra.medio;
-
-  return actualizacion;
+/*
+solo agrega la compra en caso que no exista. no realiza ningun analisis de versiones
+*/
+function agregarCompra(evento){
+  if(!compras.some(x => x.id === evento.id))
+    compras.push(evento);
 }

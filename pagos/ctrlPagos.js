@@ -7,6 +7,7 @@ var mediador = require("../mom/momMediador");
 
 mediador.coleccion("colecc_pagos");
 mediador.indice(2);
+mediador.registroCompras(new Array);
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -35,6 +36,8 @@ bus.on("momAutorizarPago", function (evento) {
 bus.on("momResultadoAutorizacion", function (evento) {
 
   mediador.incrementar();
+
+  evento = mediador.actualizarAtributo(evento);
 
   console.log("SAL: compra " + evento.id + " --> " + evento.compra.pago);
   mediador.publicar("compras.publicaciones", evento);

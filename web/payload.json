@@ -3,7 +3,7 @@
 	"id": "",
 	"compra": {
 		"estado": "",
-		"estados": [
+		"estado_valores": [
 			"generada",
 			"confirmada",
 			"cancelada",

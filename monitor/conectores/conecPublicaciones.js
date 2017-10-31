@@ -25,14 +25,14 @@ socket.on("resumen", (contadores) => {
 });
 
 socket.on("resEstado", (preguntas) => {
-  console.log("ServCompras: estado respondido");
+  console.log("ServPublicaciones: estado respondido");
   responderSockMon("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServCompras: mensajes validos son {", msgs_validos_remotos, "}"];
+  var respuesta = ["ServPublicaciones: mensajes validos son {", msgs_validos_remotos, "}"];
 
   responderSockMon("res?", respuesta);
 });

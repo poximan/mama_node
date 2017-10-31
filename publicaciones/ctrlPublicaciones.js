@@ -7,6 +7,7 @@ var mediador = require("../mom/momMediador");
 
 mediador.coleccion("colecc_publicaciones");
 mediador.indice(1);
+mediador.registroCompras(new Array);
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -101,7 +102,9 @@ bus.on("momPublicacionSeleccionada", function (evento) {
 bus.on("momResultadoInfraccion", function (evento) {
 
   mediador.incrementar();
-  estado_inf = evento.compra.infracciones;
+  console.log("ENT: compra " + evento.id + " --> " + evento.compra.infracciones);
+
+  evento = mediador.actualizarAtributo(evento);
 
   estado_sincro_inf_pub[evento.id] += 2;
   bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
@@ -110,7 +113,9 @@ bus.on("momResultadoInfraccion", function (evento) {
 bus.on("momResultadoAutorizacion", function (evento) {
 
   mediador.incrementar();
-  estado_pago = evento.compra.pago;
+  console.log("ENT: compra " + evento.id + " pago --> " + evento.compra.pago);
+
+  evento = mediador.actualizarAtributo(evento);
 
   estado_sincro_pub_pag[evento.id] += 2;
   bus.emit("sincro_pub_pag"+estado_sincro_pub_pag[evento.id], evento);
@@ -119,7 +124,9 @@ bus.on("momResultadoAutorizacion", function (evento) {
 bus.on("momResultadoAgendarEnvio", function (evento) {
 
   mediador.incrementar();
-  estado_envio = evento.compra.destino;
+  console.log("ENT: compra " + evento.id + " --> " + "destino agendado");
+
+  evento = mediador.actualizarAtributo(evento);
 
   estado_sincro_pub_env[evento.id] += 2;
   bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);

@@ -80,9 +80,9 @@ metodoPago = function(evento) {
 
 confirmar = function(evento) {
   if(probabilidad() <= probab_conf_compra)
-    evento.compra.estado = evento.compra.estados[1];  // confirma
+    evento.compra.estado = evento.compra.estado_valores[1];  // confirma
   else
-    evento.compra.estado = evento.compra.estados[2];  // cancela
+    evento.compra.estado = evento.compra.estado_valores[2];  // cancela
 }
 
 function probabilidad() {

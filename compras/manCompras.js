@@ -51,7 +51,7 @@ io.on('connection', function (socket) {
   socket.on("estado", function (msg) {
 
     console.log("respondiendo estado del servidor");
-    socket.emit("resEstado", [mediador.totales, preguntas]);
+    socket.emit("resEstado", [mediador.totales(), preguntas]);
   });
 
   socket.on("persistir", function (msg) {
@@ -76,7 +76,7 @@ io.on('connection', function (socket) {
 
   setInterval ( function() {
 
-    if(reporte.totales !== mediador.estadisticas.totales ||
+    if(true || reporte.totales !== mediador.estadisticas.totales ||
         reporte.aceptadas !== mediador.estadisticas.aceptadas ||
         reporte.canceladas !== mediador.estadisticas.canceladas ||
         reporte.en_curso !== mediador.estadisticas.en_curso){

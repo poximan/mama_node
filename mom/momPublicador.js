@@ -11,9 +11,11 @@ exports.publicar = function(regla_ruteo, msg) {
     conn.createChannel(function(err, ch) {
 
       var serializacion = JSON.stringify(msg);
-    
+
       var buffer = Buffer.from(serializacion);
       ch.publish(ex, regla_ruteo, buffer, {persistent: true, contentType: 'application/json'});
+
     });
+    setTimeout(function() { conn.close() }, 500);
   });
 }

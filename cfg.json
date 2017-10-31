@@ -1,7 +1,6 @@
 {
   "amqp" : {
     "url" : "amqp://localhost",
-    "_coment" : "amqp://192.168.0.104",
     "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
     "management" : "http://localhost:15672/",
     "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
@@ -44,10 +43,10 @@
       }
     },
     "nueva_compra" : {
-      "periodo" : "5000"
+      "periodo" : "2000"
     },
     "persistencia" : {
-      "periodo" : "10000"
+      "periodo" : "20000"
     }
   }
 }

@@ -35,19 +35,19 @@ socket.on("resultadoConfirmar", (preguntas) => {
   socket_monitor.emit("resultadoConfirmar", preguntas);
 });
 
-socket.on("resumen", (contadores) => {
+socket.on("resumen", (contadores) => {  
   responderSockMon("resumen", contadores);
 });
 
 socket.on("resEstado", (preguntas) => {
-  console.log("ServCompras: estado respondido");
+  console.log("ServWeb: estado respondido");
   responderSockMon("resEstado", preguntas);
 });
 
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServCompras: mensajes validos son {", msgs_validos_remotos, "}"];
+  var respuesta = ["ServWeb: mensajes validos son {", msgs_validos_remotos, "}"];
 
   responderSockMon("res?", respuesta);
 });

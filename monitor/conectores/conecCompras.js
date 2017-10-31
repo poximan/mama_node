@@ -20,7 +20,7 @@ function responderSockMon(nombre_evento, contenido){
       respuestas.push([nombre_evento, contenido]);
 }
 
-socket.on("resumen", (contadores) => {
+socket.on("resumen", (contadores) => {  
   responderSockMon("resumen", contadores);
 });
 

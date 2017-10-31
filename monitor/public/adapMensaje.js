@@ -157,6 +157,8 @@ $(function() {
     var arreglos = { totales:conj_compras[0], pendientes:conj_compras[1] };
 
     if(arreglos.totales.length > 0 || arreglos.pendientes.length > 0){
+
+      addChatMessage("");
       addChatMessage(" ------ totales ------ ");
       arreglos.totales.forEach(function(pregunta) {
 
@@ -171,6 +173,7 @@ $(function() {
         addChatMessage(texto);
       });
 
+      addChatMessage("");
       addChatMessage(" ------ pendientes ------ ");
       arreglos.pendientes.forEach(function(pregunta) {
 
