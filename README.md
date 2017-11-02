@@ -1,4 +1,4 @@
-#mama_node
+# mama_node
 Implementación nodejs/rabbitmq de una infraestructura mom
 
 El proceso inicia cuando el cliente indica que desea comprar un producto. Inmediatamente el departamento de infracciones comienza una revisión del chat entre el vendedor y el comprador en búsqueda de violaciones al reglamento del sitio. El departamento de ventas, a su vez, reserva el producto para asegurar el cumplimiento de las condiciones de venta en caso de que la compra sea exitosa. Luego el comprador elige la forma de entrega y de pago. En caso de que el comprador decida que el producto se le envíe por correo, el departamento de envíos calcula el costo del envío antes de que el comprador elija la forma de pago. Consecuentemente se le informa al comprador un resumen de las condiciones de compra, y se le solicita confirmar la misma. Si la confirma, y no hay infracción, el departamento de pagos procede a efectivizar el pago (utilizando los servicios provistos por los medios de pagos contratados). Una vez que el pago es confirmado, el departamento de envíos agenda el envío con la empresa de correo elegida.
