@@ -31,5 +31,5 @@ Como se trata de un sistema distribuido, cada servidor es ejecutado desde un she
 * Como son 6 servidores de negocio, se levantan 6 entornos de ejecucion diferentes.
 * Uno para iniciar el servidor de base de datos, mongodb, que queda a la escucha de conexiones entrantes.
 * Uno para el monitor bidireccional, que cumple dos funciones:
-*** En automático, colecta datos de los servidores del negocio y los presenta a un cliente monitor web.
-*** En manual, lo mismo que automático y ademas, escucha los post (peticiones o comandos) desde el cliente monitor web hacia los servidores del negocio. funciona como un concentrador. servnegocio/servmonitor <-> climonitor/servweb <-> cliweb.
+  * En automático, colecta datos de los servidores del negocio y los presenta a un cliente monitor web.
+  * En manual, lo mismo que automático y ademas, escucha los post (peticiones o comandos) desde el cliente monitor web hacia los servidores del negocio. funciona como un concentrador. servnegocio/servmonitor <-> climonitor/servweb <-> cliweb.
