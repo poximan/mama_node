@@ -7,7 +7,9 @@ var mediador = require("../mom/momMediador");
 
 mediador.coleccion("colecc_publicaciones");
 mediador.indice(1);
-mediador.registroCompras(new Array);
+mediador.registroCompras(new Array());
+mediador.respuestasCorte(4);
+mediador.registroCorte(new Array());
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -198,7 +200,7 @@ bus.on("sincro_pub_pag3", function (evento) {
   mediador.incrementar();
   console.log("INTERNO: compra " + evento.id + " --> " + "sincro 2 terminada");
   evento.compra.pago = estado_pago;
-  estado_inf = null;
+  estado_pago = null;
 
   // si la compra registra infracciones o el pago fue rechazado
   if(evento.compra.infracciones === evento.compra.infracciones_valores[2] ||

@@ -1,7 +1,5 @@
 require("../mom/momSuscriptor").suscribir("cola_compras");
 
-var publicador = require("../mom/momPublicador");
-
 var bus = require('../eventBus');
 var mediador = require("../mom/momMediador");
 
@@ -9,7 +7,9 @@ var mediador = require("../mom/momMediador");
 
 mediador.coleccion("colecc_compras");
 mediador.indice(5);
-mediador.registroCompras(new Array);
+mediador.registroCompras(new Array());
+mediador.respuestasCorte(4);
+mediador.registroCorte(new Array());
 
 exports.mediador = mediador;
 exports.bus = bus;

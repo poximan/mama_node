@@ -18,8 +18,6 @@ amqp.connect(amqp_url, function(err, conn) {
 
         // msg origianl es {fields, properties, content}
         var serializacion = JSON.parse(buffer.content.toString());
-
-        // en función del nombre del evento procesa el mensaje de forma automática
         bus.emit("mom", serializacion);
         ch.ack(buffer);
       }, {noAck: false});

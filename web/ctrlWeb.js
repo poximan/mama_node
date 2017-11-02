@@ -10,6 +10,8 @@ var async = require('async');
 mediador.coleccion("colecc_web");
 mediador.indice(0);
 mediador.registroCompras(new Array());
+mediador.respuestasCorte(1);
+mediador.registroCorte(new Array());
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -50,13 +52,6 @@ exports.comprar = function() {
 function indicePublicacionElegida() {
   return Math.floor(Math.random() * (publicaciones.length - 1));
 }
-
-/*
-.............................................................
-... mensajes MOM entrada-salida
-.............................................................
-*/
-
 
 /*
 .............................................................

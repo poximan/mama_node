@@ -1,17 +1,56 @@
-/*
-este modulo conoce y agrupa distintas funcionalidades que en su conjunto, dan vida al servidor ejecutado
+var port = require("../cfg.json").monitor.port_compras;
+var control = require('./ctrlCompras');
+var monitor = require('../monitorServ')(port, control);
 
-- agrega el control principal del servidor, donde corre el nucleo del negocio.
-- pide el mediador que ya fue agregado por el control.
+var mediador = monitor.mediador;
+var bus = monitor.bus;
+var io = monitor.io;
+
+var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+var probab_corte_consistente = require("../cfg.json").probab_corte_consistente;
+
+// ---------
+
+setInterval(persistir, periodo_persistencia);
+
+// ---------
+
+/*
+.............................................................
+... respuestas simuladas
+.............................................................
 */
 
-var control = require('./ctrlCompras');
-var mediador = control.mediador;
+/*
+al persistirse el estado, solicita con un 50% de probabilidad la
+generación de un corte consistente
+*/
+function persistir(evento) {
 
-var p_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+  if(!mediador.corteEnProceso())
+    if(probabilidad() <= probab_corte_consistente){
 
-// ---------
+      var tarea = "momCorte";
+      var evento = {tarea};
 
-setInterval(mediador.persistir, p_persistencia);
+      console.log("GLOBAL: comienza corte consistente");
+      bus.emit(evento.tarea, evento);
+    }
+    else {
+      mediador.persistir();
+    }
+}
 
-// ---------
+function probabilidad() {
+  return Math.random() * 100;
+}
+
+/*
+.............................................................
+... respuestas desde cliente web
+.............................................................
+*/
+
+io.on('connection', function (socket) {
+  monitor.agendarEventos("auto");
+});

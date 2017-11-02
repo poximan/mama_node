@@ -1,31 +1,28 @@
 {
   "amqp" : {
-    "url" : "amqp://localhost",
-    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
+    "_coment" : "amqp://localhost",
+    "url" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
     "management" : "http://localhost:15672/",
     "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
   },
   "mongo" : {
     "url" : "mongodb://localhost:27017/mlivre",
-    "_coment" : "mongodb://localhost:27017/tatobd",
     "management" : "http://localhost:27017/"
   },
-  "manual" : {
-    "monitor" : {
-      "ip_web" : "http://localhost",
-      "port_web" : "5000",
-      "ip_publicaciones" : "http://localhost",
-      "port_publicaciones" : "5001",
-      "ip_pagos" : "http://localhost",
-      "port_pagos" : "5002",
-      "ip_infracciones" : "http://localhost",
-      "port_infracciones" : "5003",
-      "ip_envios" : "http://localhost",
-      "port_envios" : "5004",
-      "ip_compras" : "http://localhost",
-      "port_compras" : "5005",
-      "port_monitor" : "5006"
-    }
+  "monitor" : {
+    "ip_web" : "http://localhost",
+    "port_web" : "5000",
+    "ip_publicaciones" : "http://localhost",
+    "port_publicaciones" : "5001",
+    "ip_pagos" : "http://localhost",
+    "port_pagos" : "5002",
+    "ip_infracciones" : "http://localhost",
+    "port_infracciones" : "5003",
+    "ip_envios" : "http://localhost",
+    "port_envios" : "5004",
+    "ip_compras" : "http://localhost",
+    "port_compras" : "5005",
+    "port_monitor" : "5006"
   },
   "automatico" : {
     "probabilidad" : {
@@ -43,10 +40,11 @@
       }
     },
     "nueva_compra" : {
-      "periodo" : "2000"
+      "periodo" : "15000"
     },
     "persistencia" : {
       "periodo" : "20000"
     }
-  }
+  },
+  "probab_corte_consistente" : "50"
 }

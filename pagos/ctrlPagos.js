@@ -7,7 +7,9 @@ var mediador = require("../mom/momMediador");
 
 mediador.coleccion("colecc_pagos");
 mediador.indice(2);
-mediador.registroCompras(new Array);
+mediador.registroCompras(new Array());
+mediador.respuestasCorte(1);
+mediador.registroCorte(new Array());
 
 exports.mediador = mediador;
 exports.bus = bus;

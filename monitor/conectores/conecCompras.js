@@ -1,5 +1,5 @@
-var ip = require("../../cfg.json").manual.monitor.ip_compras;
-var port = require("../../cfg.json").manual.monitor.port_compras;
+var ip = require("../../cfg.json").monitor.ip_compras;
+var port = require("../../cfg.json").monitor.port_compras;
 
 const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
@@ -9,7 +9,7 @@ var respuestas = [];
 
 function responderSockMon(nombre_evento, contenido){
 
-  if(socket_monitor !== undefined){
+  if(typeof socket_monitor !== "undefined"){
 
     socket_monitor.emit(nombre_evento, contenido);
 
@@ -20,7 +20,11 @@ function responderSockMon(nombre_evento, contenido){
       respuestas.push([nombre_evento, contenido]);
 }
 
-socket.on("resumen", (contadores) => {  
+socket.on("resCorte", (corte_consistente) => {
+  responderSockMon("resCorte", corte_consistente);
+});
+
+socket.on("resumen", (contadores) => {
   responderSockMon("resumen", contadores);
 });
 
@@ -32,8 +36,11 @@ socket.on("resEstado", (preguntas) => {
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServCompras: mensajes validos son {", msgs_validos_remotos, "}"];
+  msgs_validos = msgs_validos.filter(function(item){
+    return item !== "?resumen";
+  });
 
+  var respuesta = ["ServCompras: mensajes validos son {", msgs_validos, "}"];
   responderSockMon("res?", respuesta);
 });
 

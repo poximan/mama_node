@@ -152,6 +152,48 @@ $(function() {
     addChatMessage(texto);
   });
 
+  socket.on("resCorte", function (corte_consistente) {
+
+    var entrante = corte_consistente.ent;
+    var estado = corte_consistente.est;
+    var saliente = corte_consistente.sal;
+
+    addChatMessage("");
+    addChatMessage(" ------ canal entrada ------ ");
+    entrante.forEach(function(pregunta) {
+
+      var texto = pregunta.vector + " / " +
+      pregunta.evento.tarea;
+
+      addChatMessage(texto);
+    });
+
+    addChatMessage("");
+    addChatMessage(" ------ estado guardado ------ ");
+    estado.forEach(function(pregunta) {
+
+      var texto = "compra " + pregunta.id + " => " +
+      pregunta.compra.estado + " : " +
+      pregunta.compra.entrega + " : " +
+      pregunta.compra.reserva + " : " +
+      pregunta.compra.pago + " : " +
+      pregunta.compra.infracciones + " : " +
+      pregunta.compra.medio;
+
+      addChatMessage(texto);
+    });
+
+    addChatMessage("");
+    addChatMessage(" ------ canal salida ------ ");
+    saliente.forEach(function(pregunta) {
+
+      var texto = pregunta.vector + " / " +
+      pregunta.evento.tarea;
+
+      addChatMessage(texto);
+    });
+  });
+
   socket.on("resEstado", function (conj_compras) {
 
     var arreglos = { totales:conj_compras[0], pendientes:conj_compras[1] };

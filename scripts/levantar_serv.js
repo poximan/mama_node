@@ -37,10 +37,9 @@ var operaciones = [
 
   function(callback) {
 
-    if(modo_operacion == "man"){
-      console.log("levantando monitor");
-      shell_ejec("start ventana /K \"cd monitor && node monitor.js\"");
-    }
+    console.log("levantando monitor");
+    shell_ejec("start ventana /K \"cd monitor && node monitor.js\"");
+
     callback(null);
   }
 ];

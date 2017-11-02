@@ -5,17 +5,16 @@ var amqp_url = require("../cfg.json").amqp.url;
 
 var ex = 'exchange';
 
-exports.publicar = function(regla_ruteo, msg) {
+exports.publicar = function(reglas_ruteo, msg) {
 
   amqp.connect(amqp_url, function(err, conn) {
     conn.createChannel(function(err, ch) {
 
       var serializacion = JSON.stringify(msg);
-
       var buffer = Buffer.from(serializacion);
-      ch.publish(ex, regla_ruteo, buffer, {persistent: true, contentType: 'application/json'});
 
+      ch.publish(ex, reglas_ruteo, buffer, {persistent: true, contentType: 'application/json'});
+      setTimeout(function() { conn.close() }, 200);
     });
-    setTimeout(function() { conn.close() }, 500);
   });
 }

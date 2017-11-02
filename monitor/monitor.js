@@ -3,11 +3,9 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = require("../cfg.json").manual.monitor.port_monitor;
+var port = require("../cfg.json").monitor.port_monitor;
 
 var conectores = require("./conectador").conectores;
-
-var bus = require('../eventBus');
 
 // Routing
 app.use(express.static(__dirname + '/public'));

@@ -1,5 +1,5 @@
-var ip = require("../../cfg.json").manual.monitor.ip_infracciones;
-var port = require("../../cfg.json").manual.monitor.port_infracciones;
+var ip = require("../../cfg.json").monitor.ip_infracciones;
+var port = require("../../cfg.json").monitor.port_infracciones;
 
 const socket = require('socket.io-client')(ip + ":" + port);
 var msgs_validos_remotos;
@@ -9,7 +9,7 @@ var respuestas = [];
 
 function responderSockMon(nombre_evento, contenido){
 
-  if(socket_monitor !== undefined){
+  if(typeof socket_monitor !== "undefined"){
 
     socket_monitor.emit(nombre_evento, contenido);
 
@@ -25,6 +25,10 @@ socket.on("resultadoInfraccion", (preguntas) => {
   socket_monitor.emit("resultadoInfraccion", preguntas);
 });
 
+socket.on("resCorte", (corte_consistente) => {
+  responderSockMon("resCorte", corte_consistente);
+});
+
 socket.on("resumen", (contadores) => {
   responderSockMon("resumen", contadores);
 });
@@ -37,8 +41,11 @@ socket.on("resEstado", (preguntas) => {
 socket.on("res?", (msgs_validos) => {
 
   msgs_validos_remotos = msgs_validos;
-  var respuesta = ["ServInfracciones: mensajes validos son {", msgs_validos_remotos, "}"];
+  msgs_validos = msgs_validos.filter(function(item){
+    return item !== "?resumen";
+  });
 
+  var respuesta = ["ServInfracciones: mensajes validos son {", msgs_validos, "}"];
   responderSockMon("res?", respuesta);
 });
 
