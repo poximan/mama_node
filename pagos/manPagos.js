@@ -2,7 +2,7 @@ var port = require("../cfg.json").monitor.port_pagos;
 var control = require('./ctrlPagos');
 var monitor = require('../monitorServ')(port, control);
 
-var bus = monitor.bus;
+var bus = control.bus;
 var io = monitor.io;
 
 // ---------

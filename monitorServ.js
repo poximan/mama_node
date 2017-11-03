@@ -22,9 +22,6 @@ module.exports = function(puerto, control) {
   var mediador = control.mediador;
   var bus = control.bus;
 
-  module.mediador = mediador;
-  module.bus = bus;
-
   // ---------
 
   const Server = require('socket.io');

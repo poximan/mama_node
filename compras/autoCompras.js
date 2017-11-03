@@ -2,8 +2,8 @@ var port = require("../cfg.json").monitor.port_compras;
 var control = require('./ctrlCompras');
 var monitor = require('../monitorServ')(port, control);
 
-var mediador = monitor.mediador;
-var bus = monitor.bus;
+var mediador = control.mediador;
+var bus = control.bus;
 var io = monitor.io;
 
 var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
