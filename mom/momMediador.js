@@ -1,4 +1,4 @@
-var publicador = require("./momPublicador");
+var publicador = require("./momPublicador")();
 var bus = require('../eventBus');
 var _ = require('underscore');
 var unificador = require("./unificador");
@@ -123,7 +123,7 @@ function publicar(reglas_ruteo, evento){
   var msg = {vector, evento};
 
   if (typeof registrarActividad !== "function" ||
-      evento.tarea === "momCorte")
+                                      evento.tarea === "momCorte")
     publicador.publicar(reglas_ruteo, msg);
   else {
     registrarActividad("saliente", msg);
@@ -253,7 +253,7 @@ exports.sockRespuesta = function(socket) {
   sock_respuesta = socket;
 }
 
-var compras;
+var compras = [];
 exports.registroCompras = function(arreglo) {
   compras = arreglo;
 }

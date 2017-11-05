@@ -88,11 +88,15 @@ bus.on("momConfirmarCompra", function (evento) {
 
 bus.on("momInformarInfraccion", function (evento) {
 
+  evento = mediador.actualizarAtributo(evento);
+
   mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> cancelada " + evento.compra.infracciones);
 });
 
 bus.on("momInformarPagoRechazado", function (evento) {
+
+  evento = mediador.actualizarAtributo(evento);
 
   mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.compra.pago + " por pago");
@@ -100,16 +104,17 @@ bus.on("momInformarPagoRechazado", function (evento) {
 
 bus.on("momAceptarCompra", function (evento) {
 
+  evento = mediador.actualizarAtributo(evento);
+
   mediador.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.compra.estado + " en sistema");
+  console.log("¡MUCHAS GRACIAS POR COMPRAR!... cerdo capitalista");
 });
 
 bus.on("momResultadoPublicaciones", function (evento) {
 
-  console.log("INTERNO: obteniendo nuevas publicaciones");
-
-  evento.tarea = "cargarPublicaciones";
-  bus.emit(evento.tarea, evento);
+  console.log("ENT: obteniendo " + evento.publicaciones.length + " nuevas publicaciones");
+  publicaciones = evento.publicaciones;
 });
 
 /*
@@ -168,6 +173,6 @@ bus.on("momResultadoConfirmar", function (evento) {
 .............................................................
 */
 
-bus.on("cargarPublicaciones", function (evento) {
-  publicaciones = evento.publicaciones;
-});
+exports.hayPublicaciones = function() {
+  return publicaciones.length > 0;
+}

@@ -16,9 +16,15 @@ exports.bus = bus;
 
 // ---------
 
-var value = 0,      // valor inicial
-    size  = 10000,  // tamaño del arreglo
-    estado_sincro_inf_compr = Array.apply(null,{length: size}).map(function() { return value; });
+/*
+.............................................................
+... sincronizacion 1
+se espera la llegada de dos mensajes
+1) desde servidor compras - compra confirmada
+2) desde servidor infracciones - resultado infraccion
+.............................................................
+*/
+var estado_sincro_inf_compr = [];
 
 /*
 .............................................................
@@ -94,7 +100,7 @@ bus.on("autorizarPago", function (evento) {
 bus.on("aceptarCompra", function (evento) {
 
   mediador.incrementar();
-
+  
   evento.tarea = "momAceptarCompra";
   mediador.publicar("web", evento);
 })
@@ -164,7 +170,7 @@ bus.on("momResultadoConfirmar", function (evento) {
 
   evento = mediador.actualizarAtributo(evento);
 
-  estado_sincro_inf_compr[evento.id] += 1;
+  sumar(estado_sincro_inf_compr, evento.id, 1);
   bus.emit("sincro_inf_compr"+estado_sincro_inf_compr[evento.id], evento);
 });
 
@@ -175,7 +181,7 @@ bus.on("momResultadoInfraccion", function (evento) {
 
   evento = mediador.actualizarAtributo(evento);
 
-  estado_sincro_inf_compr[evento.id] += 2;
+  sumar(estado_sincro_inf_compr, evento.id, 2);
   bus.emit("sincro_inf_compr"+estado_sincro_inf_compr[evento.id], evento);
 })
 
@@ -198,6 +204,8 @@ bus.on("momResultadoAutorizacion", function (evento) {
 
     evento.compra.estado = evento.compra.estado_valores[3]; // aceptada
 
+    console.log("SAL: compra " + evento.id + " --> " + evento.compra.estado + " en sistema");
+
     evento.tarea = "aceptarCompra";
     bus.emit(evento.tarea, evento);
 
@@ -218,14 +226,19 @@ bus.on("momResultadoAutorizacion", function (evento) {
 
 /*
 .............................................................
-... sincronizacion
+... sincronizacion 1
+se espera la llegada de dos mensajes
+1) desde servidor compras - compra confirmada
+2) desde servidor infracciones - resultado infraccion
 .............................................................
 */
 
 bus.on("sincro_inf_compr1", function (evento) {
+  console.log("INT: esperando resultado infraccion");
 });
 
 bus.on("sincro_inf_compr2", function (evento) {
+  console.log("INT: esperando confirmacion de compra");
 });
 
 bus.on("sincro_inf_compr3", function (evento) {
@@ -247,3 +260,17 @@ bus.on("sincro_inf_compr3", function (evento) {
     bus.emit(evento.tarea, evento);
   }
 });
+
+/*
+.............................................................
+... auxiliar
+.............................................................
+*/
+
+function sumar(estado_sincro, indice_objetivo, incremento){
+
+  while(estado_sincro.length <= indice_objetivo)
+    estado_sincro.push(0);
+
+  estado_sincro[indice_objetivo] += incremento;
+}

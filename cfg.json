@@ -40,11 +40,14 @@
       }
     },
     "nueva_compra" : {
-      "periodo" : "15000"
+      "periodo" : "10000"
     },
     "persistencia" : {
-      "periodo" : "20000"
+      "periodo" : "30000"
     }
   },
-  "probab_corte_consistente" : "50"
+  "probabilidad" : {
+    "corte_consistente" : "50",
+    "_coment" : "(50) probabilidad que una persistencia genere un corte"
+    }
 }

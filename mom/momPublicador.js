@@ -3,18 +3,42 @@ var amqp_url = require("../cfg.json").amqp.url;
 
 //-----------------------------
 
-var ex = 'exchange';
+module.exports = function() {
 
-exports.publicar = function(reglas_ruteo, msg) {
+  var module = {};
+
+  var ex = 'exchange';
+  var canal;
+  var publicaciones = [];
 
   amqp.connect(amqp_url, function(err, conn) {
     conn.createChannel(function(err, ch) {
-
-      var serializacion = JSON.stringify(msg);
-      var buffer = Buffer.from(serializacion);
-
-      ch.publish(ex, reglas_ruteo, buffer, {persistent: true, contentType: 'application/json'});
-      setTimeout(function() { conn.close() }, 200);
+      canal = ch;
     });
   });
-}
+
+  module.publicar = function(reglas_ruteo, msg){
+
+    publicaciones.push({reglas_ruteo, msg});
+    if(canal !== undefined)
+      vaciarPendientes();
+  }
+
+  setInterval(function(){
+    if(canal !== undefined && publicaciones.length > 0)
+      vaciarPendientes();
+  }, 1000);
+
+  function vaciarPendientes(){
+    while (publicaciones.length > 0) {
+
+      var pendiente = publicaciones.pop();
+      var serializacion = JSON.stringify(pendiente.msg);
+      var buffer = Buffer.from(serializacion);
+
+      canal.publish(ex, pendiente.reglas_ruteo, buffer, {persistent: true, contentType: 'application/json'});
+    }
+  }
+
+  return module;
+};

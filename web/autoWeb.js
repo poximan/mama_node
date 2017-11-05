@@ -11,13 +11,19 @@ var periodo_comprar = require("../cfg.json").automatico.nueva_compra.periodo;
 var probab_envio_correo = require("../cfg.json").automatico.probabilidad.cliente.correo;
 var probab_pago_debito = require("../cfg.json").automatico.probabilidad.cliente.debito;
 var probab_conf_compra = require("../cfg.json").automatico.probabilidad.cliente.confirma;
-var probab_corte_consistente = require("../cfg.json").probab_corte_consistente;
+var probab_corte_consistente = require("../cfg.json").probabilidad.corte_consistente;
 
 // ---------
 
 setInterval(persistir, periodo_persistencia);
-setInterval(control.comprar, periodo_comprar);
-setInterval(control.comprar, periodo_comprar);
+
+var id = setInterval(function(){
+  if(control.hayPublicaciones()){
+    control.comprar();
+    control.comprar();
+    //clearInterval(id);
+  }
+}, periodo_comprar);
 
 // ---------
 

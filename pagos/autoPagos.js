@@ -8,7 +8,7 @@ var io = monitor.io;
 
 var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
 var probab_autorizacion = require("../cfg.json").automatico.probabilidad.autorizacion;
-var probab_corte_consistente = require("../cfg.json").probab_corte_consistente;
+var probab_corte_consistente = require("../cfg.json").probabilidad.corte_consistente;
 
 // ---------
 
