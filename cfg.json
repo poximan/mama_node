@@ -43,7 +43,7 @@
       "periodo" : "10000"
     },
     "persistencia" : {
-      "periodo" : "30000"
+      "periodo" : "120000"
     }
   },
   "probabilidad" : {

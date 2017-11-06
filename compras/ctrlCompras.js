@@ -1,15 +1,15 @@
 require("../mom/momSuscriptor").suscribir("cola_compras");
 
 var bus = require('../eventBus');
-var mediador = require("../mom/momMediador");
+
+/*
+param 1 = indice del que es responsable en reloj vectorial
+param 2 = coleccion en donde persiten sus documentos este servidor
+param 3 = cantidad de respuetas que espera para fin corte consistente
+*/
+var mediador = require("../mom/momMediador")(5, "colecc_compras", 4);
 
 // ---------
-
-mediador.coleccion("colecc_compras");
-mediador.indice(5);
-mediador.registroCompras(new Array());
-mediador.respuestasCorte(4);
-mediador.registroCorte(new Array());
 
 exports.mediador = mediador;
 exports.bus = bus;
@@ -100,7 +100,7 @@ bus.on("autorizarPago", function (evento) {
 bus.on("aceptarCompra", function (evento) {
 
   mediador.incrementar();
-  
+
   evento.tarea = "momAceptarCompra";
   mediador.publicar("web", evento);
 })

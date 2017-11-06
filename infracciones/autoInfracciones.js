@@ -53,7 +53,7 @@ function persistir(evento) {
       bus.emit(evento.tarea, evento);
     }
     else {
-      mediador.persistir();
+      mediador.persistir;
     }
 }
 

@@ -1,15 +1,16 @@
 require("../mom/momSuscriptor").suscribir("cola_envios");
 
 var bus = require('../eventBus');
-var mediador = require("../mom/momMediador");
+
+/*
+param 1 = indice del que es responsable en reloj vectorial
+param 2 = coleccion en donde persiten sus documentos este servidor
+param 3 = cantidad de respuetas que espera para fin corte consistente
+*/
+var mediador = require("../mom/momMediador")(4, "colecc_envios", 1);
+
 
 // ---------
-
-mediador.coleccion("colecc_envios");
-mediador.indice(4);
-mediador.registroCompras(new Array());
-mediador.respuestasCorte(1);
-mediador.registroCorte(new Array());
 
 exports.mediador = mediador;
 exports.bus = bus;
