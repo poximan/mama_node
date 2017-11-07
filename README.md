@@ -7,6 +7,12 @@ Existen tres tipos de servidores: de lógica del negocio, de mensajería, y web.
 La interacción entre los servidores web y de lógica del negocio es mediada por un servidor de mensajería, que aloja las colas de mensajes a través de las cuales el proceso se lleva adelante. Un servidor web permite a los clientes acceder a la funcionalidad de compra/venta.
 Todos los servidores persisten regularmente su estado. En el caso de que un servidor caiga, el mismo puede re-iniciarse a su estado persistido.
 
+## Requisitos del sistema
+* La plataforma de trabajo fue Windows 7 32 bits y Windows 10.
+* Debe estar instalado Node.js®, entorno de ejecución para JavaScript (https://nodejs.org/es/download/). Este proyecto se desarrollo con v6.11.2.
+* Agregar al path de variables de entorno, la carpeta destino donde se instalo nodejs. Por ej. C:\Program Files\nodejs\
+* Debe estar instalado RabbitMQ, agente de mensajes de utlidad para implementar infraestrucutras MOM (https://www.rabbitmq.com/download.html). Este proyecto se desarrollo con v3.6.10.
+
 ## Paquetes necesarios
 * Sincronizar "async" (npm install async)
 * Cliente mom "amqp" (npm install amqplib). la implementacion es rabbitmq, que sigue esta especificación.
