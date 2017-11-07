@@ -234,11 +234,12 @@ se espera la llegada de dos mensajes
 */
 
 bus.on("sincro_inf_compr1", function (evento) {
-  console.log("INT: esperando resultado infraccion");
+  "ENT: compra " + evento.id +
+  console.log("INT: compra " + evento.id + "compra " + evento.id + " --> esperando resultado infraccion");
 });
 
 bus.on("sincro_inf_compr2", function (evento) {
-  console.log("INT: esperando confirmacion de compra");
+  console.log("INT: compra " + evento.id + " --> esperando confirmacion de compra");
 });
 
 bus.on("sincro_inf_compr3", function (evento) {
@@ -251,7 +252,6 @@ bus.on("sincro_inf_compr3", function (evento) {
     evento.tarea = "autorizarPago";
     bus.emit(evento.tarea, evento);
   }
-
   // si la compra registra infracciones
   if(evento.compra.infracciones === evento.compra.infracciones_valores[2]){
 

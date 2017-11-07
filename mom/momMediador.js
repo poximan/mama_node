@@ -13,6 +13,11 @@ var unificador = require("./unificador");
 var MongoClient = require("mongodb").MongoClient;
 var mongo_url = require("../cfg.json").mongo.url;
 
+/*
+param 1 = indice del que es responsable en reloj vectorial
+param 2 = coleccion en donde persiten sus documentos este servidor
+param 3 = cantidad de respuetas que espera para fin corte consistente
+*/
 module.exports = function(mi_reloj, coleccion, corte_resp_esperadas) {
 
   var module = {};
@@ -52,20 +57,24 @@ module.exports = function(mi_reloj, coleccion, corte_resp_esperadas) {
   ......... persistencia
   */
 
+  var db_global;
   MongoClient.connect(mongo_url, function(err, db) {
 
     if(err)
       throw err;
     db.createCollection(coleccion);
+    db_global = db;
   });
 
   module.persistir = function() {
 
     console.log("INT: persistiendo estado");
+    var coleccion_obj = db_global.collection(coleccion);
 
     compras.forEach(function(compra){
-      coleccion.update({id:compra.id}, compra, {up:true});
+      coleccion_obj.update({id:compra.id}, compra, {up:true});
     });
+    console.log("INT: estado persistido");
   }
 
   /*
