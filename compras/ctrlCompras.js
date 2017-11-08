@@ -255,7 +255,6 @@ bus.on("sincro_inf_compr3", function (evento) {
   // si la compra registra infracciones
   if(evento.compra.infracciones === evento.compra.infracciones_valores[2]){
 
-    evento.compra.estado = evento.compra.estado_valores[2];  // cancelada
     evento.tarea = "informarInfraccion";
     bus.emit(evento.tarea, evento);
   }

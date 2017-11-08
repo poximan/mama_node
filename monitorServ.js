@@ -110,13 +110,16 @@ module.exports = function(puerto, control) {
     .............................................................
     */
 
-    var reporte = { totales:-1, aceptadas:-1, canceladas:-1, en_curso:-1};
+    var canceladas = {confirmacion:-1, autorizacion:-1, infraccion:-1};
+    var reporte = { totales:-1, aceptadas:-1, canceladas, en_curso:-1};
 
     setInterval ( function() {
 
       if(true || reporte.totales !== mediador.estadisticas.totales ||
           reporte.aceptadas !== mediador.estadisticas.aceptadas ||
-          reporte.canceladas !== mediador.estadisticas.canceladas ||
+          reporte.canceladas.confirmacion !== mediador.estadisticas.canceladas.confirmacion ||
+          reporte.canceladas.autorizacion !== mediador.estadisticas.canceladas.autorizacion ||
+          reporte.canceladas.infraccion !== mediador.estadisticas.canceladas.infraccion ||
           reporte.en_curso !== mediador.estadisticas.en_curso){
 
             reporte = mediador.estadisticas;

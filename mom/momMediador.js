@@ -81,27 +81,14 @@ module.exports = function(mi_reloj, coleccion, corte_resp_esperadas) {
   ......... eventos
   */
 
-  /*
-  marca para preparar al servidor en el arranque. es una manera de configurar
-  un estado inicial conocido, esperado y repetible.
-  */
-  var iniciando = true;
   bus.on("mom", function (msg) {
 
-    if(!(iniciando && msg.evento.tarea === "momCorte")){
       actualizarVector(msg.vector);
 
       if(msg.evento.tarea !== "momResultadoPublicaciones" &&
         msg.evento.tarea !== "momGetPublicaciones" &&
-        msg.evento.tarea !== "momCorte"){
-
-          if(iniciando)
-            console.log("INT: servidor iniciado");
-
-          iniciando = false;
+        msg.evento.tarea !== "momCorte")
           agregarCompra(msg.evento);
-        }
-
 
       /*
       si no se está ejecutando un corte consistente, el mensaje que llega
@@ -125,9 +112,6 @@ module.exports = function(mi_reloj, coleccion, corte_resp_esperadas) {
         */
         registrarActividad("entrante", msg);
       }
-    }else {
-      console.log("INT: iniciando en estado estable");
-    }
   });
 
   module.publicar = function(reglas_ruteo, evento){
@@ -264,20 +248,37 @@ module.exports = function(mi_reloj, coleccion, corte_resp_esperadas) {
       return compras;
   }
 
-  var estadisticas = { totales:0, aceptadas:0, canceladas:0, en_curso:0,};
+  var canceladas = {confirmacion:0, autorizacion:0, infraccion:0};
+  var estadisticas = { totales:0, aceptadas:0, canceladas, en_curso:0};
+
   module.estadisticas = estadisticas;
 
   setInterval(function() {
     estadisticas.totales = compras.length;
-    estadisticas.aceptadas = estadisticas.canceladas = 0;
+    estadisticas.aceptadas = 0;
+
+    estadisticas.canceladas.confirmacion = 0;
+    estadisticas.canceladas.autorizacion = 0;
+    estadisticas.canceladas.infraccion = 0;
 
     compras.forEach(function(evento){
 
+      // compras aceptadas
       if(evento.compra.estado === evento.compra.estado_valores[3])
         estadisticas.aceptadas++;
-      if(evento.compra.estado === evento.compra.estado_valores[2])
-        estadisticas.canceladas++;
-      estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - estadisticas.canceladas;
+
+      // compras canceladas, debe resolverse por que se cancelo
+      if(evento.compra.estado === evento.compra.estado_valores[2]){
+        if(evento.compra.estado === evento.compra.estado_valores[2])
+          estadisticas.canceladas.confirmacion++;
+        if(evento.compra.pago === evento.compra.pago_valores[2])
+          estadisticas.canceladas.autorizacion++;
+        if(evento.compra.infracciones === evento.compra.infracciones_valores[2])
+          estadisticas.canceladas.infraccion++;
+      }
+      var tot_canceladas = estadisticas.canceladas.confirmacion + estadisticas.canceladas.autorizacion + estadisticas.canceladas.infraccion;
+
+      estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - tot_canceladas;
     });
   }, 1000);
 

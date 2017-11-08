@@ -10,7 +10,9 @@ $(function() {
 
   var $totales = $(".totales");
   var $aceptadas = $(".aceptadas");
-  var $canceladas = $(".canceladas");
+  var $cancel_confirmacion = $(".v_conf");
+  var $cancel_autorizacion = $(".v_aut");
+  var $cancel_infraccion = $(".v_infr");
   var $en_curso = $(".en_curso");
 
   var msg = {message:"?resumen", instancia:""};
@@ -100,7 +102,9 @@ $(function() {
 
     $totales.text(contadores.totales);
     $aceptadas.text(contadores.aceptadas);
-    $canceladas.text(contadores.canceladas);
+    $cancel_confirmacion.text(contadores.canceladas.confirmacion);
+    $cancel_autorizacion.text(contadores.canceladas.autorizacion);
+    $cancel_infraccion.text(contadores.canceladas.infraccion);
     $en_curso.text(contadores.en_curso);
   });
 
