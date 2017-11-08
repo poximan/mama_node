@@ -27,12 +27,12 @@ module.exports = function(mi_reloj, coleccion, corte_resp_esperadas) {
   */
 
   /*
-  0=serv_compras
-  1=serv_envios
-  2=serv_infracciones
-  3=serv_pagos
-  4=serv_publicaciones
-  5=serv_web
+  0=serv_web
+  1=serv_publicaciones
+  2=serv_pagos
+  3=serv_infracciones
+  4=serv_envios
+  5=serv_compras
   */
   var vector = [0, 0, 0, 0, 0, 0];
 
@@ -81,37 +81,52 @@ module.exports = function(mi_reloj, coleccion, corte_resp_esperadas) {
   ......... eventos
   */
 
+  /*
+  marca para preparar al servidor en el arranque. es una manera de configurar
+  un estado inicial conocido, esperado y repetible.
+  */
+  var iniciando = true;
   bus.on("mom", function (msg) {
 
-    actualizarVector(msg.vector);
+    if(!(iniciando && msg.evento.tarea === "momCorte")){
+      actualizarVector(msg.vector);
 
-    if(msg.evento.tarea !== "momResultadoPublicaciones" &&
-      msg.evento.tarea !== "momGetPublicaciones" &&
-      msg.evento.tarea !== "momCorte")
+      if(msg.evento.tarea !== "momResultadoPublicaciones" &&
+        msg.evento.tarea !== "momGetPublicaciones" &&
+        msg.evento.tarea !== "momCorte"){
 
-      agregarCompra(msg.evento);
+          if(iniciando)
+            console.log("INT: servidor iniciado");
 
-    /*
-    si no se está ejecutando un corte consistente, el mensaje que llega
-    desde el canal de comunicaciones se pasa a la capa de negocio
+          iniciando = false;
+          agregarCompra(msg.evento);
+        }
 
-    nota: como caso singular, si no esta ejecutando un corte consistente pero
-    este mensaje es el inicio de uno, cuando se coloque en el bus no será
-    atrapado por el negocio, sino por un escucha en el mediador que inicaria
-    el corte consistente...
 
-    "bus.on("momCorte", function (evento) {});"
-
-    */
-    if (typeof registrarActividad !== "function"){
-      bus.emit(msg.evento.tarea, msg.evento);
-    }
-    if (typeof registrarActividad === "function"){
       /*
-      si se esta ejecutando un corte consistente, el mensaje no se baja al negocio
-      sino que se encola
+      si no se está ejecutando un corte consistente, el mensaje que llega
+      desde el canal de comunicaciones se pasa a la capa de negocio
+
+      nota: como caso singular, si no esta ejecutando un corte consistente pero
+      este mensaje es el inicio de uno, cuando se coloque en el bus no será
+      atrapado por el negocio, sino por un escucha en el mediador que inicaria
+      el corte consistente...
+
+      "bus.on("momCorte", function (evento) {});"
+
       */
-      registrarActividad("entrante", msg);
+      if (typeof registrarActividad !== "function"){
+        bus.emit(msg.evento.tarea, msg.evento);
+      }
+      if (typeof registrarActividad === "function"){
+        /*
+        si se esta ejecutando un corte consistente, el mensaje no se baja al negocio
+        sino que se encola
+        */
+        registrarActividad("entrante", msg);
+      }
+    }else {
+      console.log("INT: iniciando en estado estable");
     }
   });
 

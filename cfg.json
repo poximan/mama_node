@@ -1,7 +1,7 @@
 {
   "amqp" : {
-    "_coment" : "amqp://localhost",
-    "url" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
+    "url" : "amqp://localhost",
+    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
     "management" : "http://localhost:15672/",
     "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
   },
@@ -40,10 +40,10 @@
       }
     },
     "nueva_compra" : {
-      "periodo" : "2000"
+      "periodo" : "200"
     },
     "persistencia" : {
-      "periodo" : "60000"
+      "periodo" : "30000"
     }
   },
   "probabilidad" : {
