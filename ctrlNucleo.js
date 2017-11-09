@@ -139,6 +139,7 @@ module.exports = function(
       tot_canceladas = estadisticas.canceladas.confirmacion + estadisticas.canceladas.autorizacion + estadisticas.canceladas.infraccion;
     });
     estadisticas.en_curso = estadisticas.totales - estadisticas.aceptadas - tot_canceladas;
+
   }, 1000);
 
   /*

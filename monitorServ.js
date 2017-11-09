@@ -114,7 +114,7 @@ module.exports = function(puerto, nucleo, bus) {
           reporte.canceladas.infraccion !== nucleo.estadisticas.canceladas.infraccion ||
           reporte.en_curso !== nucleo.estadisticas.en_curso){
 
-            reporte = nucleo.estadisticas;
+            reporte = JSON.parse(JSON.stringify(nucleo.estadisticas));
             socket.emit("resumen", reporte);
           }
 
