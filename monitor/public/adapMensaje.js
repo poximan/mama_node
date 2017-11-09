@@ -156,6 +156,16 @@ $(function() {
     addChatMessage(texto);
   });
 
+  socket.on("resReloj", function (reloj) {
+
+    var vector = reloj.vector;
+    var indice = reloj.indice;
+
+    addChatMessage("");
+    addChatMessage(" ------ reloj vectorial ------ ");    
+    addChatMessage("[" + indice + "]" + " -> " + vector);
+  });
+
   socket.on("resCorte", function (corte_consistente) {
 
     var entrante = corte_consistente.ent;

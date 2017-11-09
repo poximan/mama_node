@@ -53,7 +53,6 @@ module.exports = function(puerto, nucleo, bus) {
 
   io.on('connection', function (socket) {
 
-    //console.log(nucleo);
     nucleo.mw.sockRespuesta(socket);
 
     socket.on("get", function (msg) {
@@ -73,8 +72,18 @@ module.exports = function(puerto, nucleo, bus) {
       bus.emit("persistir", msg);
     });
 
+    socket.on("reloj", function (msg) {
+      var resp = {vector:nucleo.mw.vector(), indice:nucleo.mw.indice()};      
+      socket.emit("resReloj", resp);
+    });
+
     socket.on("corte", function (msg) {
       bus.emit("corte", msg);
+    });
+
+    // ultimo corte
+    socket.on("uCorte", function (msg) {
+      socket.emit("resuCorte", reporte);
     });
 
     socket.on("?resumen", function (msg) {

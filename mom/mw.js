@@ -32,6 +32,14 @@ module.exports = function(
     console.log("INT: reloj " + mi_reloj + ": " + vector);
   }
 
+  module.vector = function(){
+    return vector;
+  }
+
+  module.indice = function(){
+    return mi_reloj;
+  }
+
   function actualizarVector(nuevo_vector){
 
     var aux_reloj = vector[mi_reloj];

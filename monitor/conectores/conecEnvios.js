@@ -6,6 +6,7 @@ var msgs_validos_remotos;
 
 var socket_monitor;
 var respuestas = [];
+var u_corte = {};
 
 function responderSockMon(nombre_evento, contenido){
 
@@ -25,8 +26,16 @@ socket.on("resultadoCosto", (preguntas) => {
   socket_monitor.emit("resultadoCosto", preguntas);
 });
 
+socket.on("resReloj", (reloj) => {
+  responderSockMon("resReloj", reloj);
+});
+
+socket.on("resuCorte", (corte_consistente) => {
+  responderSockMon("resCorte", u_corte);
+});
+
 socket.on("resCorte", (corte_consistente) => {
-  responderSockMon("resCorte", corte_consistente);
+  u_corte = corte_consistente;
 });
 
 socket.on("resumen", (contadores) => {
