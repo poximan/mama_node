@@ -1,18 +1,18 @@
-require("../mom/momSuscriptor").suscribir("cola_publicaciones");
-
 var bus = require('../eventBus');
 
 /*
-param 1 = indice del que es responsable en reloj vectorial
-param 2 = coleccion en donde persiten sus documentos este servidor
+param 1 = indice del reloj vectorial que debe incrementar este servidor
+param 2 = coleccion mongo donde persite este servidor
 param 3 = cantidad de respuetas que espera para fin corte consistente
+param 4 = nombre de la cola MOM que escucha este servidor
+param 5 = instancia de bus para gestion de eventos
 */
-var mediador = require("../mom/momMediador")(1, "colecc_publicaciones", 4);
-
+var nucleo = require("../ctrlNucleo")(1, "colecc_publicaciones", 4, "cola_publicaciones", bus);
+var mw = nucleo.mw;
 
 // ---------
 
-exports.mediador = mediador;
+exports.nucleo = nucleo;
 exports.bus = bus;
 
 // ---------
@@ -85,7 +85,7 @@ bus.on("momGetPublicaciones", function (evento) {
     },
     function(callback) {
 
-      mediador.publicar("web", evento);
+      mw.publicar("web", evento);
       callback(null);
     }
   ];
@@ -103,47 +103,47 @@ bus.on("momGetPublicaciones", function (evento) {
 
 bus.on("momPublicacionSeleccionada", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "producto reservado");
 
   reservas.push(evento);
-  evento.compra.reserva = evento.compra.reserva_valores[1]; // reservado  
-  evento = mediador.actualizarAtributo(evento);
+  evento.compra.reserva = evento.compra.reserva_valores[1]; // reservado
+  evento = nucleo.actualizarAtributo(evento);
 
-  sumar(estado_sincro_inf_pub, evento.id, 1);
+  nucleo.sumar(estado_sincro_inf_pub, evento.id, 1);
   bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
 });
 
 bus.on("momResultadoInfraccion", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + evento.compra.infracciones);
 
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
-  sumar(estado_sincro_inf_pub, evento.id, 2);
+  nucleo.sumar(estado_sincro_inf_pub, evento.id, 2);
   bus.emit("sincro_inf_pub"+estado_sincro_inf_pub[evento.id], evento);
 })
 
 bus.on("momResultadoAutorizacion", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("ENT: compra " + evento.id + " pago --> " + evento.compra.pago);
 
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
-  sumar(estado_sincro_pub_pag, evento.id, 2);
+  nucleo.sumar(estado_sincro_pub_pag, evento.id, 2);
   bus.emit("sincro_pub_pag"+estado_sincro_pub_pag[evento.id], evento);
 })
 
 bus.on("momResultadoAgendarEnvio", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "destino agendado");
 
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
-  sumar(estado_sincro_pub_env, evento.id, 2);
+  nucleo.sumar(estado_sincro_pub_env, evento.id, 2);
   bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
 })
 
@@ -155,11 +155,11 @@ bus.on("momResultadoAgendarEnvio", function (evento) {
 
 bus.on("liberarProducto", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("INT: compra " + evento.id + " --> " + "liberada");
 
   evento.compra.reserva = evento.compra.reserva_valores[2]; // liberado
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
   for (var i = 0; i < reservas.length; i++){
     if (reservas[i].id === evento.id) {
@@ -171,7 +171,7 @@ bus.on("liberarProducto", function (evento) {
 
 bus.on("enviarProducto", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("INT: producto " + evento.id + " --> " + "enviado");
 });
 
@@ -194,15 +194,15 @@ bus.on("sincro_inf_pub2", function (evento) {
 
 bus.on("sincro_inf_pub3", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("INT: compra " + evento.id + " --> " + "sincro 1 terminada");
 
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
   if(evento.compra.infracciones === evento.compra.infracciones_valores[2])
-    sumar(estado_sincro_pub_pag, evento.id, 2);
+    nucleo.sumar(estado_sincro_pub_pag, evento.id, 2);
 
-  sumar(estado_sincro_pub_pag, evento.id, 1);
+  nucleo.sumar(estado_sincro_pub_pag, evento.id, 1);
   bus.emit("sincro_pub_pag"+estado_sincro_pub_pag[evento.id], evento);
 });
 
@@ -225,10 +225,10 @@ bus.on("sincro_pub_pag2", function (evento) {
 
 bus.on("sincro_pub_pag3", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("INT: compra " + evento.id + " --> " + "sincro 2 terminada");
 
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
   // si la compra registra infracciones o el pago fue rechazado
   if(evento.compra.infracciones === evento.compra.infracciones_valores[2] ||
@@ -242,7 +242,7 @@ bus.on("sincro_pub_pag3", function (evento) {
   if(evento.compra.infracciones === evento.compra.infracciones_valores[1] &&
     evento.compra.pago === evento.compra.pago_valores[1]){
 
-      sumar(estado_sincro_pub_env, evento.id, 1);
+      nucleo.sumar(estado_sincro_pub_env, evento.id, 1);
       bus.emit("sincro_pub_env"+estado_sincro_pub_env[evento.id], evento);
   }
 });
@@ -266,25 +266,11 @@ bus.on("sincro_pub_env2", function (evento) {
 
 bus.on("sincro_pub_env3", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
   console.log("INT: compra " + evento.id + " --> " + "sincro 3 terminada");
 
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "enviarProducto";
   bus.emit(evento.tarea, evento);
 });
-
-/*
-.............................................................
-... auxiliar
-.............................................................
-*/
-
-function sumar(estado_sincro, indice_objetivo, incremento){
-
-  while(estado_sincro.length <= indice_objetivo)
-    estado_sincro.push(0);
-
-  estado_sincro[indice_objetivo] += incremento;
-}

@@ -1,17 +1,18 @@
-require("../mom/momSuscriptor").suscribir("cola_pagos");
-
 var bus = require('../eventBus');
 
 /*
-param 1 = indice del que es responsable en reloj vectorial
-param 2 = coleccion en donde persiten sus documentos este servidor
+param 1 = indice del reloj vectorial que debe incrementar este servidor
+param 2 = coleccion mongo donde persite este servidor
 param 3 = cantidad de respuetas que espera para fin corte consistente
+param 4 = nombre de la cola MOM que escucha este servidor
+param 5 = instancia de bus para gestion de eventos
 */
-var mediador = require("../mom/momMediador")(2, "colecc_pagos", 1);
+var nucleo = require("../ctrlNucleo")(2, "colecc_pagos", 1, "cola_pagos", bus);
+var mw = nucleo.mw;
 
 // ---------
 
-exports.mediador = mediador;
+exports.nucleo = nucleo;
 exports.bus = bus;
 
 /*
@@ -22,7 +23,7 @@ exports.bus = bus;
 
 bus.on("momAutorizarPago", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
 
   console.log("ENT: compra " + evento.id + " --> " + "preguntando si autoriza pago");
   evento.tarea = "resultadoAutorizacion";
@@ -37,12 +38,12 @@ bus.on("momAutorizarPago", function (evento) {
 
 bus.on("momResultadoAutorizacion", function (evento) {
 
-  mediador.incrementar();
+  mw.incrementar();
 
-  evento = mediador.actualizarAtributo(evento);
+  evento = nucleo.actualizarAtributo(evento);
 
   console.log("SAL: compra " + evento.id + " --> " + evento.compra.pago);
-  mediador.publicar("compras.publicaciones", evento);
+  mw.publicar("compras.publicaciones", evento);
 });
 
 /*

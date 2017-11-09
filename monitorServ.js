@@ -1,13 +1,7 @@
 /*
-este modulo conoce y agrupa distintas funcionalidades que en su conjunto,
-hacen funcionar un servidor en particular
-
-incluye
--------
-- puerto socket bidireccional, para reporte de estados y comandos (solo en manual)
-- control principal del servidor, donde corre el nucleo del negocio.
-- mediador MOM <--> Negocio. el mismo que usa el control.
-- bus de mensajes (eventEmitter). el mismo que usa el control.
+- puerto socket bidireccional, para reporte de estados y comandos (solo en manual).
+- nucleo comun a todos los servidores del negocio.
+- bus de mensajes (eventEmitter). el mismo para todo el servidor.
 - servidor http para montar un servicio basado en socket.io
 
 bus --> concentra los eventos locales
@@ -15,12 +9,9 @@ io --> concentra los evento de E/S por socket
 */
 var _ = require('underscore');
 
-module.exports = function(puerto, control) {
+module.exports = function(puerto, nucleo, bus) {
 
   var module = {};
-
-  var mediador = control.mediador;
-  var bus = control.bus;
 
   // ---------
 
@@ -30,7 +21,7 @@ module.exports = function(puerto, control) {
   // ---------
 
   bus.on("persistir", function (evento) {
-    mediador.persistir();
+    nucleo.persistir();
   });
 
   bus.on("corte", function (evento) {
@@ -62,7 +53,8 @@ module.exports = function(puerto, control) {
 
   io.on('connection', function (socket) {
 
-    mediador.sockRespuesta(socket);
+    //console.log(nucleo);
+    nucleo.mw.sockRespuesta(socket);
 
     socket.on("get", function (msg) {
 
@@ -74,7 +66,7 @@ module.exports = function(puerto, control) {
     socket.on("estado", function (msg) {
 
       console.log("respondiendo estado del servidor");
-      socket.emit("resEstado", [mediador.totales(), preguntas]);
+      socket.emit("resEstado", [nucleo.totales(), preguntas]);
     });
 
     socket.on("persistir", function (msg) {
@@ -111,18 +103,18 @@ module.exports = function(puerto, control) {
     */
 
     var canceladas = {confirmacion:-1, autorizacion:-1, infraccion:-1};
-    var reporte = { totales:-1, aceptadas:-1, canceladas, en_curso:-1};
+    var reporte = {totales:-1, aceptadas:-1, canceladas, en_curso:-1};
 
     setInterval ( function() {
 
-      if(true || reporte.totales !== mediador.estadisticas.totales ||
-          reporte.aceptadas !== mediador.estadisticas.aceptadas ||
-          reporte.canceladas.confirmacion !== mediador.estadisticas.canceladas.confirmacion ||
-          reporte.canceladas.autorizacion !== mediador.estadisticas.canceladas.autorizacion ||
-          reporte.canceladas.infraccion !== mediador.estadisticas.canceladas.infraccion ||
-          reporte.en_curso !== mediador.estadisticas.en_curso){
+      if(reporte.totales !== nucleo.estadisticas.totales ||
+          reporte.aceptadas !== nucleo.estadisticas.aceptadas ||
+          reporte.canceladas.confirmacion !== nucleo.estadisticas.canceladas.confirmacion ||
+          reporte.canceladas.autorizacion !== nucleo.estadisticas.canceladas.autorizacion ||
+          reporte.canceladas.infraccion !== nucleo.estadisticas.canceladas.infraccion ||
+          reporte.en_curso !== nucleo.estadisticas.en_curso){
 
-            reporte = mediador.estadisticas;
+            reporte = nucleo.estadisticas;
             socket.emit("resumen", reporte);
           }
 

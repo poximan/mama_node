@@ -1,8 +1,8 @@
 var port = require("../cfg.json").monitor.port_infracciones;
 var control = require('./ctrlInfracciones');
-var monitor = require('../monitorServ')(port, control);
+var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
-var mediador = control.mediador;
+var mw = control.mw;
 var bus = control.bus;
 var io = monitor.io;
 
@@ -43,7 +43,7 @@ generación de un corte consistente
 */
 function persistir(evento) {
 
-  if(!mediador.corteEnProceso())
+  if(!mw.corteEnProceso())
     if(probabilidad() <= probab_corte_consistente){
 
       var tarea = "momCorte";
@@ -53,7 +53,7 @@ function persistir(evento) {
       bus.emit(evento.tarea, evento);
     }
     else {
-      mediador.persistir();
+      control.nucleo.persistir();
     }
 }
 

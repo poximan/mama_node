@@ -1,6 +1,6 @@
 var port = require("../cfg.json").monitor.port_infracciones;
 var control = require('./ctrlInfracciones');
-var monitor = require('../monitorServ')(port, control);
+var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
 var bus = control.bus;
 var io = monitor.io;

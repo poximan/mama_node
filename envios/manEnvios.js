@@ -1,6 +1,6 @@
 var port = require("../cfg.json").monitor.port_envios;
 var control = require('./ctrlEnvios');
-var monitor = require('../monitorServ')(port, control);
+var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
 var bus = control.bus;
 var io = monitor.io;

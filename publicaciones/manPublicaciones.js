@@ -1,6 +1,6 @@
 var port = require("../cfg.json").monitor.port_publicaciones;
 var control = require('./ctrlPublicaciones');
-var monitor = require('../monitorServ')(port, control);
+var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
 var io = monitor.io;
 
