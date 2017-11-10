@@ -3,7 +3,7 @@ module.exports = function(
   coleccion,    // coleccion en donde persiten sus documentos este servidor
   corte_resp_esperadas, // cantidad de respuetas que espera para fin corte consistente
   cola_escucha, // nombre de la cola en el servidor de mensajeria
-  compras,      // compras registradas por este servidor
+  compras,
   bus,          // bus de escucha para los eventos generados por el eventEmitter
   persistir     // llamada a funcion de persistencia del negocio
 ) {
@@ -70,8 +70,8 @@ module.exports = function(
         }
         if (typeof registrarActividad === "function"){
           /*
-          si se esta ejecutando un corte consistente, el mensaje no se baja al negocio
-          sino que se encola
+          si se esta ejecutando un corte consistente,
+          el mensaje no se baja al negocio sino que se encola
           */
           registrarActividad("entrante", msg);
         }
@@ -139,8 +139,8 @@ module.exports = function(
     }
 
     if (corte_resp_recibidas === corte_resp_esperadas){
-
-      var msg = {ent:canal_entrante.slice(0), est:compras.slice(0)};
+      
+      var msg = {ent:canal_entrante.slice(0), est:compras().slice(0)};
 
       console.log("mensajes entrantes -->");
       canal_entrante.forEach(function(actual){
@@ -163,7 +163,7 @@ module.exports = function(
       });
 
       console.log("en memoria -->");
-      compras.forEach(function(actual){
+      msg.est.forEach(function(actual){
 
         var texto = "compra " + actual.id + " => " +
         actual.compra.estado + " : " +

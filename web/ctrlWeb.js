@@ -25,30 +25,27 @@ var publicaciones = [];
 
 exports.comprar = function() {
 
-  if(publicaciones.length > 0){
+  var operaciones = [
+    function(callback) {  // el callback siempre es el ultimo parametro
+        var nueva_compra = JSON.parse(require('fs').readFileSync('./payload.json', 'utf8'));
+        callback(null, nueva_compra);
+    },
+    function(nueva_compra, callback) {  // el callback siempre es el ultimo parametro
+        nueva_compra.publicacion = publicaciones[indicePublicacionElegida()];
+        callback(null, nueva_compra);
+    },
+    function(nueva_compra, callback) {
+        nueva_compra.tarea = "nuevaCompra";
+        callback(null, nueva_compra);
+    }
+  ];
+  async.waterfall(operaciones, function (err, nueva_compra) {
 
-    var operaciones = [
-      function(callback) {  // el callback siempre es el ultimo parametro
-          var nueva_compra = JSON.parse(require('fs').readFileSync('./payload.json', 'utf8'));
-          callback(null, nueva_compra);
-      },
-      function(nueva_compra, callback) {  // el callback siempre es el ultimo parametro
-          nueva_compra.publicacion = publicaciones[indicePublicacionElegida()];
-          callback(null, nueva_compra);
-      },
-      function(nueva_compra, callback) {
-          nueva_compra.tarea = "momNuevaCompra";
-          callback(null, nueva_compra);
-      }
-    ];
-    async.waterfall(operaciones, function (err, nueva_compra) {
+    mw.incrementar();
 
-      mw.incrementar();
-
-      nueva_compra.id = id++;
-      bus.emit(nueva_compra.tarea, nueva_compra);
-    });
-  }
+    nueva_compra.id = id++;
+    bus.emit(nueva_compra.tarea, nueva_compra);
+  });
 }
 
 function indicePublicacionElegida() {
@@ -133,7 +130,7 @@ bus.on("momGetPublicaciones", function (evento) {
   mw.publicar("publicaciones", evento);
 });
 
-bus.on("momNuevaCompra", function (evento) {
+bus.on("nuevaCompra", function (evento) {
 
   mw.incrementar();
   console.log("SAL: nueva compra " + evento.id + " --> " + evento.publicacion.descripcion);

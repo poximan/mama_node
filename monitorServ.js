@@ -65,7 +65,7 @@ module.exports = function(puerto, nucleo, bus) {
     socket.on("estado", function (msg) {
 
       console.log("respondiendo estado del servidor");
-      socket.emit("resEstado", [nucleo.totales(), preguntas]);
+      socket.emit("resEstado", [nucleo.compras(), preguntas]);
     });
 
     socket.on("persistir", function (msg) {

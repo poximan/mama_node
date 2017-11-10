@@ -42,6 +42,10 @@ module.exports = function(
 
   var compras = new Array();
 
+  module.compras = function(){
+    return compras;
+  }
+
   module.persistir = function() {
 
     console.log("INT: persistiendo estado");
@@ -63,7 +67,7 @@ module.exports = function(
     coleccion,
     corte_resp_esperadas,
     cola_escucha,
-    compras,    // compras registradas por este servidor
+    module.compras,
     bus,        // bus de escucha para los eventos generados por el eventEmitter
     module.persistir
   );
@@ -99,12 +103,6 @@ module.exports = function(
     });
 
     return compra;
-  }
-
-  var compras = new Array();
-
-  module.totales = function(){
-      return compras;
   }
 
   var canceladas = {confirmacion:0, autorizacion:0, infraccion:0};
