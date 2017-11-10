@@ -42,7 +42,6 @@ bus.on("momResultadoCosto", function (evento) {
 
   console.log("SAL: compra " + evento.id + " adic correo --> " + evento.compra.adic_envio);
   evento = nucleo.actualizarAtributo(evento);
-
   mw.publicar("compras", evento);
 });
 

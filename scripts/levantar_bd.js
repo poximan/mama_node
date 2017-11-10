@@ -38,7 +38,7 @@ var operaciones = [
       });
     }
     if(instancia_bd == "actual"){
-        console.log("usando base de datos actual");
+      console.log("usando base de datos actual");
     }
 
     callback(null);

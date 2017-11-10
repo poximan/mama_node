@@ -73,7 +73,7 @@ module.exports = function(puerto, nucleo, bus) {
     });
 
     socket.on("reloj", function (msg) {
-      var resp = {vector:nucleo.mw.vector(), indice:nucleo.mw.indice()};      
+      var resp = {vector:nucleo.mw.vector(), indice:nucleo.mw.indice()};
       socket.emit("resReloj", resp);
     });
 
@@ -144,7 +144,7 @@ module.exports = function(puerto, nucleo, bus) {
         // si esta en manual
         if(modo === "man" ||
           // si esta en automatico
-          (key === "?" || key === "estado" || key === "?resumen"))
+          (key === "?" || key === "estado" || key === "?resumen" || key === "uCorte"))
         msgs_validos.push(key);
       }
     }

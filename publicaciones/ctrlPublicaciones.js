@@ -199,6 +199,7 @@ bus.on("sincro_inf_pub3", function (evento) {
 
   evento = nucleo.actualizarAtributo(evento);
 
+  // si hubo infraccion no espera el resultado desde el serv pagos, porque nunca llegara
   if(evento.compra.infracciones === evento.compra.infracciones_valores[2])
     nucleo.sumar(estado_sincro_pub_pag, evento.id, 2);
 

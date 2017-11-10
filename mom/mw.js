@@ -79,15 +79,8 @@ module.exports = function(
   });
 
   module.publicar = function(reglas_ruteo, evento){
-
     var msg = {vector, evento};
-
-    if (typeof registrarActividad !== "function" ||
-                                        evento.tarea === "momCorte")
-      publicador.publicar(reglas_ruteo, msg);
-    else {
-      registrarActividad("saliente", msg);
-    }
+    publicador.publicar(reglas_ruteo, msg);
   }
 
   /*
@@ -106,7 +99,6 @@ module.exports = function(
 
   var registrarActividad = "no funcion";
   var canal_entrante = new Array();
-  var canal_saliente = new Array();
 
   bus.on("momCorte", function (evento) {
 
@@ -146,12 +138,9 @@ module.exports = function(
       canal_entrante.push(msg);
     }
 
-    if(origen === "saliente")
-      canal_saliente.push(msg);
-
     if (corte_resp_recibidas === corte_resp_esperadas){
 
-      var msg = {ent:canal_entrante.slice(0), est:compras.slice(0), sal:canal_saliente.slice(0)};
+      var msg = {ent:canal_entrante.slice(0), est:compras.slice(0)};
 
       console.log("mensajes entrantes -->");
       canal_entrante.forEach(function(actual){
@@ -187,13 +176,9 @@ module.exports = function(
         console.log(texto);
       });
 
-      console.log("mensajes saliente -->");
-      console.log(canal_saliente);
-
       registrarActividad = "no funcion";
       corte_resp_recibidas = 0;
       canal_entrante.length = 0;
-      canal_saliente.length = 0;
 
       console.log("INT: fin corte consistente");
       sock_respuesta.emit("resCorte", msg);

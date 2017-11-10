@@ -162,7 +162,7 @@ $(function() {
     var indice = reloj.indice;
 
     addChatMessage("");
-    addChatMessage(" ------ reloj vectorial ------ ");    
+    addChatMessage(" ------ reloj vectorial ------ ");
     addChatMessage("[" + indice + "]" + " -> " + vector);
   });
 
@@ -170,7 +170,6 @@ $(function() {
 
     var entrante = corte_consistente.ent;
     var estado = corte_consistente.est;
-    var saliente = corte_consistente.sal;
 
     addChatMessage("");
     addChatMessage(" ------ canal entrada ------ ");
@@ -193,16 +192,6 @@ $(function() {
       pregunta.compra.pago + " : " +
       pregunta.compra.infracciones + " : " +
       pregunta.compra.medio;
-
-      addChatMessage(texto);
-    });
-
-    addChatMessage("");
-    addChatMessage(" ------ canal salida ------ ");
-    saliente.forEach(function(pregunta) {
-
-      var texto = pregunta.vector + " / " +
-      pregunta.evento.tarea;
 
       addChatMessage(texto);
     });

@@ -41,6 +41,7 @@ bus.on("momResultadoInfraccion", function (evento) {
   mw.incrementar();
 
   console.log("SAL: compra " + evento.id + " --> " + evento.compra.infracciones);
+  evento = nucleo.actualizarAtributo(evento);
   mw.publicar("compras.publicaciones", evento);
 });
 
