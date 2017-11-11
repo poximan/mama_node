@@ -5,7 +5,12 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = require("../cfg.json").monitor.port_monitor;
 
-var conectores = require("./conectador").conectores;
+var c_compras = require("./conectores/conecCompras").conector;
+var c_envios = require("./conectores/conecEnvios").conector;
+var c_infracciones = require("./conectores/conecInfracciones").conector;
+var c_pagos = require("./conectores/conecPagos").conector;
+var c_publicaciones = require("./conectores/conecPublicaciones").conector;
+var c_web = require("./conectores/conecWeb").conector;
 
 // Routing
 app.use(express.static(__dirname + '/public'));
@@ -27,9 +32,9 @@ io.on('connection', function (socket) {
     var comando = msg.message;
     var instancia = msg.instancia;
 
-    if(conectores.c_compras.esValido(comando)){
-      conectores.c_compras.socket.emit(comando, instancia);
-      conectores.c_compras.retorno(socket);
+    if(c_compras.esValido(comando)){
+      c_compras.socket.emit(comando, instancia);
+      c_compras.retorno(socket);
     }
   });
 
@@ -40,9 +45,9 @@ io.on('connection', function (socket) {
     var comando = msg.message;
     var instancia = msg.instancia;
 
-    if(conectores.c_envios.esValido(comando)){
-      conectores.c_envios.socket.emit(comando, instancia);
-      conectores.c_envios.retorno(socket);
+    if(c_envios.esValido(comando)){
+      c_envios.socket.emit(comando, instancia);
+      c_envios.retorno(socket);
     }
   });
 
@@ -53,9 +58,9 @@ io.on('connection', function (socket) {
     var comando = msg.message;
     var instancia = msg.instancia;
 
-    if(conectores.c_infracciones.esValido(comando)){
-      conectores.c_infracciones.socket.emit(comando, instancia);
-      conectores.c_infracciones.retorno(socket);
+    if(c_infracciones.esValido(comando)){
+      c_infracciones.socket.emit(comando, instancia);
+      c_infracciones.retorno(socket);
     }
   });
 
@@ -66,9 +71,9 @@ io.on('connection', function (socket) {
     var comando = msg.message;
     var instancia = msg.instancia;
 
-    if(conectores.c_pagos.esValido(comando)){
-      conectores.c_pagos.socket.emit(comando, instancia);
-      conectores.c_pagos.retorno(socket);
+    if(c_pagos.esValido(comando)){
+      c_pagos.socket.emit(comando, instancia);
+      c_pagos.retorno(socket);
     }
   });
 
@@ -79,9 +84,9 @@ io.on('connection', function (socket) {
     var comando = msg.message;
     var instancia = msg.instancia;
 
-    if(conectores.c_publicaciones.esValido(comando)){
-      conectores.c_publicaciones.socket.emit(comando, instancia);
-      conectores.c_publicaciones.retorno(socket);
+    if(c_publicaciones.esValido(comando)){
+      c_publicaciones.socket.emit(comando, instancia);
+      c_publicaciones.retorno(socket);
     }
   });
 
@@ -92,9 +97,9 @@ io.on('connection', function (socket) {
     var comando = msg.message;
     var instancia = msg.instancia;
 
-    if(conectores.c_web.esValido(comando)){
-      conectores.c_web.socket.emit(comando, instancia);
-      conectores.c_web.retorno(socket);
+    if(c_web.esValido(comando)){
+      c_web.socket.emit(comando, instancia);
+      c_web.retorno(socket);
     }
   });
 

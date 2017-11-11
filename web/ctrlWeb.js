@@ -63,6 +63,8 @@ bus.on("momPublicacionSeleccionada", function (evento) {
   mw.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando forma de entrega");
 
+  evento = nucleo.actualizarAtributo(evento);
+
   evento.tarea = "resultadoFormaEntrega";
   bus.emit(evento.tarea, evento);
 });
@@ -71,6 +73,8 @@ bus.on("momSeleccionarMedioPago", function (evento) {
 
   mw.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando medio de pago");
+
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "resultadoMedioPago";
   bus.emit(evento.tarea, evento);
@@ -81,16 +85,18 @@ bus.on("momConfirmarCompra", function (evento) {
   mw.incrementar();
   console.log("ENT: compra " + evento.id + " --> " + "preguntando a cliente si confima");
 
+  evento = nucleo.actualizarAtributo(evento);
+
   evento.tarea = "resultadoConfirmar";
   bus.emit(evento.tarea, evento);
 });
 
 bus.on("momInformarInfraccion", function (evento) {
 
-  evento = nucleo.actualizarAtributo(evento);
-
   mw.incrementar();
   console.log("ENT: compra " + evento.id + " --> cancelada " + evento.compra.infracciones);
+
+  evento = nucleo.actualizarAtributo(evento);
 });
 
 bus.on("momInformarPagoRechazado", function (evento) {

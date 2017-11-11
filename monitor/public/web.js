@@ -6,7 +6,7 @@ $(function() {
   var $window = $(window);
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
-  var $servidor = $('.servidor').text().trim().split(" ")[1].split(",")[0].toLowerCase();
+  var $servidor = "web";
 
   var $totales = $(".totales");
   var $aceptadas = $(".aceptadas");
@@ -50,12 +50,6 @@ $(function() {
       }
       socket.emit($servidor, msg);
     }
-  }
-
-  // Log a message
-  function log (message) {
-    var $el = $('<li>').addClass('log').text(message);
-    addMessageElement($el);
   }
 
   // Adds the visual chat message to the message list
@@ -106,30 +100,6 @@ $(function() {
     $cancel_autorizacion.text(contadores.canceladas.autorizacion);
     $cancel_infraccion.text(contadores.canceladas.infraccion);
     $en_curso.text(contadores.en_curso);
-  });
-
-  socket.on("resultadoCosto", function (evento) {
-
-    var texto = "compra " + evento.id + ": costo adic correo. ";
-    texto += "usar: \"{id compra}:resCosto={numero}\""
-
-    addChatMessage(texto);
-  });
-
-  socket.on("resultadoInfraccion", function (evento) {
-
-    var texto = "compra " + evento.id + ": ¿posee infraccion?.";
-    texto += "usar: \"{id compra}:resInfraccion={sin_infr|con_infr}\""
-
-    addChatMessage(texto);
-  });
-
-  socket.on("resultadoAutorizacion", function (evento) {
-
-    var texto = "compra " + evento.id + ": ¿autorizar?.";
-    texto += "usar: \"{id compra}:resAutorizar={autorizado|rechazado}\""
-
-    addChatMessage(texto);
   });
 
   socket.on("resultadoFormaEntrega", function (evento) {

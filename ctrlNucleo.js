@@ -125,8 +125,8 @@ module.exports = function(
       if(evento.compra.estado === evento.compra.estado_valores[3])
         estadisticas.aceptadas++;
 
-      // compras canceladas, debe resolverse por que se cancelo
-      if(evento.compra.estado === evento.compra.estado_valores[2]){
+      // si todavia no esta aceptada
+      if(evento.compra.estado !== evento.compra.estado_valores[3]){
         if(evento.compra.estado === evento.compra.estado_valores[2])
           estadisticas.canceladas.confirmacion++;
         if(evento.compra.pago === evento.compra.pago_valores[2])

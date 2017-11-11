@@ -1,7 +1,7 @@
 {
   "amqp" : {
-    "url" : "amqp://localhost",
-    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
+    "_coment" : "amqp://localhost",
+    "url" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
     "management" : "http://localhost:15672/",
     "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
   },
@@ -43,7 +43,7 @@
       "periodo" : "1000"
     },
     "persistencia" : {
-      "periodo" : "20000"
+      "periodo" : "30000"
     }
   },
   "probabilidad" : {

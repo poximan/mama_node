@@ -51,6 +51,7 @@ bus.on("momPublicacionSeleccionada", function (evento) {
 bus.on("calcularCosto", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momCalcularCosto";
   mw.publicar("envios", evento);
@@ -59,6 +60,7 @@ bus.on("calcularCosto", function (evento) {
 bus.on("seleccionarMedioPago", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momSeleccionarMedioPago";
   mw.publicar("web", evento);
@@ -67,6 +69,7 @@ bus.on("seleccionarMedioPago", function (evento) {
 bus.on("confirmarCompra", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momConfirmarCompra";
   mw.publicar("web", evento);
@@ -75,6 +78,7 @@ bus.on("confirmarCompra", function (evento) {
 bus.on("informarInfraccion", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momInformarInfraccion";
   mw.publicar("web", evento);
@@ -83,6 +87,7 @@ bus.on("informarInfraccion", function (evento) {
 bus.on("informarPagoRechazado", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momInformarPagoRechazado";
   mw.publicar("web", evento);
@@ -91,6 +96,7 @@ bus.on("informarPagoRechazado", function (evento) {
 bus.on("autorizarPago", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momAutorizarPago";
   mw.publicar("pagos", evento);
@@ -99,6 +105,7 @@ bus.on("autorizarPago", function (evento) {
 bus.on("aceptarCompra", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momAceptarCompra";
   mw.publicar("web", evento);
@@ -107,6 +114,7 @@ bus.on("aceptarCompra", function (evento) {
 bus.on("agendarEnvio", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   evento.tarea = "momAgendarEnvio";
   mw.publicar("envios", evento);
@@ -244,6 +252,7 @@ bus.on("sincro_inf_compr2", function (evento) {
 bus.on("sincro_inf_compr3", function (evento) {
 
   mw.incrementar();
+  evento = nucleo.actualizarAtributo(evento);
 
   // si la compra no registra infracciones
   if(evento.compra.infracciones === evento.compra.infracciones_valores[1]){
