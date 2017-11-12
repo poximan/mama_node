@@ -40,10 +40,10 @@
       }
     },
     "nueva_compra" : {
-      "periodo" : "1000"
+      "periodo" : "5000"
     },
     "persistencia" : {
-      "periodo" : "30000"
+      "periodo" : "10000"
     }
   },
   "probabilidad" : {

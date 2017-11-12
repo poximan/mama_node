@@ -142,9 +142,14 @@ module.exports = function(puerto, nucleo, bus) {
 
       for (var key in msgs) {
         // si esta en manual
-        if(modo === "man" ||
-          // si esta en automatico
-          (key === "?" || key === "estado" || key === "?resumen" || key === "uCorte"))
+        if(modo === "man"
+          || // si esta en automatico
+            (key === "?"
+            || key === "estado"
+            || key === "?resumen"
+            || key === "uCorte"
+            || key === "reloj")
+          )
         msgs_validos.push(key);
       }
     }

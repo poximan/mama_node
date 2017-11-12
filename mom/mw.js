@@ -60,22 +60,16 @@ module.exports = function(
 
   bus.on("mom", function (msg) {
 
-      actualizarVector(msg.vector);
+    actualizarVector(msg.vector);
 
-      if(msg.evento.tarea !== "momCorte")
-        bus.emit("nucleo", msg);
-      else {
-        if (typeof registrarActividad !== "function"){
-          bus.emit(msg.evento.tarea, msg.evento);
-        }
-        if (typeof registrarActividad === "function"){
-          /*
-          si se esta ejecutando un corte consistente,
-          el mensaje no se baja al negocio sino que se encola
-          */
-          registrarActividad("entrante", msg);
-        }
-      }
+    if(msg.evento.tarea !== "momCorte")
+      bus.emit("nucleo", msg);
+    else {
+      if (typeof registrarActividad !== "function")
+        bus.emit(msg.evento.tarea, msg.evento);
+    }
+    if (typeof registrarActividad === "function")
+      registrarActividad(msg);
   });
 
   module.publicar = function(reglas_ruteo, evento){
@@ -129,21 +123,22 @@ module.exports = function(
     sock_respuesta = socket;
   }
 
-  function funcionRegistrar(origen, msg){
+  function funcionRegistrar(msg){
 
-    if(origen === "entrante"){
-
-      if(msg.evento.tarea === "momCorte")
-        corte_resp_recibidas++;
-      canal_entrante.push(msg);
-    }
+    if(msg.evento.tarea === "momCorte")
+      corte_resp_recibidas++;
+    canal_entrante.push(msg);
 
     if (corte_resp_recibidas === corte_resp_esperadas){
-      
+
       var msg = {ent:canal_entrante.slice(0), est:compras().slice(0)};
 
+      registrarActividad = "no funcion";
+      corte_resp_recibidas = 0;
+      canal_entrante.length = 0;
+
       console.log("mensajes entrantes -->");
-      canal_entrante.forEach(function(actual){
+      msg.ent.forEach(function(actual){
 
         var texto;
 
@@ -175,11 +170,6 @@ module.exports = function(
 
         console.log(texto);
       });
-
-      registrarActividad = "no funcion";
-      corte_resp_recibidas = 0;
-      canal_entrante.length = 0;
-
       console.log("INT: fin corte consistente");
       sock_respuesta.emit("resCorte", msg);
     }
