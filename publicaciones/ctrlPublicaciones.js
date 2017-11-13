@@ -79,6 +79,7 @@ bus.on("momGetPublicaciones", function (evento) {
     },
     function(callback) {
 
+      evento.id = nucleo.id_mayor;
       evento.tarea = "momResultadoPublicaciones";
       evento.publicaciones = msg;
       callback(null);

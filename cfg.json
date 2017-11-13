@@ -27,7 +27,7 @@
   "automatico" : {
     "probabilidad" : {
       "infraccion" : "30",
-      "_coment" : "(30) probabilidad infraccion en compra",
+      "_coment" : "(30) probabilidad que la compra posea infraccion",
       "autorizacion" : "70",
       "_coment" : "(70) probabilidad autorizacion pago de la compra",
       "cliente" : {
@@ -37,13 +37,18 @@
         "_coment" : "(50) probabilidad que cliente elija metodo pago debito",
         "confirma" : "70",
         "_coment" : "(70) probabilidad que cliente confirme compra"
-      }
+      },
+      "caida_servidor" : "10",
+      "_coment" : "(10) probabilidad de caida del servidor"
     },
     "nueva_compra" : {
       "periodo" : "5000"
     },
     "persistencia" : {
       "periodo" : "10000"
+    },
+    "caida_servidor" : {
+      "periodo" : "3000"
     }
   },
   "probabilidad" : {

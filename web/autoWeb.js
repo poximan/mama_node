@@ -7,11 +7,14 @@ var bus = control.bus;
 var io = monitor.io;
 
 var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+var periodo_caida = require("../cfg.json").automatico.caida_servidor.periodo;
 var periodo_comprar = require("../cfg.json").automatico.nueva_compra.periodo;
+
 var probab_envio_correo = require("../cfg.json").automatico.probabilidad.cliente.correo;
 var probab_pago_debito = require("../cfg.json").automatico.probabilidad.cliente.debito;
 var probab_conf_compra = require("../cfg.json").automatico.probabilidad.cliente.confirma;
 var probab_corte_consistente = require("../cfg.json").probabilidad.corte_consistente;
+var probab_caida = require("../cfg.json").automatico.probabilidad.caida_servidor;
 
 // ---------
 
@@ -24,6 +27,8 @@ var id = setInterval(function(){
     //clearInterval(id);
   }
 }, periodo_comprar);
+
+setInterval(caida, periodo_caida);
 
 // ---------
 
@@ -106,6 +111,13 @@ function persistir(evento) {
     else {
       control.nucleo.persistir();
     }
+}
+
+function caida() {
+
+  if(probabilidad() <= probab_caida){
+    monitor.caida();
+  }
 }
 
 function probabilidad() {

@@ -171,7 +171,9 @@ module.exports = function(
         console.log(texto);
       });
       console.log("INT: fin corte consistente");
-      sock_respuesta.emit("resCorte", msg);
+      
+      if(sock_respuesta !== undefined)
+        sock_respuesta.emit("resCorte", msg);
     }
   }
 

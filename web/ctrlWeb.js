@@ -120,6 +120,9 @@ bus.on("momResultadoPublicaciones", function (evento) {
 
   console.log("ENT: obteniendo " + evento.publicaciones.length + " nuevas publicaciones");
   publicaciones = evento.publicaciones;
+
+  if(nucleo.id_mayor < evento.id)
+    nucleo.id_mayor = evento.id;
 });
 
 /*

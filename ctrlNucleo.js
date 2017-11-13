@@ -32,12 +32,23 @@ module.exports = function(
   ......... negocio
   */
 
+  var id_mayor = 0;
+  module.id_mayor = id_mayor;
+
   bus.on("nucleo", function (msg) {
     if(msg.evento.tarea !== "momResultadoPublicaciones" &&
-          msg.evento.tarea !== "momGetPublicaciones")
-      module.agregarCompra(msg.evento);
+          msg.evento.tarea !== "momGetPublicaciones"){
+            
+            if(msg.evento.id > id_mayor)
+              id_mayor = msg.evento.id;
+
+            module.agregarCompra(msg.evento);
+          }
 
     bus.emit(msg.evento.tarea, msg.evento);
+  });
+
+  bus.on("momMayorId", function (msg) {
   });
 
   var compras = new Array();
