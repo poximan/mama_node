@@ -43,7 +43,10 @@ exports.comprar = function() {
 
     mw.incrementar();
 
-    nueva_compra.id = id++;
+    if(id < nucleo.id_mayor)
+      id = nucleo.id_mayor;
+console.log(id);
+    nueva_compra.id = ++id;
     bus.emit(nueva_compra.tarea, nueva_compra);
   });
 }
@@ -120,9 +123,6 @@ bus.on("momResultadoPublicaciones", function (evento) {
 
   console.log("ENT: obteniendo " + evento.publicaciones.length + " nuevas publicaciones");
   publicaciones = evento.publicaciones;
-
-  if(nucleo.id_mayor < evento.id)
-    nucleo.id_mayor = evento.id;
 });
 
 /*

@@ -32,23 +32,18 @@ module.exports = function(
   ......... negocio
   */
 
-  var id_mayor = 0;
-  module.id_mayor = id_mayor;
+  module.id_mayor = 1;
 
   bus.on("nucleo", function (msg) {
     if(msg.evento.tarea !== "momResultadoPublicaciones" &&
-          msg.evento.tarea !== "momGetPublicaciones"){
-            
-            if(msg.evento.id > id_mayor)
-              id_mayor = msg.evento.id;
+          msg.evento.tarea !== "momGetPublicaciones")
 
             module.agregarCompra(msg.evento);
-          }
+
+    if(msg.evento.id > module.id_mayor)
+      module.id_mayor = msg.evento.id;
 
     bus.emit(msg.evento.tarea, msg.evento);
-  });
-
-  bus.on("momMayorId", function (msg) {
   });
 
   var compras = new Array();
@@ -88,6 +83,13 @@ module.exports = function(
   module.mw = mw;
 
   // ---------
+
+  module.caida = function() {
+    if(!mw.corteEnProceso()){
+      console.log("\nINT: caida programada del servidor\n");
+      process.exit(1);
+    }
+  }
 
   module.actualizarAtributo = function(evento){
 

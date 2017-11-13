@@ -38,11 +38,11 @@
         "confirma" : "70",
         "_coment" : "(70) probabilidad que cliente confirme compra"
       },
-      "caida_servidor" : "10",
+      "caida_servidor" : "2",
       "_coment" : "(10) probabilidad de caida del servidor"
     },
     "nueva_compra" : {
-      "periodo" : "5000"
+      "periodo" : "2000"
     },
     "persistencia" : {
       "periodo" : "10000"

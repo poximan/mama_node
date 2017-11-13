@@ -7,12 +7,20 @@ var bus = control.bus;
 var io = monitor.io;
 
 var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+var periodo_caida = require("../cfg.json").automatico.caida_servidor.periodo;
+
 var probab_autorizacion = require("../cfg.json").automatico.probabilidad.autorizacion;
 var probab_corte_consistente = require("../cfg.json").probabilidad.corte_consistente;
+var probab_caida = require("../cfg.json").automatico.probabilidad.caida_servidor;
 
 // ---------
 
 setInterval(persistir, periodo_persistencia);
+
+setInterval(function(){
+  if(probabilidad() <= probab_caida)
+    control.nucleo.caida();
+}, periodo_caida);
 
 // ---------
 

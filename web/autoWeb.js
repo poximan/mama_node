@@ -7,8 +7,8 @@ var bus = control.bus;
 var io = monitor.io;
 
 var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
-var periodo_caida = require("../cfg.json").automatico.caida_servidor.periodo;
 var periodo_comprar = require("../cfg.json").automatico.nueva_compra.periodo;
+var periodo_caida = require("../cfg.json").automatico.caida_servidor.periodo;
 
 var probab_envio_correo = require("../cfg.json").automatico.probabilidad.cliente.correo;
 var probab_pago_debito = require("../cfg.json").automatico.probabilidad.cliente.debito;
@@ -28,7 +28,10 @@ var id = setInterval(function(){
   }
 }, periodo_comprar);
 
-setInterval(caida, periodo_caida);
+setInterval(function(){
+  if(probabilidad() <= probab_caida)
+    control.nucleo.caida();
+}, periodo_caida);
 
 // ---------
 
@@ -61,6 +64,7 @@ bus.on("resultadoConfirmar", function (evento) {
 
 var get_publicaciones = {
   "tarea":"momGetPublicaciones",
+  "id": 1,
   "publicaciones" : []
 }
 
@@ -111,13 +115,6 @@ function persistir(evento) {
     else {
       control.nucleo.persistir();
     }
-}
-
-function caida() {
-
-  if(probabilidad() <= probab_caida){
-    monitor.caida();
-  }
 }
 
 function probabilidad() {

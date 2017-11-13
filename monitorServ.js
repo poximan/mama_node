@@ -82,7 +82,7 @@ module.exports = function(puerto, nucleo, bus) {
     });
 
     socket.on("ouch", function (msg) {
-      module.caida();
+      nucleo.caida();
     });
 
     // ultimo corte
@@ -159,11 +159,6 @@ module.exports = function(puerto, nucleo, bus) {
     }
     this.agendarEventos;
   });
-
-  module.caida = function() {
-    console.log("\nINT: caida programada del servidor\n");
-    process.exit(1);
-  }
 
   server.listen(puerto, function () {
 

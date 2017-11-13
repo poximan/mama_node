@@ -31,6 +31,7 @@ bus.on("comprar", function (evento) {
 
 var get_publicaciones = {
   "tarea":"momGetPublicaciones",
+  "id": 1,
   "publicaciones" : []
 }
 
