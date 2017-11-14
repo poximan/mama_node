@@ -25,6 +25,9 @@ io.on('connection', function (socket) {
     console.log("Monitor: conectado");
   });
 
+  socket.on("general", function (msg) {    
+  });
+
   socket.on("compras", function (msg) {
 
     console.log("redireccionando a ServCompras");

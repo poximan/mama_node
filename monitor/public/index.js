@@ -4,7 +4,15 @@ $(function() {
 
   var FADE_TIME = 150; // ms
   var $window = $(window);
+
   var $messages = $('.messages'); // Messages area
+  var $msg_compras = $('.msg_compras'); // respuestas desde compras
+  var $msg_envios = $('.msg_envios'); // respuestas desde compras
+  var $msg_infracciones = $('.msg_infracciones'); // respuestas desde compras
+  var $msg_pagos = $('.msg_pagos'); // respuestas desde compras
+  var $msg_publicaciones = $('.msg_publicaciones'); // respuestas desde compras
+  var $msg_web = $('.msg_web'); // respuestas desde compras
+
   var $inputMessage = $('.inputMessage'); // Input message input box
   var $servidor = "general";
 
