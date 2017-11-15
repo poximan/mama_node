@@ -18,7 +18,7 @@ exports.bus = bus;
 // ---------
 
 var async = require('async');
-var id = 1;
+var id = 0;
 var publicaciones = [];
 
 // ---------
@@ -45,8 +45,8 @@ exports.comprar = function() {
 
     if(id < nucleo.id_mayor)
       id = nucleo.id_mayor;
-console.log(id);
-    nueva_compra.id = ++id;
+
+    nueva_compra.id = id++;
     bus.emit(nueva_compra.tarea, nueva_compra);
   });
 }

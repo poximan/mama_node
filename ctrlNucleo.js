@@ -32,7 +32,7 @@ module.exports = function(
   ......... negocio
   */
 
-  module.id_mayor = 1;
+  module.id_mayor = 0;
 
   bus.on("nucleo", function (msg) {
     if(msg.evento.tarea !== "momResultadoPublicaciones" &&

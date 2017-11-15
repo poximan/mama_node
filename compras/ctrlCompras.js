@@ -242,7 +242,7 @@ se espera la llegada de dos mensajes
 
 bus.on("sincro_inf_compr1", function (evento) {
   "ENT: compra " + evento.id +
-  console.log("INT: compra " + evento.id + "compra " + evento.id + " --> esperando resultado infraccion");
+  console.log("INT: compra " + evento.id + " --> esperando resultado infraccion");
 });
 
 bus.on("sincro_inf_compr2", function (evento) {

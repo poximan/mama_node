@@ -20,11 +20,13 @@ var probab_caida = require("../cfg.json").automatico.probabilidad.caida_servidor
 
 setInterval(persistir, periodo_persistencia);
 
+var cant_compras = 1;
 var id = setInterval(function(){
+
   if(control.hayPublicaciones()){
     control.comprar();
-    control.comprar();
-    //clearInterval(id);
+    if(cant_compras++ >= 100)
+      clearInterval(id);
   }
 }, periodo_comprar);
 
