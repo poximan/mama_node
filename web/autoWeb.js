@@ -25,7 +25,7 @@ var id = setInterval(function(){
 
   if(control.hayPublicaciones()){
     control.comprar();
-    if(cant_compras++ >= 100)
+    if(cant_compras++ >= 200)
       clearInterval(id);
   }
 }, periodo_comprar);

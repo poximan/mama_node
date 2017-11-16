@@ -25,7 +25,7 @@ var operaciones = [
     // servidor base de datos (hay que crear carpeta C:\data\db)
     shell_ejec("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " + version_mongo +  " && cd bin && mongod.exe\"");
 
-    setTimeout(function() { callback(null); }, 1000);
+    setTimeout(function() { callback(null); }, 8000);
   },
   function(callback) {
 

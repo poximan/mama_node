@@ -138,14 +138,21 @@ module.exports = function(
       if(evento.compra.estado === evento.compra.estado_valores[3])
         estadisticas.aceptadas++;
 
+      var marca = false;
       // si todavia no esta aceptada
       if(evento.compra.estado !== evento.compra.estado_valores[3]){
-        if(evento.compra.estado === evento.compra.estado_valores[2])
+        if(!marca && (evento.compra.estado === evento.compra.estado_valores[2])){
           estadisticas.canceladas.confirmacion++;
-        if(evento.compra.pago === evento.compra.pago_valores[2])
+          marca = true;
+        }
+        if(!marca && (evento.compra.pago === evento.compra.pago_valores[2])){
           estadisticas.canceladas.autorizacion++;
-        if(evento.compra.infracciones === evento.compra.infracciones_valores[2])
+          marca = true;
+        }
+        if(!marca && (evento.compra.infracciones === evento.compra.infracciones_valores[2])){
           estadisticas.canceladas.infraccion++;
+          marca = true;
+        }
       }
       tot_canceladas = estadisticas.canceladas.confirmacion + estadisticas.canceladas.autorizacion + estadisticas.canceladas.infraccion;
     });

@@ -26,29 +26,29 @@
   },
   "automatico" : {
     "probabilidad" : {
-      "infraccion" : "100",
+      "infraccion" : "30",
       "_coment" : "(30) probabilidad que la compra posea infraccion",
-      "autorizacion" : "100",
+      "autorizacion" : "70",
       "_coment" : "(70) probabilidad autorizacion pago de la compra",
       "cliente" : {
-        "correo" : "0",
+        "correo" : "80",
         "_coment" : "(80) probabilidad que cliente elija metodo envio correo",
         "debito" : "50",
         "_coment" : "(50) probabilidad que cliente elija metodo pago debito",
-        "confirma" : "100",
+        "confirma" : "70",
         "_coment" : "(70) probabilidad que cliente confirme compra"
       },
-      "caida_servidor" : "3",
+      "caida_servidor" : "2",
       "_coment" : "(10) probabilidad de caida del servidor"
     },
     "nueva_compra" : {
-      "periodo" : "100"
+      "periodo" : "200"
     },
     "persistencia" : {
-      "periodo" : "6000000"
+      "periodo" : "60000"
     },
     "caida_servidor" : {
-      "periodo" : "300000"
+      "periodo" : "30000"
     }
   },
   "probabilidad" : {
