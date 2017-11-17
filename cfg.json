@@ -1,7 +1,7 @@
 {
   "amqp" : {
-    "_coment" : "amqp://localhost",
-    "url" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
+    "url" : "amqp://localhost",
+    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
     "management" : "http://localhost:15672/",
     "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
   },
@@ -38,7 +38,7 @@
         "confirma" : "70",
         "_coment" : "(70) probabilidad que cliente confirme compra"
       },
-      "caida_servidor" : "2",
+      "caida_servidor" : "0",
       "_coment" : "(10) probabilidad de caida del servidor"
     },
     "nueva_compra" : {
