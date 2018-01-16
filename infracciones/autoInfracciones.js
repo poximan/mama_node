@@ -2,25 +2,12 @@ var port = require("../cfg.json").monitor.port_infracciones;
 var control = require('./ctrlInfracciones');
 var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
-var mw = control.nucleo.mw;
 var bus = control.bus;
 var io = monitor.io;
 
-var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
-var periodo_caida = require("../cfg.json").automatico.caida_servidor.periodo;
+require("../autoComun")(control.nucleo, bus);
 
 var probab_infraccion = require("../cfg.json").automatico.probabilidad.infraccion;
-var probab_corte_consistente = require("../cfg.json").probabilidad.corte_consistente;
-var probab_caida = require("../cfg.json").automatico.probabilidad.caida_servidor;
-
-// ---------
-
-setInterval(persistir, periodo_persistencia);
-
-setInterval(function(){
-  if(probabilidad() <= probab_caida)
-    control.nucleo.caida();
-}, periodo_caida);
 
 // ---------
 
@@ -43,26 +30,6 @@ existeInfraccion = function(evento) {
     evento.compra.infracciones = evento.compra.infracciones_valores[2]; // con_infr
   else
     evento.compra.infracciones = evento.compra.infracciones_valores[1]; // sin_infr
-}
-
-/*
-al persistirse el estado, solicita con un 50% de probabilidad la
-generación de un corte consistente
-*/
-function persistir(evento) {
-
-  if(!mw.corteEnProceso())
-    if(probabilidad() <= probab_corte_consistente){
-
-      var tarea = "momCorte";
-      var evento = {tarea};
-
-      console.log("GLOBAL: comienza corte consistente");
-      bus.emit(evento.tarea, evento);
-    }
-    else {
-      control.nucleo.persistir();
-    }
 }
 
 function probabilidad() {

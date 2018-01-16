@@ -24,13 +24,20 @@ module.exports = function(puerto, nucleo, bus) {
     nucleo.persistir();
   });
 
+  /*
+  el bus de mensajes recibe una solicitud de corte.
+  prepara el mensaje para enviar al MOM.
+  en este caso la carga util es solo la firma del mensaje, no se necesita mas nada.
+  */
   bus.on("corte", function (evento) {
 
-    var tarea = "momCorte";
-    var evento = {tarea};
+    if(!mw.corteEnProceso()){
+      var tarea = "momCorte";
+      var evento = {tarea};
 
-    console.log("GLOBAL: comienza corte consistente");
-    bus.emit(evento.tarea, evento);
+      console.log("GLOBAL: comienza corte consistente");
+      bus.emit(evento.tarea, evento);
+    }
   });
 
   /*
@@ -77,6 +84,10 @@ module.exports = function(puerto, nucleo, bus) {
       socket.emit("resReloj", resp);
     });
 
+    /*
+    mensaje de corte que entra desde el socket abierto para el cliente monitor.
+    esta es una generacion manual, realizada por un operador desde el monitor
+    */
     socket.on("corte", function (msg) {
       bus.emit("corte", msg);
     });

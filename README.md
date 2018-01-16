@@ -22,9 +22,9 @@ Todos los servidores persisten regularmente su estado. En el caso de que un serv
 * Web framework "express" (npm install express).
 
 ## Ejecutar el sistema
-Desde el raíz del proyecto, ir a /scripts. alli estan todos los scripts necesarios para automatizar la ejecución
-se destacan:
-* "levantar_bd {nueva|actual}" para ejecutar el servidor de bd
+Desde el raíz del proyecto, ir a /scripts. alli estan todos los scripts necesarios para automatizar la ejecución se destacan:
+* "levantar_bd {nueva|actual}" para ejecutar el servidor de bd.
+Para "levantar_bd nueva”: Cuando se ejecuta esto por primera vez demora un poco mas, ya que no tiene en caché la llamada al DBMS Mongo. En equipos mas lentos, podría pasar que el proceso de servicio (mongod.exe) no haya terminado de levantarse y desde uno de los procesos de este programa se ejecute un dropDatabase para limpiar la base de datos, lo cual genera un error en ejecución. Repetir la operación si sucede esto.
 * "levantar_serv {man|auto}" para todo el sistema completo, servidores del negocio y monitor.
 
 En automático el sistema solo se puede observar, opcionalmente pueden cargarse parámetros iniciales desde cfg.json en el directorio raíz.
@@ -34,8 +34,9 @@ El acceso al monitor es mediante "http://{ip|localhost}:5006/index.html". para s
 
 ### Shell's
 Como se trata de un sistema distribuido, cada servidor es ejecutado desde un shell distinto.
-* Como son 6 servidores de negocio, se levantan 6 entornos de ejecucion diferentes.
+* Como son 6 servidores de negocio, se levantan 6 entornos de ejecución diferentes.
 * Uno para iniciar el servidor de base de datos, mongodb, que queda a la escucha de conexiones entrantes.
 * Uno para el monitor bidireccional, que cumple dos funciones:
   * En automático, colecta datos de los servidores del negocio y los presenta a un cliente monitor web.
-  * En manual, lo mismo que automático y ademas, escucha los post (peticiones o comandos) desde el cliente monitor web hacia los servidores del negocio. funciona como un concentrador. servnegocio/servmonitor <-> climonitor/servweb <-> cliweb.
+  * En manual, lo mismo que automático y ademas, escucha los post (peticiones o comandos) desde el cliente monitor web hacia los servidores del negocio. funciona como un concentrador.
+servnegocio/servmonitor <-> climonitor/servweb <-> cliweb.

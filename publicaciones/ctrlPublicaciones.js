@@ -3,11 +3,12 @@ var bus = require('../eventBus');
 /*
 param 1 = indice del reloj vectorial que debe incrementar este servidor
 param 2 = coleccion mongo donde persite este servidor
-param 3 = cantidad de respuetas que espera para fin corte consistente
-param 4 = nombre de la cola MOM que escucha este servidor
-param 5 = instancia de bus para gestion de eventos
+param 3 = nombre de la cola MOM que escucha este servidor
+param 4 = instancia de bus para gestion de eventos
+param 5 = lista de suscriptores del servidor dado
+param 6 = cantidad de confirmaciones externas para fin corte consistente
 */
-var nucleo = require("../ctrlNucleo")(1, "colecc_publicaciones", 4, "cola_publicaciones", bus);
+var nucleo = require("../ctrlNucleo")(1, "colecc_publicaciones", "cola_publicaciones", bus, ".", 4);
 var mw = nucleo.mw;
 
 // ---------
@@ -82,7 +83,7 @@ bus.on("momGetPublicaciones", function (evento) {
       evento.tarea = "momResultadoPublicaciones";
       evento.id = nucleo.id_mayor;
       evento.publicaciones = msg;
-      
+
       callback(null);
     },
     function(callback) {

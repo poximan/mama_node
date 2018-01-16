@@ -17,6 +17,7 @@ amqp.connect(amqp_url, function(err, conn) {
       ch.consume(q.queue, function(buffer) {
         // msg origianl es {fields, properties, content}
         var serializacion = JSON.parse(buffer.content.toString());
+        
         bus.emit("mom", serializacion);
         ch.ack(buffer);
       }, {noAck: false});

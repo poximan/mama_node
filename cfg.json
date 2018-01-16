@@ -38,11 +38,15 @@
         "confirma" : "70",
         "_coment" : "(70) probabilidad que cliente confirme compra"
       },
-      "caida_servidor" : "0",
+      "caida_servidor" : "5",
       "_coment" : "(10) probabilidad de caida del servidor"
     },
     "nueva_compra" : {
-      "periodo" : "200"
+      "periodo" : "5000"
+    },
+    "total_compras" : {
+      "cantidad" : "50",
+      "_coment" : "compras maximas que se generaran en auto (0 para infinitas)"
     },
     "persistencia" : {
       "periodo" : "60000"
@@ -54,5 +58,9 @@
   "probabilidad" : {
     "corte_consistente" : "50",
     "_coment" : "(50) probabilidad que una persistencia genere un corte"
-    }
+  },
+  "vector_serv" : {
+    "cantidad" : "6",
+    "_coment" : "cantidad de servidores para definir tamaño del reloj vectorial"
+  }
 }

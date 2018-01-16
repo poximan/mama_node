@@ -2,38 +2,29 @@ var port = require("../cfg.json").monitor.port_web;
 var control = require('./ctrlWeb');
 var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
-var mw = control.nucleo.mw;
 var bus = control.bus;
 var io = monitor.io;
 
-var periodo_persistencia = require("../cfg.json").automatico.persistencia.periodo;
+require("../autoComun")(control.nucleo, bus);
+
 var periodo_comprar = require("../cfg.json").automatico.nueva_compra.periodo;
-var periodo_caida = require("../cfg.json").automatico.caida_servidor.periodo;
+var max_compras = require("../cfg.json").automatico.total_compras.cantidad;
 
 var probab_envio_correo = require("../cfg.json").automatico.probabilidad.cliente.correo;
 var probab_pago_debito = require("../cfg.json").automatico.probabilidad.cliente.debito;
 var probab_conf_compra = require("../cfg.json").automatico.probabilidad.cliente.confirma;
-var probab_corte_consistente = require("../cfg.json").probabilidad.corte_consistente;
-var probab_caida = require("../cfg.json").automatico.probabilidad.caida_servidor;
 
 // ---------
 
-setInterval(persistir, periodo_persistencia);
-
 var cant_compras = 1;
 var id = setInterval(function(){
-
+console.log(max_compras);
   if(control.hayPublicaciones()){
     control.comprar();
-    if(cant_compras++ >= 200)
+    if(max_compras != 0 && cant_compras++ >= max_compras)
       clearInterval(id);
   }
 }, periodo_comprar);
-
-setInterval(function(){
-  if(probabilidad() <= probab_caida)
-    control.nucleo.caida();
-}, periodo_caida);
 
 // ---------
 
@@ -97,26 +88,6 @@ confirmar = function(evento) {
     evento.compra.estado = evento.compra.estado_valores[1];  // confirma
   else
     evento.compra.estado = evento.compra.estado_valores[2];  // cancela
-}
-
-/*
-al persistirse el estado, solicita con un 50% de probabilidad la
-generación de un corte consistente
-*/
-function persistir(evento) {
-
-  if(!mw.corteEnProceso())
-    if(probabilidad() <= probab_corte_consistente){
-
-      var tarea = "momCorte";
-      var evento = {tarea};
-
-      console.log("GLOBAL: comienza corte consistente");
-      bus.emit(evento.tarea, evento);
-    }
-    else {
-      control.nucleo.persistir();
-    }
 }
 
 function probabilidad() {

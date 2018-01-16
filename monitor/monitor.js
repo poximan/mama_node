@@ -25,7 +25,7 @@ io.on('connection', function (socket) {
     console.log("Monitor: conectado");
   });
 
-  socket.on("general", function (msg) {    
+  socket.on("general", function (msg) {
   });
 
   socket.on("compras", function (msg) {
@@ -114,7 +114,8 @@ io.on('connection', function (socket) {
 
 server.listen(port, function () {
 
-  console.log("--------------------------");
-  console.log('Escuchando en puerto %d', port);
-  console.log("--------------------------");
+  console.log("-----------------------------------");
+  console.log("MONITOR ---------------------------");
+  console.log('Escuchando en puerto %d ---------', port);
+  console.log("-----------------------------------");
 });

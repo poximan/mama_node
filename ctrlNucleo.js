@@ -5,12 +5,21 @@ var _ = require('underscore');
 var MongoClient = require("mongodb").MongoClient;
 var mongo_url = require("./cfg.json").mongo.url;
 
+/*
+param 1 = indice del que es responsable en reloj vectorial
+param 2 = coleccion en donde persiten sus documentos este servidor
+param 3 = nombre de la cola MOM que escucha este servidor
+param 4 = instancia de bus para gestion de eventos
+param 5 = lista de suscriptores del servidor dado
+param 6 = cantidad de confirmaciones externas para fin corte consistente
+*/
 module.exports = function(
-  ind_vector,   // indice del que es responsable en reloj vectorial
-  coleccion,    // coleccion en donde persiten sus documentos este servidor
-  corte_resp_esperadas, // cantidad de respuetas que espera para fin corte consistente
-  cola_escucha, // nombre de la cola en el servidor de mensajeria
-  bus           // bus de escucha para los eventos generados por el eventEmitter
+  mi_reloj,
+  coleccion,
+  cola_escucha,
+  bus,
+  suscriptores,
+  corte_resp_esperadas
 ){
 
   var module = {};
@@ -66,15 +75,21 @@ module.exports = function(
   /*
   param 1 = indice del que es responsable en reloj vectorial
   param 2 = coleccion en donde persiten sus documentos este servidor
-  param 3 = cantidad de respuetas que espera para fin corte consistente
+  param 3 = nombre de la cola MOM que escucha este servidor
+  param 4 = instancia de bus para gestion de eventos
+  param 5 = lista de suscriptores del servidor dado
+  param 6 = cantidad de confirmaciones externas para fin corte consistente
+  param 7 = compras en curso
+  param 8 = llamada a funcion de persistencia del negocio
   */
   var mw = require("./mom/mw")(
-    ind_vector,
+    mi_reloj,
     coleccion,
-    corte_resp_esperadas,
     cola_escucha,
+    bus,
+    suscriptores,
+    corte_resp_esperadas,
     module.compras,
-    bus,        // bus de escucha para los eventos generados por el eventEmitter
     module.persistir
   );
 

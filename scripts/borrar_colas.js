@@ -1,4 +1,4 @@
-var shell_ejec = require('./shell')
+var shell_ejec = require('./shell_sin_cb')
 
 // 3.6.10 en la pc
 var version_rabbit = "3.6.10";

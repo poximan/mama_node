@@ -3,11 +3,12 @@ var bus = require('../eventBus');
 /*
 param 1 = indice del reloj vectorial que debe incrementar este servidor
 param 2 = coleccion mongo donde persite este servidor
-param 3 = cantidad de respuetas que espera para fin corte consistente
-param 4 = nombre de la cola MOM que escucha este servidor
-param 5 = instancia de bus para gestion de eventos
+param 3 = nombre de la cola MOM que escucha este servidor
+param 4 = instancia de bus para gestion de eventos
+param 5 = lista de suscriptores del servidor dado
+param 6 = cantidad de confirmaciones externas para fin corte consistente
 */
-var nucleo = require("../ctrlNucleo")(4, "colecc_envios", 1, "cola_envios", bus);
+var nucleo = require("../ctrlNucleo")(4, "colecc_envios", "cola_envios", bus, "compras.publicaciones", 1);
 var mw = nucleo.mw;
 
 // ---------
