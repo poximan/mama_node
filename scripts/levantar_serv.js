@@ -9,35 +9,57 @@ if (modo_operacion.length == 0 ||
   process.exit(1);
 }
 
-var operaciones = [
+async.series([
   function(callback) {
-
-    console.log("levantando servidores");
-    shell_ejec.execCommand("start ventana /K \"cd compras && node \"" + modo_operacion + "\"Compras.js\"", function (returnvalue) {
-    });
-    shell_ejec.execCommand("start ventana /K \"cd envios && node \"" + modo_operacion + "\"Envios.js\"", function (returnvalue) {
-    });
-    shell_ejec.execCommand("start ventana /K \"cd infracciones && node \"" + modo_operacion + "\"Infracciones.js\"", function (returnvalue) {
-    });
-    shell_ejec.execCommand("start ventana /K \"cd pagos && node \"" + modo_operacion + "\"Pagos.js\"", function (returnvalue) {
-    });
-    shell_ejec.execCommand("start ventana /K \"cd publicaciones && node \"" + modo_operacion + "\"Publicaciones.js\"", function (returnvalue) {
-    });
-    shell_ejec.execCommand("start ventana /K \"cd web && node \"" + modo_operacion + "\"Web.js\"", function (returnvalue) {
-    });
-
-    callback(null);
+    shell_ejec.execCommand("start ventana /K \"cd compras && node \"" +
+                            modo_operacion +
+                            "\"Compras.js\"", function (returnvalue) {
+                              callback(null, "servidor compras activo");
+                            })
   },
-
   function(callback) {
-
-    console.log("levantando monitor");
+    shell_ejec.execCommand("start ventana /K \"cd envios && node \"" +
+                            modo_operacion +
+                            "\"Envios.js\"", function (returnvalue) {
+                              callback(null, "servidor envios activo");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("start ventana /K \"cd infracciones && node \"" +
+                            modo_operacion +
+                            "\"Infracciones.js\"", function (returnvalue) {
+                              callback(null, "servidor infracciones activo");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("start ventana /K \"cd pagos && node \"" +
+                            modo_operacion +
+                            "\"Pagos.js\"", function (returnvalue) {
+                              callback(null, "servidor pagos activo");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("start ventana /K \"cd publicaciones && node \"" +
+                            modo_operacion +
+                            "\"Publicaciones.js\"", function (returnvalue) {
+                              callback(null, "servidor publicaciones activo");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("start ventana /K \"cd web && node \"" +
+                            modo_operacion +
+                            "\"Web.js\"", function (returnvalue) {
+                              callback(null, "servidor web activo");
+                            })
+  },
+  function(callback) {
     shell_ejec.execCommand("start ventana /K \"cd monitor && node monitor.js\"", function (returnvalue) {
+      callback(null, "monitor activo");
     });
-
-    callback(null);
   }
-];
-async.waterfall(operaciones, function (err, evento) {
-  console.log("todos los servidores activos");
+],
+// optional callback
+function(err, results) {
+  console.log(results);
+  process.exit(0);
 });

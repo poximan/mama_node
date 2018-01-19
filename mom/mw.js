@@ -45,12 +45,12 @@ module.exports = function(
 
     if(msg.evento.tarea !== "momCorte")
       bus.emit("nucleo", msg);
-    else {
-      if (typeof corte_consistente.registrarActividad !== "function")
+    else {  // llega un mensaje de corte desde otro servidor
+      if (!corte_consistente.corte_en_proceso)
         bus.emit(msg.evento.tarea, msg.evento);
     }
-    if (typeof corte_consistente.registrarActividad === "function")
-      corte_consistente.registrarActividad(msg);
+    if (corte_consistente.corte_en_proceso)
+      corte_consistente.registrar(msg);
   });
 
   module.publicar = function(suscriptores, evento){
@@ -87,12 +87,12 @@ module.exports = function(
   ......... corte consistente
   */
 
-  module.corteEnProceso = function() {
-    return corte_consistente.corteEnProceso();
-  }
-
   module.sockRespuesta = function(socket) {
     corte_consistente.sockRespuesta(socket);
+  }
+
+  module.corteEnProceso = function(){
+    return corte_consistente.corte_en_proceso;
   }
 
   return module;

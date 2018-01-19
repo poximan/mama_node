@@ -100,9 +100,9 @@ module.exports = function(
   // ---------
 
   module.caida = function() {
-    if(!mw.corteEnProceso()){
+    if(!mw.corte_en_proceso){
       console.log("\nINT: caida programada del servidor\n");
-      process.exit(1);
+      process.exit(0);
     }
   }
 

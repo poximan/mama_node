@@ -21,6 +21,5 @@ amqp.connect(amqp_url, function(err, conn) {
       });
     });
   });
-
-  setTimeout(function() { conn.close(); process.exit(0) }, 5000);
+  setTimeout(function() { conn.close(); process.exit(0) }, 3000);
 });

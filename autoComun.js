@@ -33,7 +33,7 @@ module.exports = function(
   */
   function persistir(evento) {
 
-    if(!mw.corteEnProceso()){
+    if(!nucleo.mw.corteEnProceso()){
       if(probabilidad() <= probab_corte_consistente){
 
         var tarea = "momCorte";

@@ -1,25 +1,42 @@
-var shell_ejec = require('./shell_sin_cb')
+var shell_ejec = require('./shell_con_cb')
 var async = require('async');
 
-var operaciones = [
+console.log("creando colas");
+
+async.series([
   function(callback) {
-
-    console.log("creando colas");
-
-    shell_ejec("node crear_cola.js web");
-    shell_ejec("node crear_cola.js compras");
-    shell_ejec("node crear_cola.js infracciones");
-    shell_ejec("node crear_cola.js publicaciones");
-    shell_ejec("node crear_cola.js envios");
-    shell_ejec("node crear_cola.js pagos");
-
-    console.log("todas las colas creadas");
-    callback(null);
+    shell_ejec.execCommand("node crear_cola.js compras", function (returnvalue) {
+                              callback(null, "cola compras creada");
+                            })
   },
   function(callback) {
-    callback(null);
+    shell_ejec.execCommand("node crear_cola.js envios", function (returnvalue) {
+                              callback(null, "cola envios creada");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("node crear_cola.js infracciones", function (returnvalue) {
+                              callback(null, "cola infracciones creada");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("node crear_cola.js pagos", function (returnvalue) {
+                              callback(null, "cola pagos creada");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("node crear_cola.js publicaciones", function (returnvalue) {
+                              callback(null, "cola publicaciones creada");
+                            })
+  },
+  function(callback) {
+    shell_ejec.execCommand("node crear_cola.js web", function (returnvalue) {
+                              callback(null, "cola web creada");
+                            })
   }
-];
-
-async.waterfall(operaciones, function (err, evento) {
+],
+// optional callback
+function(err, results) {
+  console.log(results);
+  process.exit(0);
 });

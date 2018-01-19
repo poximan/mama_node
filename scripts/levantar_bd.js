@@ -3,6 +3,9 @@ var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
 var mongo_url = require("../cfg.json").mongo.url;
 
+var fs = require("fs"),
+    path = require("path");
+
 // ---------
 
 var instancia_bd = process.argv.slice(2);
@@ -16,42 +19,69 @@ if (instancia_bd.length == 0 ||
 
 // ---------
 
-var operaciones = [
-  function(callback) {
-    console.log("Levantando DBMS mongo");
+var version_mongo = [];
+var base_datos;
 
-    // 3.0 pc trabajo o 3.4 pc casa y note
-    var version_mongo = "3.4";
-    // servidor base de datos (hay que crear carpeta C:\data\db)
+async.series([
+  function(callback){
 
-    shell_ejec.execCommand("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " + version_mongo +  " && cd bin && mongod.exe\"", function (returnvalue) {
-      callback(returnvalue);
+    var p = "c:/Program Files/MongoDB/Server/";
+
+    fs.readdir(p, function (err, files) {
+      if (err) {
+          throw err;
+      }
+      files.map(function (file) {
+          return path.join(p, file);
+      }).filter(function (file) {
+          return fs.statSync(file).isDirectory();
+      }).forEach(function (file) {
+        version_mongo.push(file.slice(file.lastIndexOf("\\") + 1, file.length));
+      });
+      callback(null, "Version mongo localizada");
     });
   },
-  function(callback) {
+  function(callback){
 
-    console.log("Conectando a base de datos");
+    version_mongo = version_mongo[version_mongo.length - 1];
+    // servidor base de datos (hay que crear carpeta C:\data\db)
+    shell_ejec.execCommand("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
+                                                  version_mongo +
+                                                  " && cd bin && mongod.exe\"", function (returnvalue) {
+                                                    callback(null, "Proceso mongod.exe activo")
+                                                  });
+  },
+  function(callback){
+
+    MongoClient.connect(mongo_url, function(err, db) {
+
+      base_datos = db;
+      callback(null, "Conectado a BD");
+    });
+  },
+  function(callback){
+
+    var mensaje = "";
+
     var id = setInterval(function(){
-      MongoClient.connect(mongo_url, function(err, db) {
 
-        if(db !== null){
-          clearInterval(id);
+      if(base_datos !== null){
+        clearInterval(id);
 
-          if(instancia_bd == "nueva"){
-            console.log("Limpiando colecciones en base de datos");
-            db.dropDatabase();
-          }
-
-          if(instancia_bd == "actual"){
-            console.log("Se continua desde ultimo estado de base de datos");
-          }
-          process.exit(1);
+        if(instancia_bd == "nueva"){
+          mensaje = "Limpiando colecciones";
+          base_datos.dropDatabase();
         }
-      });
+        if(instancia_bd == "actual"){
+          mensaje = "Usando ultimo estado de colecciones";
+        }
+        callback(null, mensaje);
+      }
     }, 500);
-    callback(null);
   }
-];
-
-async.waterfall(operaciones, function (err, evento) {
+],
+// optional callback
+function(err, results) {
+  console.log(results);
+  process.exit(0);
 });

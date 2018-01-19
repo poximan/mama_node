@@ -49,7 +49,7 @@
       "_coment" : "compras maximas que se generaran en auto (0 para infinitas)"
     },
     "persistencia" : {
-      "periodo" : "60000"
+      "periodo" : "20000"
     },
     "caida_servidor" : {
       "periodo" : "30000"

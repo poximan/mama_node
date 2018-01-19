@@ -23,9 +23,7 @@ module.exports = function(
   ......... corte consistente
   */
 
-  module.corteEnProceso = function() {
-    return typeof registrarActividad === "function";
-  }
+  module.corte_en_proceso = false;
 
   /*
   numero de respuestas que espera el servidor
@@ -33,7 +31,6 @@ module.exports = function(
   */
   var corte_resp_recibidas = 0;
 
-  module.registrarActividad = "no funcion";
   var canal_entrante = new Array();
 
   bus.on("momCorte", function (evento) {
@@ -44,8 +41,8 @@ module.exports = function(
     else
       console.log("INT: se espera " + corte_resp_esperadas + " respuesta desde otro servidor");
 
+    module.corte_en_proceso = true;
     persistir();
-    registrarActividad = funcionRegistrar;
 
     // si existen destinatarios
     if(suscriptores !== ""){
@@ -60,7 +57,7 @@ module.exports = function(
     sock_respuesta = socket;
   }
 
-  function funcionRegistrar(msg){
+  module.registrar = function(msg){
 
     if(msg.evento.tarea === "momCorte")
       corte_resp_recibidas++;
@@ -68,11 +65,12 @@ module.exports = function(
 
     if (corte_resp_recibidas === corte_resp_esperadas){
 
+      module.corte_en_proceso = false;
+
       console.log("INT: se recibieron " + corte_resp_recibidas + " respuestas de otros servidores");
 
       var msg = {ent:canal_entrante.slice(0), est:compras().slice(0)};
 
-      registrarActividad = "no funcion";
       corte_resp_recibidas = 0;
       canal_entrante.length = 0;
 

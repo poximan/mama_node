@@ -18,7 +18,7 @@ var probab_conf_compra = require("../cfg.json").automatico.probabilidad.cliente.
 
 var cant_compras = 1;
 var id = setInterval(function(){
-console.log(max_compras);
+
   if(control.hayPublicaciones()){
     control.comprar();
     if(max_compras != 0 && cant_compras++ >= max_compras)
