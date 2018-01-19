@@ -15,9 +15,9 @@ Todos los servidores persisten regularmente su estado. En el caso de que un serv
 
 ## Paquetes necesarios
 * Sincronizar "async" (npm install async)
-* Cliente mom "amqp" (npm install amqplib). la implementacion es rabbitmq, que sigue esta especificación.
-* Utileria "underscore" (npm install underscore)
 * Cliente bd "mongodb" (npm install mongodb)
+* Utileria "underscore" (npm install underscore)
+* Cliente mom "amqp" (npm install amqplib). la implementacion es rabbitmq, que sigue esta especificación.
 * Socket bidireccional "socketio" (npm install socket.io). aplicacion que se monta sobre socket tcp para brindar servicio de eventos (tal como eventemitter pero distribuido)
 * Web framework "express" (npm install express).
 

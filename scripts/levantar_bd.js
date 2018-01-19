@@ -55,7 +55,10 @@ async.series([
 
     MongoClient.connect(mongo_url, function(err, db) {
 
-      base_datos = db;
+      if (err) throw err;
+      var dbase = db.db("mydb"); //here
+      base_datos = dbase;
+
       callback(null, "Conectado a BD");
     });
   },
@@ -77,7 +80,7 @@ async.series([
         }
         callback(null, mensaje);
       }
-    }, 500);
+    }, 1000);
   }
 ],
 // optional callback

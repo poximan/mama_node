@@ -31,10 +31,11 @@ module.exports = function(
   var db_global;
   MongoClient.connect(mongo_url, function(err, db) {
 
-    if(err)
-      throw err;
-    db.createCollection(coleccion);
-    db_global = db;
+    if(err) throw err;
+
+    var dbase = db.db("mydb");
+    dbase.createCollection(coleccion);
+    db_global = dbase;
   });
 
   /*
