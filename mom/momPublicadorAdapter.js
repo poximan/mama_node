@@ -1,33 +1,30 @@
-var amqp = require('amqplib/callback_api');
-var amqp_url = require("../cfg.json").amqp.url;
+var publicador_rabbit = require("./momPublicadorRabbit")("exchange");
 
 //-----------------------------
-
+/*
+adapter para publicar, ofrece servicios de publicacion al mw.
+internamente se conecta con un driver AMQP RabbitMQ.
+usa una cola interna para salvar mensajes que pudieran ser enviados
+a publicacion antes que el canal de salida este preparado
+*/
 module.exports = function() {
 
   var module = {};
 
-  var ex = 'exchange';
-  var canal;
   var publicaciones = [];
-
-  amqp.connect(amqp_url, function(err, conn) {
-    conn.createChannel(function(err, ch) {
-      canal = ch;
-    });
-  });
 
   module.publicar = function(reglas_ruteo, msg){
 
     publicaciones.push({reglas_ruteo, msg});
-    if(canal !== undefined)
+    if(publicador_rabbit.canal !== undefined)
       vaciarPendientes();
   }
 
   setInterval(function(){
-    if(canal !== undefined && publicaciones.length > 0)
+
+    if(publicador_rabbit.canal !== undefined)
       vaciarPendientes();
-  }, 1000);
+  }, 3000);
 
   function vaciarPendientes(){
     while (publicaciones.length > 0) {
@@ -36,7 +33,7 @@ module.exports = function() {
       var serializacion = JSON.stringify(pendiente.msg);
       var buffer = Buffer.from(serializacion);
 
-      canal.publish(ex, pendiente.reglas_ruteo, buffer, {persistent: true, contentType: 'application/json'});
+      publicador_rabbit.publicar(pendiente.reglas_ruteo, buffer);
     }
   }
 

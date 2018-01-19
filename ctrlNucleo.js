@@ -93,8 +93,6 @@ module.exports = function(
     module.persistir
   );
 
-  // ---------
-
   module.mw = mw;
 
   // ---------

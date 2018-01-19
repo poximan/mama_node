@@ -1,26 +1,23 @@
-var amqp = require('amqplib/callback_api');
-var amqp_url = require("../cfg.json").amqp.url;
-
 var bus = require('../eventBus');
 
-var cola;
+//-----------------------------
+/*
+adapter para suscribirse a una cola, ofrece servicios de escucha al mw.
+internamente se conecta con un driver AMQP RabbitMQ.
+el mensaje entrante es procesado con JSON.parse y colocado en el bus de mensajes
+paramatros:
+- cola = nombre de la cola que debe escucharse
+*/
+module.exports = function(cola) {
 
-exports.suscribir = function(nombre_cola) {
-  cola = nombre_cola;
-}
+  var module = {};
 
-amqp.connect(amqp_url, function(err, conn) {
-  conn.createChannel(function(err, ch) {
+  require("./momSuscriptorRabbit")(cola, mensajeEntrante);
 
-    ch.checkQueue(cola, function(err, q) {
+  function mensajeEntrante(buffer){
+    var serializacion = JSON.parse(buffer.content.toString());
+    bus.emit("mom", serializacion);
+  }
 
-      ch.consume(q.queue, function(buffer) {
-        // msg origianl es {fields, properties, content}
-        var serializacion = JSON.parse(buffer.content.toString());
-        
-        bus.emit("mom", serializacion);
-        ch.ack(buffer);
-      }, {noAck: false});
-    });
-  });
-});
+  return module;
+};

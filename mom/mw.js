@@ -19,7 +19,7 @@ module.exports = function(
   persistir
 ) {
 
-  require("./momSuscriptorAdapter").suscribir(cola_escucha);
+  require("./momSuscriptorAdapter")(cola_escucha);
   var publicador = require("./momPublicadorAdapter")();
 
   var reloj_vectorial = require("./relojVectorial")(mi_reloj);

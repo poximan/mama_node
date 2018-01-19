@@ -8,10 +8,6 @@ module.exports = function(mi_reloj) {
   var module = {};
 
   /*
-  ......... reloj vectorial
-  */
-
-  /*
   el tamaño del reloj vectorial se obtiene desde un archivo de configuracion
 
   0=serv_web
