@@ -51,10 +51,13 @@ Como se trata de un sistema distribuido, cada servidor es ejecutado desde un she
 * Ademas, se levanta uno para iniciar el servidor de base de datos (DBMS) mongodb, que queda a la escucha de conexiones entrantes. En caso de probarse este sistema en 6 equipos distintos, cada DBMS atenderá 1 conexion, pero de probarse todo el sistema en un unico equipo, atenderá 6 conexiones.
 * Por ultimo, se levanta un shell exclusivamente para ver la salida del monitor bidireccional, que cumple dos funciones:
   * En automático, colecta datos de los servidores del negocio y los presenta a un cliente monitor web.
-  * En manual, lo mismo que en automático y ademas, escucha los post (peticiones o comandos) desde el cliente monitor web hacia los servidores del negocio. Funciona como un concentrador ->
+  * En manual, lo mismo que en automático y ademas, escucha los post (peticiones o comandos) desde el cliente monitor web hacia los servidores del negocio. Funciona como un concentrador.
 
-  {servidor del negocio} serv_negocio/serv_monitor <-> {concentrador} cliente_monitor/serv_web <-> {usuario} cliente_web.
+## Arquitectura
+Los tres tipos de servidores descritos (ver Resumen del ejercicio implementado) se contruyeron segun el siguiente esquema:
+{servidor del negocio} serv_negocio/serv_monitor <-> {concentrador} cliente_monitor/serv_web <-> {usuario} cliente_web.
+En este modelo el negocio es Servidor/Servidor, en tanto que el concentrador es Cliente/Servidor. Esto implica una conexion socket por cada Servidor monitor que es accedido desde el cliente monitor alojado en el Concentrador.
 
-  Observacion: esta arquitectura no es optima, y se sugiere refactorizar con miras a una que sea ->
-
-  {servidor del negocio} serv_negocio/cliente_monitor <-> {concentrador} serv_monitor/serv_web <-> {usuario} cliente_web.
+Observacion: esta arquitectura no es optima, y se sugiere refactorizar con miras a una con este esquema:
+{servidor del negocio} serv_negocio/cliente_monitor <-> {concentrador} serv_monitor/serv_web <-> {usuario} cliente_web.
+Aqui el negocio seria Servidor/Cliente y el concentrador Servidor/Servidor. Como beneficio el concentrador podría mantener un unico bus distribuido, explotando mejor la potencia de socket.io con el uso de salas de chat en vez de sockets.
