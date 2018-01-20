@@ -1,6 +1,7 @@
 # mama_node
 Implementación nodejs/rabbitmq de una infraestructura mom
 
+
 ## Resumen del ejercicio implementado
 El proceso inicia cuando el cliente indica que desea comprar un producto. Inmediatamente el departamento de Infracciones comienza una revisión del chat entre el vendedor y el comprador en búsqueda de violaciones al reglamento del sitio. El departamento de Publicaciones, a su vez, reserva el producto para asegurar el cumplimiento de las condiciones de venta en caso de que la compra sea exitosa. Luego el comprador elige la forma de entrega y de pago. En caso de que el comprador decida que el producto se le envíe por correo, el departamento de Envíos calcula el costo del envío antes de que el comprador elija la forma de pago. Consecuentemente se le informa al comprador un resumen de las condiciones de compra, y se le solicita confirmar la misma. Si la confirma, y no hay infracción, el departamento de Pagos procede a efectivizar el pago (utilizando los servicios provistos por los medios de pagos contratados). Una vez que el pago es confirmado, el departamento de Envíos agenda el envío con la empresa de correo elegida.
 
@@ -55,4 +56,5 @@ Como se trata de un sistema distribuido, cada servidor es ejecutado desde un she
   {servidor del negocio} serv_negocio/serv_monitor <-> {concentrador} cliente_monitor/serv_web <-> {usuario} cliente_web.
 
   Observacion: esta arquitectura no es optima, y se sugiere refactorizar con miras a una que sea ->
+
   {servidor del negocio} serv_negocio/cliente_monitor <-> {concentrador} serv_monitor/serv_web <-> {usuario} cliente_web.
