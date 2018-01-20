@@ -54,10 +54,14 @@ Como se trata de un sistema distribuido, cada servidor es ejecutado desde un she
   * En manual, lo mismo que en automático y ademas, escucha los post (peticiones o comandos) desde el cliente monitor web hacia los servidores del negocio. Funciona como un concentrador.
 
 ## Arquitectura
-Los tres tipos de servidores descritos (ver Resumen del ejercicio implementado) se contruyeron segun el siguiente esquema:
+### Los tres tipos de servidores descritos (ver Resumen del ejercicio implementado) se contruyeron segun el siguiente esquema:
+
 {servidor del negocio} serv_negocio/serv_monitor <-> {concentrador} cliente_monitor/serv_web <-> {usuario} cliente_web.
+
 En este modelo el negocio es Servidor/Servidor, en tanto que el concentrador es Cliente/Servidor. Esto implica una conexion socket por cada Servidor monitor que es accedido desde el cliente monitor alojado en el Concentrador.
 
-Observacion: esta arquitectura no es optima, y se sugiere refactorizar con miras a una con este esquema:
+### Esta arquitectura no es optima, y se sugiere refactorizar con miras a una con este esquema:
+
 {servidor del negocio} serv_negocio/cliente_monitor <-> {concentrador} serv_monitor/serv_web <-> {usuario} cliente_web.
+
 Aqui el negocio seria Servidor/Cliente y el concentrador Servidor/Servidor. Como beneficio el concentrador podría mantener un unico bus distribuido, explotando mejor la potencia de socket.io con el uso de salas de chat en vez de sockets.
