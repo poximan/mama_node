@@ -31,7 +31,9 @@ module.exports = function(puerto, nucleo, bus) {
   */
   bus.on("corte", function (evento) {
 
-    if(!nucleo.mw.corteEnProceso()){
+    if(nucleo.mw.existeModuloCC() &&
+    !nucleo.mw.corteEnProceso()){
+
       var tarea = "momCorte";
       var evento = {tarea};
 

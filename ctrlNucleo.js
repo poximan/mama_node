@@ -1,5 +1,6 @@
 var unificador = require("./unificador");
 var _ = require('underscore');
+require("./precondicion");
 
 // hay que crear carpeta C:\data\db
 var MongoClient = require("mongodb").MongoClient;
@@ -29,6 +30,7 @@ module.exports = function(
   */
 
   var db_global;
+
   MongoClient.connect(mongo_url, function(err, db) {
 
     if(err) throw err;
@@ -64,13 +66,17 @@ module.exports = function(
 
   module.persistir = function() {
 
-    console.log("INT: persistiendo estado");
-    var coleccion_obj = db_global.collection(coleccion);
+    try {
+      console.log("INT: persistiendo estado");
+      var coleccion_obj = db_global.collection(coleccion);
 
-    compras.forEach(function(compra){
-      coleccion_obj.update({id:compra.id}, compra, {up:true});
-    });
-    console.log("INT: estado persistido");
+      compras.forEach(function(compra){
+        coleccion_obj.update({id:compra.id}, compra, {up:true});
+      });
+      console.log("INT: estado persistido");
+    } catch (e) {
+      console.error("INT: no es posible presistir estado en este momento");
+    } finally { }
   }
 
   /*

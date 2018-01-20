@@ -38,25 +38,25 @@
         "confirma" : "70",
         "_coment" : "(70) probabilidad que cliente confirme compra"
       },
-      "caida_servidor" : "1",
+      "caida_servidor" : "10",
       "_coment" : "(10) probabilidad de caida del servidor"
     },
     "nueva_compra" : {
-      "periodo" : "5000"
+      "periodo" : "2000"
     },
     "total_compras" : {
       "cantidad" : "100",
       "_coment" : "compras maximas que se generaran en auto (0 para infinitas)"
     },
     "persistencia" : {
-      "periodo" : "10000"
+      "periodo" : "5000"
     },
     "caida_servidor" : {
       "periodo" : "30000"
     }
   },
   "probabilidad" : {
-    "corte_consistente" : "50",
+    "corte_consistente" : "60",
     "_coment" : "(60) probabilidad que una persistencia genere un corte"
   },
   "vector_serv" : {

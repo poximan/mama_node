@@ -10,8 +10,6 @@ module.exports = function(
 
   var module = {};
 
-  var mw = nucleo.mw;
-
   var periodo_persistencia = require("./cfg.json").automatico.persistencia.periodo;
   var periodo_caida = require("./cfg.json").automatico.caida_servidor.periodo;
 
@@ -34,7 +32,8 @@ module.exports = function(
   function persistir(evento) {
 
     if(!nucleo.mw.corteEnProceso()){
-      if(probabilidad() <= probab_corte_consistente){
+      if(nucleo.mw.existeModuloCC() &&
+      probabilidad() <= probab_corte_consistente){
 
         var tarea = "momCorte";
         var evento = {tarea};

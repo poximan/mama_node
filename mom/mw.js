@@ -23,15 +23,23 @@ module.exports = function(
   var publicador = require("./momPublicadorAdapter")();
 
   var reloj_vectorial = require("./relojVectorial")(mi_reloj);
-  var corte_consistente = require("./corteConsistente")(
-    bus,
-    suscriptores,
-    corte_resp_esperadas,
-    compras,
-    persistir,
-    publicador,
-    reloj_vectorial
-  );
+
+  try {
+    var corte_consistente = require("./corteConsistente")(
+      bus,
+      suscriptores,
+      corte_resp_esperadas,
+      compras,
+      persistir,
+      publicador,
+      reloj_vectorial
+    );
+    console.log("INT: inicializando MW con modulo de corte consistente");
+  } catch (e) {
+    console.log("INT: inicializando MW sin modulo de corte consistente");
+  } finally {
+
+  }
 
   var module = {};
 
@@ -46,11 +54,15 @@ module.exports = function(
     if(msg.evento.tarea !== "momCorte")
       bus.emit("nucleo", msg);
     else {  // llega un mensaje de corte desde otro servidor
-      if (!corte_consistente.corte_en_proceso)
-        bus.emit(msg.evento.tarea, msg.evento);
+      try {
+        if (!corte_consistente.corte_en_proceso)
+          bus.emit(msg.evento.tarea, msg.evento);
+      } catch (e) { } finally { }
     }
-    if (corte_consistente.corte_en_proceso)
-      corte_consistente.registrar(msg);
+    try {
+      if (corte_consistente.corte_en_proceso)
+        corte_consistente.registrar(msg);
+    } catch (e) { } finally { }
   });
 
   module.publicar = function(suscriptores, evento){
@@ -87,12 +99,22 @@ module.exports = function(
   ......... corte consistente
   */
 
+  module.existeModuloCC = function() {
+    return corte_consistente !== undefined;
+  }
+
   module.sockRespuesta = function(socket) {
-    corte_consistente.sockRespuesta(socket);
+    try {
+      corte_consistente.sockRespuesta(socket);
+    } catch (e) {} finally {}
   }
 
   module.corteEnProceso = function(){
-    return corte_consistente.corte_en_proceso;
+    try {
+      return corte_consistente.corte_en_proceso;
+    } catch (e) {
+      return false;
+    } finally {}
   }
 
   return module;
