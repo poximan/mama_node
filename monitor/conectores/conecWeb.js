@@ -2,8 +2,8 @@ var ip = require("../../cfg.json").monitor.ip_web;
 var port = require("../../cfg.json").monitor.port_web;
 
 const socket = require('socket.io-client')(ip + ":" + port);
-var msgs_validos_remotos;
 
+var msgs_validos_remotos;
 var socket_monitor;
 var respuestas = [];
 var u_corte = {};
@@ -105,10 +105,11 @@ function esValido(comando){
 
   var coincidencia = false;
 
-  msgs_validos_remotos.forEach(function(msg){
-    if(comando === msg)
-      coincidencia = true;
-  });
+  if(msgs_validos_remotos)
+    msgs_validos_remotos.forEach(function(msg){
+      if(comando === msg)
+        coincidencia = true;
+    });
   console.log("ServWeb: comando \"" + comando + "\" -->", (coincidencia?"valido":"invalido"));
   return coincidencia;
 }
