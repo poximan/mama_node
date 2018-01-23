@@ -4,7 +4,9 @@ require("./precondicion");
 
 // hay que crear carpeta C:\data\db
 var MongoClient = require("mongodb").MongoClient;
-var mongo_url = require("./cfg.json").mongo.url;
+var mongo_prot = require("./cfg.json").mongo.protocolo;
+var mongo_serv = require("./cfg.json").mongo.servidor;
+var mongo_bd = require("./cfg.json").mongo.bd;
 
 /*
 param 1 = indice del que es responsable en reloj vectorial
@@ -31,11 +33,12 @@ module.exports = function(
 
   var db_global;
 
-  MongoClient.connect(mongo_url, function(err, db) {
+  var url = mongo_prot + mongo_serv;
+  MongoClient.connect(url, function(err, db) {
 
     if(err) throw err;
 
-    var dbase = db.db("mydb");
+    var dbase = db.db(mongo_bd);
     dbase.createCollection(coleccion);
     db_global = dbase;
   });

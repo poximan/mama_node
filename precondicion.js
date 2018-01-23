@@ -1,6 +1,9 @@
 var ps = require('ps-node');
 
-// A simple pid lookup
+/*
+este modulo controla que las precondiciones en terminos de procesos activos esten presentes
+se verifica que este ejecutandose el proceso mongod, encargado de persistir los datos
+*/
 ps.lookup({command: 'mongod', psargs: '-l'}, function(err, resultList ) {
 
   if (err) throw new Error(err);

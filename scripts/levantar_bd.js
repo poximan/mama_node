@@ -1,7 +1,9 @@
 var shell_ejec = require('./shell_con_cb')
 var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
-var mongo_url = require("../cfg.json").mongo.url;
+var mongo_prot = require("../cfg.json").mongo.protocolo;
+var mongo_serv = require("../cfg.json").mongo.servidor;
+var mongo_bd = require("../cfg.json").mongo.bd;
 
 var fs = require("fs"),
     path = require("path");
@@ -20,7 +22,6 @@ if (instancia_bd.length == 0 ||
 // ---------
 
 var version_mongo = [];
-var base_datos;
 
 async.series([
   function(callback){
@@ -53,34 +54,41 @@ async.series([
   },
   function(callback){
 
-    MongoClient.connect(mongo_url, function(err, db) {
+    function probarConexion(arg) {
 
-      if (err) throw err;
-      var dbase = db.db("mydb"); //here
-      base_datos = dbase;
-
-      callback(null, "Conectado a BD");
-    });
+      var arq64x = "";//" (x86)";
+      shell_ejec.execCommand("start ventana /C c:/\"Program Files" +
+                                                  arq64x+"\""+
+                                                  "/\"Mozilla Firefox\"/firefox " +
+                                                  mongo_serv, function (returnvalue) {
+                                                    callback(null, "Probando conexion con DBMS")
+                                                  });
+    }
+    setTimeout(probarConexion, 2000);
   },
   function(callback){
 
+    var url = mongo_prot + mongo_serv;
+    MongoClient.connect(url, function(err, db) {
+
+      if (err) throw err;
+      var dbase = db.db(mongo_bd);
+
+      callback(dbase, "Conectado a BD");
+    });
+  },
+  function(dbase, callback){
+
     var mensaje = "";
 
-    var id = setInterval(function(){
-
-      if(base_datos !== null){
-        clearInterval(id);
-
-        if(instancia_bd == "nueva"){
-          mensaje = "Limpiando colecciones";
-          base_datos.dropDatabase();
-        }
-        if(instancia_bd == "actual"){
-          mensaje = "Usando ultimo estado de colecciones";
-        }
-        callback(null, mensaje);
-      }
-    }, 1000);
+    if(instancia_bd == "nueva"){
+      mensaje = "Limpiando colecciones";
+      dbase.dropDatabase();
+    }
+    if(instancia_bd == "actual"){
+      mensaje = "Usando ultimo estado de colecciones";
+    }
+    callback(null, mensaje);
   }
 ],
 // optional callback
@@ -88,3 +96,21 @@ function(err, results) {
   console.log(results);
   process.exit(0);
 });
+
+/*
+var id = setInterval(function(){
+
+  if(base_datos !== null){
+    clearInterval(id);
+
+    if(instancia_bd == "nueva"){
+      mensaje = "Limpiando colecciones";
+      base_datos.dropDatabase();
+    }
+    if(instancia_bd == "actual"){
+      mensaje = "Usando ultimo estado de colecciones";
+    }
+    callback(null, mensaje);
+  }
+}, 1000);
+*/
