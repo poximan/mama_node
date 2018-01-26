@@ -1,4 +1,4 @@
-var port = require("../cfg.json").monitor.port_web;
+var port = require("../globalCfg.json").monitor.port_web;
 var control = require('./ctrlWeb');
 var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
@@ -7,12 +7,12 @@ var io = monitor.io;
 
 require("../autoComun")(control.nucleo, bus);
 
-var periodo_comprar = require("../cfg.json").automatico.nueva_compra.periodo;
-var max_compras = require("../cfg.json").automatico.total_compras.cantidad;
+var periodo_comprar = require("./localCfg.json").automatico.nueva_compra.periodo;
+var max_compras = require("./localCfg.json").automatico.total_compras.cantidad;
 
-var probab_envio_correo = require("../cfg.json").automatico.probabilidad.cliente.correo;
-var probab_pago_debito = require("../cfg.json").automatico.probabilidad.cliente.debito;
-var probab_conf_compra = require("../cfg.json").automatico.probabilidad.cliente.confirma;
+var probab_envio_correo = require("./localCfg.json").automatico.probab_envio_correo;
+var probab_pago_debito = require("./localCfg.json").automatico.probab_pago_debito;
+var probab_conf_compra = require("./localCfg.json").automatico.probab_conf_compra;
 
 // ---------
 

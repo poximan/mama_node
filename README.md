@@ -20,10 +20,10 @@ Todos los servidores persisten regularmente su estado. En el caso de que un serv
 * Sincronizar "async" (npm install async).
 * Cliente bd "mongodb" (npm install mongodb). Es necesario crear manualmente la carpeta "C:\data\db", en donde mongo aloja por defecto las colecciones.
 * Utileria "underscore" (npm install underscore).
+* Verificador de actividad de procesos "ps-node" (npm install ps-node).
 * Cliente mom "amqp" (npm install amqplib). la implementacion es rabbitmq, que sigue esta especificación.
 * Socket bidireccional "socketio" (npm install socket.io). aplicacion que se monta sobre socket tcp para brindar servicio de eventos (tal como eventemitter pero distribuido).
 * Web framework "express" (npm install express).
-* Verificador de actividad de procesos "ps-node" (npm install ps-node).
 
 ## Ejecutar el sistema
 Clonar el proyecto https://github.com/poximan/mama_node.git o descargarlo desde el repositorio https://github.com/poximan/mama_node.
@@ -39,7 +39,7 @@ Por ejemplo el comando "node crear_cola prueba" creará "cola_prueba".
 Los demas archivos dentro de la carpeta /script son de uso auxiliar, y no deben interactuar directamente con el usuario.
 
 ## Modos de operacion del sistema
-En automático el sistema solo se puede observar, opcionalmente pueden cargarse parámetros iniciales desde cfg.json en el directorio raíz.
+En automático el sistema solo se puede observar, opcionalmente pueden cargarse parámetros iniciales desde globalCfg.json en el directorio raíz para configuraciones globales, y localCfg.json en la carpeta de cada servidor, para configuraciones que solo tienen sentido en ese ambito.
 En manual el sistema se puede observar y configurar al igual que en automático, y también comandar, tomando decisiones en los puntos de control, y disparando tareas aperiódicas como persistir la base de datos, o generar un corte consistente del sistema. Para esto se utilizó una implementación del algoritmo de instantánea de "chandy y lamport", descrito en "sistemas distribuidos, conceptos y diseño 3ra edicion" de coulouris, pag.385.
 
 El acceso al monitor es mediante "http://{ip|localhost}:5006/index.html".

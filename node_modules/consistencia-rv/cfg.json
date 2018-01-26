@@ -1,0 +1,6 @@
+{
+  "vector_serv" : {
+    "cantidad" : "6",
+    "_coment" : "cantidad de servidores para definir tamaño del reloj vectorial"
+  }
+}

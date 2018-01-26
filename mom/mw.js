@@ -22,10 +22,10 @@ module.exports = function(
   require("./momSuscriptorAdapter")(cola_escucha);
   var publicador = require("./momPublicadorAdapter")();
 
-  var reloj_vectorial = require("./relojVectorial")(mi_reloj);
+  var reloj_vectorial = require("consistencia-rv/relojVectorial")(mi_reloj);
 
   try {
-    var corte_consistente = require("./corteConsistente")(
+    var corte_consistente = require("consistencia-cc/corteConsistente")(
       bus,
       suscriptores,
       corte_resp_esperadas,

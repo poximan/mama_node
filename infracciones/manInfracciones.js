@@ -1,4 +1,4 @@
-var port = require("../cfg.json").monitor.port_infracciones;
+var port = require("../globalCfg.json").monitor.port_infracciones;
 var control = require('./ctrlInfracciones');
 var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 

@@ -1,0 +1,6 @@
+{
+  "automatico" : {
+    "probab_infraccion" : "30",
+    "_coment" : "(30) probabilidad que la compra posea infraccion"
+  }
+}

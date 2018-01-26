@@ -1,5 +1,5 @@
 var amqp = require('amqplib/callback_api');
-var amqp_url = require("../cfg.json").amqp.url;
+var amqp_url = require("../globalCfg.json").amqp.url;
 
 //-----------------------------
 /*

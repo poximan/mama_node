@@ -4,9 +4,9 @@ require("./precondicion");
 
 // hay que crear carpeta C:\data\db
 var MongoClient = require("mongodb").MongoClient;
-var mongo_prot = require("./cfg.json").mongo.protocolo;
-var mongo_serv = require("./cfg.json").mongo.servidor;
-var mongo_bd = require("./cfg.json").mongo.bd;
+var mongo_prot = require("./globalCfg.json").mongo.protocolo;
+var mongo_serv = require("./globalCfg.json").mongo.servidor;
+var mongo_bd = require("./globalCfg.json").mongo.bd;
 
 /*
 param 1 = indice del que es responsable en reloj vectorial
