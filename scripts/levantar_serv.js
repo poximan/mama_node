@@ -11,55 +11,54 @@ if (modo_operacion.length == 0 ||
 
 async.series([
   function(callback) {
-    shell_ejec.execCommand("start ventana /K \"cd compras && node \"" +
+    shell_ejec.execCommand("start cmd /K \"cd.. && cd compras && node \"" +
                             modo_operacion +
                             "\"Compras.js\"", function (returnvalue) {
-                              callback(null, "servidor compras activo");
                             })
+                            callback(null, "servidor compras activo");
   },
   function(callback) {
-    shell_ejec.execCommand("start ventana /K \"cd envios && node \"" +
+    shell_ejec.execCommand("start cmd /K \"cd.. && cd envios && node \"" +
                             modo_operacion +
                             "\"Envios.js\"", function (returnvalue) {
-                              callback(null, "servidor envios activo");
                             })
+                            callback(null, "servidor envios activo");
   },
   function(callback) {
-    shell_ejec.execCommand("start ventana /K \"cd infracciones && node \"" +
+    shell_ejec.execCommand("start cmd /K \"cd.. && cd infracciones && node \"" +
                             modo_operacion +
                             "\"Infracciones.js\"", function (returnvalue) {
-                              callback(null, "servidor infracciones activo");
                             })
+                            callback(null, "servidor infracciones activo");
   },
   function(callback) {
-    shell_ejec.execCommand("start ventana /K \"cd pagos && node \"" +
+    shell_ejec.execCommand("start cmd /K \"cd.. && cd pagos && node \"" +
                             modo_operacion +
                             "\"Pagos.js\"", function (returnvalue) {
-                              callback(null, "servidor pagos activo");
                             })
+                            callback(null, "servidor pagos activo");
   },
   function(callback) {
-    shell_ejec.execCommand("start ventana /K \"cd publicaciones && node \"" +
+    shell_ejec.execCommand("start cmd /K \"cd.. && cd publicaciones && node \"" +
                             modo_operacion +
                             "\"Publicaciones.js\"", function (returnvalue) {
-                              callback(null, "servidor publicaciones activo");
                             })
+                            callback(null, "servidor publicaciones activo");
   },
   function(callback) {
-    shell_ejec.execCommand("start ventana /K \"cd web && node \"" +
+    shell_ejec.execCommand("start cmd /K \"cd.. && cd web && node \"" +
                             modo_operacion +
                             "\"Web.js\"", function (returnvalue) {
-                              callback(null, "servidor web activo");
                             })
+                            callback(null, "servidor web activo");
   },
   function(callback) {
-    shell_ejec.execCommand("start ventana /K \"cd monitor && node monitor.js\"", function (returnvalue) {
-      callback(null, "monitor activo");
+    shell_ejec.execCommand("start cmd /K \"cd.. && cd monitor && node monitor.js\"", function (returnvalue) {
     });
+    callback(null, "monitor activo");
   }
 ],
 // optional callback
 function(err, results) {
   console.log(results);
-  process.exit(0);
 });

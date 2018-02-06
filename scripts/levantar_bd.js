@@ -13,7 +13,7 @@ var fs = require("fs"),
 var instancia_bd = process.argv.slice(2);
 
 if (instancia_bd.length == 0 ||
-  (instancia_bd != "nueva" && instancia_bd != "actual")) {
+  (instancia_bd[0] != "nueva" && instancia_bd[0] != "actual")) {
 
   console.log("Usar: levantar_bd.js {nueva|actual}");
   process.exit(1);
@@ -46,11 +46,9 @@ async.series([
 
     version_mongo = version_mongo[version_mongo.length - 1];
     // servidor base de datos (hay que crear carpeta C:\data\db)
-    shell_ejec.execCommand("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
-                                                  version_mongo +
-                                                  " && cd bin && mongod.exe\"", function (returnvalue) {
-                                                    callback(null, "Proceso mongod.exe activo")
-                                                  });
+    shell_ejec.execCommand("start cmd /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
+                            version_mongo + " && cd bin && mongod.exe\"", function (returnvalue) {});
+                            callback(null, "Proceso mongod.exe activo")
   },
   function(callback){
 
@@ -59,12 +57,9 @@ async.series([
       var arq64x = " (x86)";
       //var arq64x = "";
 
-      shell_ejec.execCommand("start ventana /C c:/\"Program Files" +
-                                                  arq64x+"\""+
-                                                  "/\"Mozilla Firefox\"/firefox " +
-                                                  mongo_serv, function (returnvalue) {
-                                                    callback(null, "Probando conexion con DBMS")
-                                                  });
+      shell_ejec.execCommand("start cmd /C c:/\"Program Files" + arq64x+"\"" +
+                            "/\"Mozilla Firefox\"/firefox " + mongo_serv, function (returnvalue) {});
+                            callback(null, "Probando conexion con DBMS")
     }
     setTimeout(probarConexion, 2000);
   },
@@ -98,21 +93,3 @@ function(err, results) {
   console.log(results);
   process.exit(0);
 });
-
-/*
-var id = setInterval(function(){
-
-  if(base_datos !== null){
-    clearInterval(id);
-
-    if(instancia_bd == "nueva"){
-      mensaje = "Limpiando colecciones";
-      base_datos.dropDatabase();
-    }
-    if(instancia_bd == "actual"){
-      mensaje = "Usando ultimo estado de colecciones";
-    }
-    callback(null, mensaje);
-  }
-}, 1000);
-*/

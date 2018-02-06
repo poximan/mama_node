@@ -14,7 +14,8 @@ Todos los servidores persisten regularmente su estado. En el caso de que un serv
 * La plataforma de trabajo fue Windows 7 32 bits y Windows 10.
 * Debe estar instalado Node.js®, entorno de ejecución para JavaScript (https://nodejs.org/es/download/). Este proyecto fue desarrollado con v6.11.2.
 * Agregar al path de variables de entorno, la carpeta destino donde se instalo nodejs. Por ej. C:\Program Files\nodejs\
-* Debe estar instalado RabbitMQ, agente de mensajes de un infraestructura MOM (https://www.rabbitmq.com/download.html). Este proyecto se desarrollo con v3.6.10.
+* Debe estar instalado RabbitMQ, agente de mensajes de un infraestructura MOM (https://www.rabbitmq.com/download.html). Este proyecto fue desarrollado con v3.6.10.
+* Debe estar instalado MongoDB, SGBD NoSQL orientado a documentos (https://www.mongodb.com/). Este proyecto fue desarrollado con v3.4.
 
 ## Paquetes necesarios
 * Sincronizar "async" (npm install async).
@@ -35,6 +36,7 @@ Por ejemplo el comando "node crear_cola prueba" creará "cola_prueba".
 * "crear_colas" para crear automaticamente todas las colas que necesita el sistema para funcionar.
 * "levantar_bd {nueva|actual}" para ejecutar el servidor de BD. Argumento "nueva" para una BD en blanco, o "actual" para continuar sobre la existente.
 * "levantar_serv {man|auto}" para ejecutar todos los servidores del negocio y monitor comun. Este ultimo concentra informacion de todos los demas, y funciona de canal de acceso para mantenimiento y consulta de estados.
+* "levantar_todo {nueva|actual} {man|auto}" que combina los dos anteriores, permitiendo un unico paso ejecutar la activacion del SGBD seguido del arranque de todos los servidores.
 
 Los demas archivos dentro de la carpeta /script son de uso auxiliar, y no deben interactuar directamente con el usuario.
 
