@@ -11,6 +11,7 @@ var fs = require("fs"),
 // ---------
 
 var instancia_bd = process.argv.slice(2);
+var dbase_global;
 
 if (instancia_bd.length == 0 ||
   (instancia_bd[0] != "nueva" && instancia_bd[0] != "actual")) {
@@ -46,22 +47,14 @@ async.series([
 
     version_mongo = version_mongo[version_mongo.length - 1];
     // servidor base de datos (hay que crear carpeta C:\data\db)
-    shell_ejec.execCommand("start cmd /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
+    shell_ejec.execCommand("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
                             version_mongo + " && cd bin && mongod.exe\"", function (returnvalue) {});
                             callback(null, "Proceso mongod.exe activo")
   },
-  function(callback){
-
-    function probarConexion(arg) {
-
-      var arq64x = " (x86)";
-      //var arq64x = "";
-
-      shell_ejec.execCommand("start cmd /C c:/\"Program Files" + arq64x+"\"" +
-                            "/\"Mozilla Firefox\"/firefox " + mongo_serv, function (returnvalue) {});
-                            callback(null, "Probando conexion con DBMS")
-    }
-    setTimeout(probarConexion, 2000);
+  function(callback) {
+    sleep(10000, function() {
+      callback(null);
+    });
   },
   function(callback){
 
@@ -70,17 +63,18 @@ async.series([
 
       if (err) throw err;
       var dbase = db.db(mongo_bd);
+      dbase_global = dbase;
 
-      callback(dbase, "Conectado a BD");
+      callback(null, "Conectado a BD");
     });
   },
-  function(dbase, callback){
+  function(callback){
 
     var mensaje = "";
 
     if(instancia_bd == "nueva"){
       mensaje = "Limpiando colecciones";
-      dbase.dropDatabase();
+      dbase_global.dropDatabase();
     }
     if(instancia_bd == "actual"){
       mensaje = "Usando ultimo estado de colecciones";
@@ -93,3 +87,11 @@ function(err, results) {
   console.log(results);
   process.exit(0);
 });
+
+function sleep(time, callback) {
+  var stop = new Date().getTime();
+  while(new Date().getTime() < stop + time) {
+      ;
+  }
+  callback();
+}

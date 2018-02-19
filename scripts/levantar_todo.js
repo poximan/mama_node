@@ -15,14 +15,19 @@ var argumentos = process.argv.slice(2);
 async.series([
   function(callback) {
 
-    shell_ejec.execCommand("start ventana /K \"cd scripts && node levantar_bd.js \"" +
+    shell_ejec.execCommand("start ventana /K \"node levantar_bd.js\" " +
       argumentos[0], function (returnvalue) {
         callback(null, "Activando SGBD");
       });
   },
   function(callback) {
+    sleep(10000, function() {
+      callback(null);
+    });
+  },
+  function(callback) {
 
-    shell_ejec.execCommand("start ventana /K \"cd scripts && node levantar_serv.js \"" +
+    shell_ejec.execCommand("start ventana /K \"node levantar_serv.js \"" +
       argumentos[1], function (returnvalue) {
         callback(null, "Activando Servidores");
       });
@@ -33,3 +38,11 @@ function(err, results) {
   console.log(results);
   process.exit(0);
 });
+
+function sleep(time, callback) {
+  var stop = new Date().getTime();
+  while(new Date().getTime() < stop + time) {
+      ;
+  }
+  callback();
+}
