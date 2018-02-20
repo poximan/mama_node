@@ -52,7 +52,7 @@ async.series([
                             callback(null, "Proceso mongod.exe activo")
   },
   function(callback) {
-    sleep(10000, function() {
+    sleep(4000, function() {
       callback(null);
     });
   },

@@ -6,10 +6,10 @@ var amqp_url = require("../globalCfg.json").amqp.url;
 driver para suscribirse a una cola AMQP RabbitMQ
 paramatros:
 - cola = nombre de la cola que debe escucharse
-- mensajeEntrante = llamada a funcion radicada en el adapter, en donde
+- getMensaje = llamada a funcion radicada en el adapter, en donde
 el mensaje entrante es procesado y entregado al mw
 */
-module.exports = function(cola, mensajeEntrante) {
+module.exports = function(cola, getMensaje) {
 
   var module = {};
 
@@ -20,7 +20,7 @@ module.exports = function(cola, mensajeEntrante) {
 
         ch.consume(q.queue, function(buffer) {
           // msg origianl es {fields, properties, content}
-          mensajeEntrante(buffer);
+          getMensaje(buffer);
           ch.ack(buffer);
         }, {noAck: false});
       });

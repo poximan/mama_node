@@ -5,7 +5,7 @@ param 3 = nombre de la cola MOM que escucha este servidor
 param 4 = instancia de bus para gestion de eventos
 param 5 = lista de suscriptores del servidor dado
 param 6 = cantidad de confirmaciones externas para fin corte consistente
-param 7 = compras en curso
+param 7 = estado actual del servidor. son los valores en memoria dinamica
 param 8 = llamada a funcion de persistencia del negocio
 */
 module.exports = function(
@@ -15,12 +15,27 @@ module.exports = function(
   bus,
   suscriptores,
   corte_resp_esperadas,
-  compras,
+  estado_servidor,
   persistir
 ) {
 
-  require("./momSuscriptorAdapter")(cola_escucha);
-  var publicador = require("./momPublicadorAdapter")();
+  var estrategia = require("../globalCfg.json").amqp.proveedor;
+
+  const Config = require('./config');
+  const strategies = require('./strategies');
+
+  for (item in strategies)
+    if(item.toString() == estrategia)
+      estrategia = item;
+
+  const instMOM = new Config(strategies[estrategia]);
+  try{
+    instMOM.altaSuscriptor(cola_escucha);
+    instMOM.altaPublicador();
+  } catch(e){
+    console.error("INT: debe declarar un proovedor de mensajeria valido en globalCfg.json y definir sus instancias pub/sus concretas");
+    process.exit(1);
+  } finally { }
 
   var reloj_vectorial = require("consistencia-rv/relojVectorial")(mi_reloj);
 
@@ -29,9 +44,9 @@ module.exports = function(
       bus,
       suscriptores,
       corte_resp_esperadas,
-      compras,
+      estado_servidor,
       persistir,
-      publicador,
+      instMOM,
       reloj_vectorial
     );
     console.log("INT: inicializando MW con modulo de corte consistente");
@@ -49,7 +64,7 @@ module.exports = function(
 
   bus.on("mom", function (msg) {
 
-    actualizarVector(msg.vector);
+    reloj_vectorial.actualizarVector(msg.vector);
 
     if(msg.evento.tarea !== "momCorte")
       bus.emit("nucleo", msg);
@@ -71,7 +86,7 @@ module.exports = function(
     if(suscriptores !== ""){
       var vector = module.vector();
       var msg = {vector, evento};
-      publicador.publicar(suscriptores, msg);
+      instMOM.publicar(suscriptores, msg);
     }
   }
 
@@ -89,10 +104,6 @@ module.exports = function(
 
   module.vector = function(){
     return reloj_vectorial.vector();
-  }
-
-  function actualizarVector(nuevo_vector){
-    reloj_vectorial.actualizarVector(nuevo_vector);
   }
 
   /*

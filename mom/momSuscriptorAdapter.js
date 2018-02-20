@@ -12,9 +12,9 @@ module.exports = function(cola) {
 
   var module = {};
 
-  require("./momSuscriptorRabbit")(cola, mensajeEntrante);
+  require("./momSuscriptorRabbit")(cola, getMensaje);
 
-  function mensajeEntrante(buffer){
+  function getMensaje(buffer){
     var serializacion = JSON.parse(buffer.content.toString());
     bus.emit("mom", serializacion);
   }
