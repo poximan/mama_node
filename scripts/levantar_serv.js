@@ -1,5 +1,6 @@
 var shell_ejec = require('./shell_con_cb')
 var async = require('async');
+var demora = require("./demora")();
 
 var modo_operacion = process.argv.slice(2)[0];
 
@@ -53,6 +54,8 @@ async.series([
                             callback(null, "servidor web activo");
   },
   function(callback) {
+    demora.esperar(3000);
+
     shell_ejec.execCommand("start ventana /K \"cd.. && cd monitor && node monitor.js\"", function (returnvalue) {
     });
     callback(null, "monitor activo");

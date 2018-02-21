@@ -1,16 +1,14 @@
 /*
 param 1 = indice del que es responsable en reloj vectorial
-param 2 = coleccion en donde persiten sus documentos este servidor
-param 3 = nombre de la cola MOM que escucha este servidor
-param 4 = instancia de bus para gestion de eventos
-param 5 = lista de suscriptores del servidor dado
-param 6 = cantidad de confirmaciones externas para fin corte consistente
-param 7 = estado actual del servidor. son los valores en memoria dinamica
-param 8 = llamada a funcion de persistencia del negocio
+param 2 = nombre de la cola MOM que escucha este servidor
+param 3 = instancia de bus para gestion de eventos
+param 4 = lista de suscriptores del servidor dado
+param 5 = cantidad de confirmaciones externas para fin corte consistente
+param 6 = estado actual del servidor. son los valores en memoria dinamica
+param 7 = llamada a funcion de persistencia del negocio
 */
 module.exports = function(
   mi_reloj,
-  coleccion,
   cola_escucha,
   bus,
   suscriptores,
@@ -18,6 +16,8 @@ module.exports = function(
   estado_servidor,
   persistir
 ) {
+
+  var module = {};
 
   var estrategia = require("../globalCfg.json").amqp.proveedor;
 
@@ -39,15 +39,33 @@ module.exports = function(
 
   var reloj_vectorial = require("consistencia-rv/relojVectorial")(mi_reloj);
 
+  module.publicar = function(suscriptores, evento){
+
+    // si existen destinatarios
+    if(suscriptores !== ""){
+      var vector = module.vector();
+      var msg = {vector, mw:"negocio", evento};
+      instMOM.publicar(suscriptores, msg);
+    }
+  }
+
+  module.publicarMW = function(){
+
+    // si existen destinatarios
+    if(suscriptores !== ""){
+      var vector = module.vector();
+      var msg = {vector, mw:"momCorte"};
+      instMOM.publicar(suscriptores, msg);
+    }
+  }
+
   try {
     var corte_consistente = require("consistencia-cc/corteConsistente")(
       bus,
-      suscriptores,
       corte_resp_esperadas,
       estado_servidor,
       persistir,
-      instMOM,
-      reloj_vectorial
+      module.publicarMW
     );
     console.log("INT: inicializando MW con modulo de corte consistente");
   } catch (e) {
@@ -56,43 +74,32 @@ module.exports = function(
 
   }
 
-  var module = {};
-
-  /*
-  ......... eventos
-  */
-
   bus.on("mom", function (msg) {
 
     reloj_vectorial.actualizarVector(msg.vector);
 
-    if(msg.evento.tarea !== "momCorte")
-      bus.emit("nucleo", msg);
-    else {  // llega un mensaje de corte desde otro servidor
-      try {
-        if (!corte_consistente.corte_en_proceso)
-          bus.emit(msg.evento.tarea, msg.evento);
-      } catch (e) { } finally { }
-    }
+    if(msg.mw == "negocio")
+      bus.emit(msg.mw, msg.evento);
+
+    if(msg.mw == "momCorte")
+      module.iniciarCorte();
+      
+    /* si hay corte en proceso...
+    se debe registar toda actividad del canal de entrada
+    */
     try {
-      if (corte_consistente.corte_en_proceso)
+      if (module.corteEnProceso())
         corte_consistente.registrar(msg);
     } catch (e) { } finally { }
   });
 
-  module.publicar = function(suscriptores, evento){
-
-    // si existen destinatarios
-    if(suscriptores !== ""){
-      var vector = module.vector();
-      var msg = {vector, evento};
-      instMOM.publicar(suscriptores, msg);
-    }
-  }
-
   /*
   ......... reloj vectorial
   */
+
+  module.vector = function(){
+    return reloj_vectorial.vector();
+  }
 
   module.incrementar = function(){
     reloj_vectorial.incrementar();
@@ -100,10 +107,6 @@ module.exports = function(
 
   module.indice = function(){
     return reloj_vectorial.indice();
-  }
-
-  module.vector = function(){
-    return reloj_vectorial.vector();
   }
 
   /*
@@ -126,6 +129,16 @@ module.exports = function(
     } catch (e) {
       return false;
     } finally {}
+  }
+
+  /*
+  estas solicitudes pueden entrar desde el modo automatico en forma periodica y probabalista,
+  o desde el monitor cuando el sistema funciona en manual y el usuario lo solicita
+  */
+  module.iniciarCorte = function(){
+
+    if(module.existeModuloCC() && !module.corteEnProceso())
+      corte_consistente.iniciarCorte();
   }
 
   return module;

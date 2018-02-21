@@ -49,16 +49,17 @@ module.exports = function(
 
   module.id_mayor = 0;
 
-  bus.on("nucleo", function (msg) {
-    if(msg.evento.tarea !== "momResultadoPublicaciones" &&
-          msg.evento.tarea !== "momGetPublicaciones")
+  bus.on("negocio", function (evento) {
 
-            module.agregarCompra(msg.evento);
+    if(evento.tarea !== "momResultadoPublicaciones" &&
+          evento.tarea !== "momGetPublicaciones")
 
-    if(msg.evento.id > module.id_mayor)
-      module.id_mayor = msg.evento.id;
+            module.agregarCompra(evento);
 
-    bus.emit(msg.evento.tarea, msg.evento);
+    if(evento.id > module.id_mayor)
+      module.id_mayor = evento.id;
+
+    bus.emit(evento.tarea, evento);
   });
 
   var compras = new Array();
@@ -69,32 +70,32 @@ module.exports = function(
 
   module.persistir = function() {
 
-    try {
-      console.log("INT: persistiendo estado");
-      var coleccion_obj = db_global.collection(coleccion);
+    if(!mw.corteEnProceso()){
+      try {
+        console.log("INT: persistiendo estado");
+        var coleccion_obj = db_global.collection(coleccion);
 
-      compras.forEach(function(compra){
-        coleccion_obj.update({id:compra.id}, compra, {up:true});
-      });
-      console.log("INT: estado persistido");
-    } catch (e) {
-      console.error("INT: no es posible presistir estado en este momento");
-    } finally { }
+        compras.forEach(function(compra){
+          coleccion_obj.update({id:compra.id}, compra, {up:true});
+        });
+        console.log("INT: estado persistido");
+      } catch (e) {
+        console.error("INT: no es posible presistir estado en este momento");
+      } finally { }
+    }
   }
 
   /*
   param 1 = indice del que es responsable en reloj vectorial
-  param 2 = coleccion en donde persiten sus documentos este servidor
-  param 3 = nombre de la cola MOM que escucha este servidor
-  param 4 = instancia de bus para gestion de eventos
-  param 5 = lista de suscriptores del servidor dado
-  param 6 = cantidad de confirmaciones externas para fin corte consistente
-  param 7 = compras en curso
-  param 8 = llamada a funcion de persistencia del negocio
+  param 2 = nombre de la cola MOM que escucha este servidor
+  param 3 = instancia de bus para gestion de eventos
+  param 4 = lista de suscriptores del servidor dado
+  param 5 = cantidad de confirmaciones externas para fin corte consistente
+  param 6 = estado actual del servidor. son los valores en memoria dinamica
+  param 7 = llamada a funcion de persistencia del negocio
   */
   var mw = require("./mom/mw")(
     mi_reloj,
-    coleccion,
     cola_escucha,
     bus,
     suscriptores,
@@ -108,7 +109,7 @@ module.exports = function(
   // ---------
 
   module.caida = function() {
-    if(!mw.corte_en_proceso){
+    if(!mw.corteEnProceso()){
       console.log("\nINT: caida programada del servidor\n");
       process.exit(0);
     }

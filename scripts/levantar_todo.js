@@ -1,5 +1,6 @@
 var shell_ejec = require('./shell_con_cb')
 var async = require('async');
+var demora = require("./demora")();
 
 if (process.argv.length != 4) {
 
@@ -17,13 +18,9 @@ async.series([
 
     shell_ejec.execCommand("start ventana /K \"node levantar_bd.js\" " +
       argumentos[0], function (returnvalue) {
+        demora.esperar(6000);
         callback(null, "Activando SGBD");
       });
-  },
-  function(callback) {
-    sleep(4000, function() {
-      callback(null);
-    });
   },
   function(callback) {
 
@@ -38,11 +35,3 @@ function(err, results) {
   console.log(results);
   process.exit(0);
 });
-
-function sleep(time, callback) {
-  var stop = new Date().getTime();
-  while(new Date().getTime() < stop + time) {
-      ;
-  }
-  callback();
-}

@@ -8,7 +8,7 @@ param 4 = instancia de bus para gestion de eventos
 param 5 = lista de suscriptores del servidor dado
 param 6 = cantidad de confirmaciones externas para fin corte consistente
 */
-var nucleo = require("../ctrlNucleo")(1, "colecc_publicaciones", "cola_publicaciones", bus, ".", 4);
+var nucleo = require("../ctrlNucleo")(1, "colecc_publicaciones", "cola_publicaciones", bus, "", 4);
 var mw = nucleo.mw;
 
 // ---------

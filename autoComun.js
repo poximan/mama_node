@@ -29,25 +29,17 @@ module.exports = function(
   al persistirse el estado, solicita con un 50% de probabilidad la
   generación de un corte consistente
   */
-  function persistir(evento) {
+  function persistir() {
 
-    if(!nucleo.mw.corteEnProceso()){
-      if(nucleo.mw.existeModuloCC() &&
-      probabilidad() <= probab_corte_consistente){
-
-        var tarea = "momCorte";
-        var evento = {tarea};
-
-        console.log("GLOBAL: comienza corte consistente");
-        bus.emit(evento.tarea, evento);
-      }
-      else {
-        nucleo.persistir();
-      }
-    }
+    if(probabilidad() <= probab_corte_consistente)
+      nucleo.mw.iniciarCorte();
+    else
+      nucleo.persistir();
   }
 
   function probabilidad() {
     return Math.random() * 100;
   }
+
+  return module;
 }

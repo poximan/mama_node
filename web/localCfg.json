@@ -7,11 +7,11 @@
     "probab_conf_compra" : "70",
     "_coment" : "(70) probabilidad que cliente confirme compra",
     "nueva_compra" : {
-      "periodo" : "3000",
+      "periodo" : "1000",
       "_coment" : "periodo conque se generan nuevas compras"
     },
     "total_compras" : {
-      "cantidad" : "100",
+      "cantidad" : "300",
       "_coment" : "compras maximas que se generaran en auto (0 para infinitas)"
     }
   }

@@ -26,20 +26,9 @@ module.exports = function(puerto, nucleo, bus) {
 
   /*
   el bus de mensajes recibe una solicitud de corte desde la pagina web del monitor.
-  prepara el mensaje para enviar al MOM.
-  en este caso la carga util es solo la firma del mensaje, no se necesita mas nada.
   */
-  bus.on("corte", function (evento) {
-
-    if(nucleo.mw.existeModuloCC() &&
-    !nucleo.mw.corteEnProceso()){
-
-      var tarea = "momCorte";
-      var evento = {tarea};
-
-      console.log("GLOBAL: comienza corte consistente");
-      bus.emit(evento.tarea, evento);
-    }
+  bus.on("corte", function () {
+    nucleo.mw.iniciarCorte();
   });
 
   /*

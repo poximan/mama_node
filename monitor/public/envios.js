@@ -127,25 +127,25 @@ $(function() {
 
     addChatMessage("");
     addChatMessage(" ------ canal entrada ------ ");
-    entrante.forEach(function(pregunta) {
+    entrante.forEach(function(actual) {
 
-      var texto = pregunta.vector + " / " +
-      pregunta.evento.tarea;
+      var texto = actual.vector + " / " +
+      (actual.mw === "momCorte")? actual.mw : actual.evento.tarea;
 
       addChatMessage(texto);
     });
 
     addChatMessage("");
     addChatMessage(" ------ estado guardado ------ ");
-    estado.forEach(function(pregunta) {
+    estado.forEach(function(actual) {
 
-      var texto = "compra " + pregunta.id + " => " +
-      pregunta.compra.estado + " : " +
-      pregunta.compra.entrega + " : " +
-      pregunta.compra.reserva + " : " +
-      pregunta.compra.pago + " : " +
-      pregunta.compra.infracciones + " : " +
-      pregunta.compra.medio;
+      var texto = "compra " + actual.id + " => " +
+      actual.compra.estado + " : " +
+      actual.compra.entrega + " : " +
+      actual.compra.reserva + " : " +
+      actual.compra.pago + " : " +
+      actual.compra.infracciones + " : " +
+      actual.compra.medio;
 
       addChatMessage(texto);
     });
@@ -159,30 +159,30 @@ $(function() {
 
       addChatMessage("");
       addChatMessage(" ------ totales ------ ");
-      arreglos.totales.forEach(function(pregunta) {
+      arreglos.totales.forEach(function(actual) {
 
-        var texto = "compra " + pregunta.id + " => " +
-        pregunta.compra.estado + " : " +
-        pregunta.compra.entrega + " : " +
-        pregunta.compra.reserva + " : " +
-        pregunta.compra.pago + " : " +
-        pregunta.compra.infracciones + " : " +
-        pregunta.compra.medio;
+        var texto = "compra " + actual.id + " => " +
+        actual.compra.estado + " : " +
+        actual.compra.entrega + " : " +
+        actual.compra.reserva + " : " +
+        actual.compra.pago + " : " +
+        actual.compra.infracciones + " : " +
+        actual.compra.medio;
 
         addChatMessage(texto);
       });
 
       addChatMessage("");
       addChatMessage(" ------ pendientes ------ ");
-      arreglos.pendientes.forEach(function(pregunta) {
+      arreglos.pendientes.forEach(function(actual) {
 
-        var texto = "compra " + pregunta.id + " => " +
-        pregunta.compra.estado + " : " +
-        pregunta.compra.entrega + " : " +
-        pregunta.compra.reserva + " : " +
-        pregunta.compra.pago + " : " +
-        pregunta.compra.infracciones + " : " +
-        pregunta.compra.medio;
+        var texto = "compra " + actual.id + " => " +
+        actual.compra.estado + " : " +
+        actual.compra.entrega + " : " +
+        actual.compra.reserva + " : " +
+        actual.compra.pago + " : " +
+        actual.compra.infracciones + " : " +
+        actual.compra.medio;
 
         addChatMessage(texto);
       });

@@ -33,14 +33,14 @@
       "_coment" : "(10) probabilidad de caida del servidor"
     },
     "persistencia" : {
-      "periodo" : "30000"
+      "periodo" : "20000"
     },
     "caida_servidor" : {
       "periodo" : "60000"
     }
   },
   "probabilidad" : {
-    "corte_consistente" : "30",
+    "corte_consistente" : "50",
     "_coment" : "(60) probabilidad que una persistencia genere un corte"
   }
 }

@@ -14,8 +14,7 @@ class Config {
     this.data = this.strategy.altaPublicador();
   }
 
-  publicar(suscriptores, msg){
-    console.log("INT: publicando mensaje", msg.evento.tarea);
+  publicar(suscriptores, msg){    
     this.strategy.publicar(this.data, suscriptores, msg);
   }
 }
