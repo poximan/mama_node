@@ -10,11 +10,11 @@ module.exports = function(
 
   var module = {};
 
-  var periodo_persistencia = require("./globalCfg.json").automatico.persistencia.periodo;
-  var periodo_caida = require("./globalCfg.json").automatico.caida_servidor.periodo;
+  var periodo_persistencia = require("./propiedades.json").automatico.persistencia.periodo;
+  var periodo_caida = require("./propiedades.json").automatico.caida_servidor.periodo;
 
-  var probab_corte_consistente = require("./globalCfg.json").probabilidad.corte_consistente;
-  var probab_caida = require("./globalCfg.json").automatico.probabilidad.caida_servidor;
+  var probab_corte_consistente = require("./propiedades.json").probabilidad.corte_consistente;
+  var probab_caida = require("./propiedades.json").automatico.probabilidad.caida_servidor;
 
   // ---------
 

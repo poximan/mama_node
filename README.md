@@ -41,7 +41,7 @@ Por ejemplo el comando "node crear_cola prueba" creará "cola_prueba".
 Los demas archivos dentro de la carpeta /script son de uso auxiliar, y no deben interactuar directamente con el usuario.
 
 ## Modos de operacion del sistema
-En automático el sistema solo se puede observar, opcionalmente pueden cargarse parámetros iniciales desde globalCfg.json en el directorio raíz para configuraciones globales, y localCfg.json en la carpeta de cada servidor, para configuraciones que solo tienen sentido en ese ambito.
+En automático el sistema solo se puede observar, opcionalmente pueden cargarse parámetros iniciales desde propiedadesGlobal.json en el directorio raíz para configuraciones globales, y propiedades.json en la carpeta de cada servidor, para configuraciones que solo tienen sentido en ese ambito.
 En manual el sistema se puede observar y configurar al igual que en automático, y también comandar, tomando decisiones en los puntos de control, y disparando tareas aperiódicas como persistir la base de datos, o generar un corte consistente del sistema. Para esto se utilizó una implementación del algoritmo de instantánea de "chandy y lamport", descrito en "sistemas distribuidos, conceptos y diseño 3ra edicion" de coulouris, pag.385.
 
 El acceso al monitor es mediante "http://{ip|localhost}:5006/index.html".

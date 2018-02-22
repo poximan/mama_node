@@ -1,4 +1,4 @@
-var port = require("../globalCfg.json").monitor.port_web;
+var port = require("../propiedades.json").monitor.port_web;
 var control = require('./ctrlWeb');
 var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 

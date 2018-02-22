@@ -1,4 +1,4 @@
-var port = require("../globalCfg.json").monitor.port_infracciones;
+var port = require("../propiedades.json").monitor.port_infracciones;
 var control = require('./ctrlInfracciones');
 var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
@@ -7,7 +7,7 @@ var io = monitor.io;
 
 require("../autoComun")(control.nucleo, bus);
 
-var probab_infraccion = require("./localCfg.json").automatico.probab_infraccion;
+var probab_infraccion = require("./propiedades.json").automatico.probab_infraccion;
 
 // ---------
 

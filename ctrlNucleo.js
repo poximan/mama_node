@@ -4,9 +4,9 @@ require("./precondicion");
 
 // hay que crear carpeta C:\data\db
 var MongoClient = require("mongodb").MongoClient;
-var mongo_prot = require("./globalCfg.json").mongo.protocolo;
-var mongo_serv = require("./globalCfg.json").mongo.servidor;
-var mongo_bd = require("./globalCfg.json").mongo.bd;
+var mongo_prot = require("./propiedades.json").mongo.protocolo;
+var mongo_serv = require("./propiedades.json").mongo.servidor;
+var mongo_bd = require("./propiedades.json").mongo.bd;
 
 /*
 param 1 = indice del que es responsable en reloj vectorial
@@ -94,7 +94,7 @@ module.exports = function(
   param 6 = estado actual del servidor. son los valores en memoria dinamica
   param 7 = llamada a funcion de persistencia del negocio
   */
-  var mw = require("./mom/mw")(
+  var mw = require("mom-nucleo")(
     mi_reloj,
     cola_escucha,
     bus,

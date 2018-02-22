@@ -1,2 +1,0 @@
-curl -XPOST -d"{"count":1,"requeue":true}" https://guest:guest@localhost/api/queues/vhost/cola_compras/get
-curl -XPOST -d"{"count":1,"requeue":true}" http://guest:guest@localhost:15672/api/queues/vhost/cola_compras/get

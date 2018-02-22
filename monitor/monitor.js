@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = require("../globalCfg.json").monitor.port_monitor;
+var port = require("../propiedades.json").monitor.port_monitor;
 
 var c_compras = require("./conectores/conecCompras").conector;
 var c_envios = require("./conectores/conecEnvios").conector;

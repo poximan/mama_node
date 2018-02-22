@@ -1,0 +1,44 @@
+{
+  "name": "mama_node",
+  "version": "1.0.0",
+  "description": "implemetacion nodejs de una arquitectura mom con broker rabbit y persistencia mongodb para un negocio de venta online ligero",
+  "main": "\\scripts\\levantar_todo.js",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "async": "^2.6.0",
+    "express": "^4.16.2",
+    "mom-nucleo": "^1.0.8",
+    "mom-reloj-vect": "^1.0.8",
+    "mom-corte-consistente": "^1.0.8",
+    "mongodb": "^3.0.1",
+    "ps-node": "^0.1.6",
+    "socket.io": "^2.0.4",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poximan/mama_node.git"
+  },
+  "keywords": [
+    "mom",
+    "rabbit",
+    "middleware-oriented",
+    "message",
+    "async",
+    "mongodb",
+    "e-commerce",
+    "event-driven",
+    "programming",
+    "eventEmitter"
+  ],
+  "author": "hugo donato",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/poximan/mama_node/issues"
+  },
+  "homepage": "https://github.com/poximan/mama_node#readme"
+}

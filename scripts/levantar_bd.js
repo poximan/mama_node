@@ -1,9 +1,9 @@
 var shell_ejec = require('./shell_con_cb')
 var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
-var mongo_prot = require("../globalCfg.json").mongo.protocolo;
-var mongo_serv = require("../globalCfg.json").mongo.servidor;
-var mongo_bd = require("../globalCfg.json").mongo.bd;
+var mongo_prot = require("../propiedades.json").mongo.protocolo;
+var mongo_serv = require("../propiedades.json").mongo.servidor;
+var mongo_bd = require("../propiedades.json").mongo.bd;
 
 var fs = require("fs"),
     path = require("path");
@@ -52,7 +52,7 @@ async.series([
                             callback(null, "Proceso mongod.exe activo")
   },
   function(callback) {
-    sleep(4000, function() {
+    sleep(6000, function() {
       callback(null);
     });
   },

@@ -1,4 +1,4 @@
-var bus = require('../eventBus');
+var bus = require("mom-bus-comunic");
 
 /*
 param 1 = indice del reloj vectorial que debe incrementar este servidor

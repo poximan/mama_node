@@ -1,5 +1,5 @@
-var ip = require("../../globalCfg.json").monitor.ip_envios;
-var port = require("../../globalCfg.json").monitor.port_envios;
+var ip = require("../../propiedades.json").monitor.ip_envios;
+var port = require("../../propiedades.json").monitor.port_envios;
 
 const socket = require('socket.io-client')(ip + ":" + port);
 

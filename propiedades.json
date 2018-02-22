@@ -1,11 +1,4 @@
-{
-  "amqp" : {
-    "proveedor" : "rabbit",
-    "url" : "amqp://localhost",
-    "_coment" : "amqp://cmbsdecq:-tiB--pIwH6F0HO0k6rUEfos_K5U7UpW@crane.rmq.cloudamqp.com/cmbsdecq",
-    "management" : "http://localhost:15672/",
-    "management_cloudamqp" : "https://customer.cloudamqp.com/instance"
-  },
+{  
   "mongo" : {
     "protocolo" : "mongodb://",
     "servidor" : "localhost:27017/",

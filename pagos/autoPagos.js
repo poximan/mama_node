@@ -1,4 +1,4 @@
-var port = require("../globalCfg.json").monitor.port_pagos;
+var port = require("../propiedades.json").monitor.port_pagos;
 var control = require('./ctrlPagos');
 var monitor = require('../monitorServ')(port, control.nucleo, control.bus);
 
@@ -7,7 +7,7 @@ var io = monitor.io;
 
 require("../autoComun")(control.nucleo, bus);
 
-var probab_autorizacion = require("./localCfg.json").automatico.probab_autorizacion;
+var probab_autorizacion = require("./propiedades.json").automatico.probab_autorizacion;
 
 // ---------
 
