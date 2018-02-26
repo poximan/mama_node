@@ -18,13 +18,12 @@ Todos los servidores persisten regularmente su estado. En el caso de que un serv
 * Debe estar instalado MongoDB, SGBD NoSQL orientado a documentos (https://www.mongodb.com/). Este proyecto fue desarrollado con v3.4.
 
 ## Paquetes necesarios
-* Sincronizar "async" (npm install async).
-* Cliente bd "mongodb" (npm install mongodb). Es necesario crear manualmente la carpeta "C:\data\db", en donde mongo aloja por defecto las colecciones.
-* Utileria "underscore" (npm install underscore).
-* Verificador de actividad de procesos "ps-node" (npm install ps-node).
-* Cliente mom "amqp" (npm install amqplib). la implementacion es rabbitmq, que sigue esta especificación.
-* Socket bidireccional "socketio" (npm install socket.io). aplicacion que se monta sobre socket tcp para brindar servicio de eventos (tal como eventemitter pero distribuido).
-* Web framework "express" (npm install express).
+Visto que es un proyecto JavaScript, la gestion de paquetes es mediante NPM (https://www.npmjs.com/).
+Los requerimientos de este proyecto estan descritos en package.json. Una vez descargado ejecutar...
+```
+npm install
+```
+... para conectarse al repositorio, donde los paquetes necesarios se descargaran automaticamente.
 
 ## Ejecutar el sistema
 Clonar el proyecto https://github.com/poximan/mama_node.git o descargarlo desde el repositorio https://github.com/poximan/mama_node.
@@ -36,16 +35,21 @@ Por ejemplo el comando "node crear_cola prueba" creará "cola_prueba".
 * "crear_colas" para crear automaticamente todas las colas que necesita el sistema para funcionar.
 * "levantar_bd {nueva|actual}" para ejecutar el servidor de BD. Argumento "nueva" para una BD en blanco, o "actual" para continuar sobre la existente.
 * "levantar_serv {man|auto}" para ejecutar todos los servidores del negocio y monitor comun. Este ultimo concentra informacion de todos los demas, y funciona de canal de acceso para mantenimiento y consulta de estados.
-* "levantar_todo {nueva|actual} {man|auto}" que combina los dos anteriores, permitiendo un unico paso ejecutar la activacion del SGBD seguido del arranque de todos los servidores.
+* "levantar_todo {nueva|actual} {man|auto}" que combina los dos anteriores, permitiendo en un unico paso ejecutar la activacion del SGBD seguido del arranque de todos los servidores.
 
 Los demas archivos dentro de la carpeta /script son de uso auxiliar, y no deben interactuar directamente con el usuario.
 
 ## Modos de operacion del sistema
-En automático el sistema solo se puede observar, opcionalmente pueden cargarse parámetros iniciales desde propiedadesGlobal.json en el directorio raíz para configuraciones globales, y propiedades.json en la carpeta de cada servidor, para configuraciones que solo tienen sentido en ese ambito.
-En manual el sistema se puede observar y configurar al igual que en automático, y también comandar, tomando decisiones en los puntos de control, y disparando tareas aperiódicas como persistir la base de datos, o generar un corte consistente del sistema. Para esto se utilizó una implementación del algoritmo de instantánea de "chandy y lamport", descrito en "sistemas distribuidos, conceptos y diseño 3ra edicion" de coulouris, pag.385.
+* Automatico: En este modo el sistema solo se puede observar.
+Opcionalmente pueden cargarse parámetros iniciales desde propiedades.json en el directorio raíz para configuraciones globales, y propiedades.json en la carpeta de cada servidor, para configuraciones que solo tienen sentido en ese ambito.
 
+* Manual: El sistema se puede observar, configurar (al igual que en automático) y comandar, tomando decisiones en los puntos de control.
+Ademas pueden dispararse tareas aperiódicas como persistir la base de datos, o generar un corte consistente del sistema. Para esto se utilizó una implementación del algoritmo de instantánea de "chandy y lamport", descrito en "sistemas distribuidos, conceptos y diseño 3ra edicion" de coulouris, pag.385.
+
+## Monitor
 El acceso al monitor es mediante "http://{ip|localhost}:5006/index.html".
-Para saber qué comandos están permitidos en cada servidor, desde el area de texto reservada para comunicarse con este, usar el comando especial "?". Esto devuelve una lista de valores igual a los comandos que acepta. En automático acepta algunos menos que en manual, ya que no es posible comandar, tan solo observar.
+Para saber qué comandos están permitidos en cada servidor, desde el area de texto reservada para comunicarse con este, usar el comando especial "?". Esto devuelve una lista de valores igual a los comandos que acepta.
+En automático acepta algunos menos que en manual, ya que no es posible comandar, tan solo observar.
 
 ### Shell's
 Como se trata de un sistema distribuido, cada servidor es ejecutado desde un shell distinto.
