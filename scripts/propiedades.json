@@ -1,0 +1,9 @@
+{
+  "shell" : {
+    "terminal" : "ventana.lnk",
+    "_coment_win_usar" : "ventana.lnk ó cmd.exe",
+    "_coment_win" : "ventana.lnk es una acceso directo a cmd.exe",
+    "_coment_win" : "no se usa directamente cmd.exe, porque se desea un tamaño de ventana en especial",
+    "_coment_win" : "cosa que es posible creando un acceso directo a cmd.exe"
+  }
+}

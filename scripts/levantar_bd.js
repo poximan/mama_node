@@ -1,5 +1,9 @@
-var shell_ejec = require('./shell_con_cb')
+var shell = require('./shell')
+var terminal = require("./propiedades.json").shell.terminal;
+
 var async = require('async');
+var demora = require("./demora")();
+
 var MongoClient = require('mongodb').MongoClient;
 var mongo_prot = require("../propiedades.json").mongo.protocolo;
 var mongo_serv = require("../propiedades.json").mongo.servidor;
@@ -47,14 +51,11 @@ async.series([
 
     version_mongo = version_mongo[version_mongo.length - 1];
     // servidor base de datos (hay que crear carpeta C:\data\db)
-    shell_ejec.execCommand("start ventana /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
+    shell.execCommand("start " + terminal + " /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
                             version_mongo + " && cd bin && mongod.exe\"", function (returnvalue) {});
+
+                            demora.esperar(3000);
                             callback(null, "Proceso mongod.exe activo")
-  },
-  function(callback) {
-    sleep(6000, function() {
-      callback(null);
-    });
   },
   function(callback){
 
@@ -87,11 +88,3 @@ function(err, results) {
   console.log(results);
   process.exit(0);
 });
-
-function sleep(time, callback) {
-  var stop = new Date().getTime();
-  while(new Date().getTime() < stop + time) {
-      ;
-  }
-  callback();
-}

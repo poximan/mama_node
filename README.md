@@ -1,7 +1,6 @@
 # mama_node
 Implementación nodejs/rabbitmq de una infraestructura mom
 
-
 ## Resumen del ejercicio implementado
 El proceso inicia cuando el cliente indica que desea comprar un producto. Inmediatamente el departamento de Infracciones comienza una revisión del chat entre el vendedor y el comprador en búsqueda de violaciones al reglamento del sitio. El departamento de Publicaciones, a su vez, reserva el producto para asegurar el cumplimiento de las condiciones de venta en caso de que la compra sea exitosa. Luego el comprador elige la forma de entrega y de pago. En caso de que el comprador decida que el producto se le envíe por correo, el departamento de Envíos calcula el costo del envío antes de que el comprador elija la forma de pago. Consecuentemente se le informa al comprador un resumen de las condiciones de compra, y se le solicita confirmar la misma. Si la confirma, y no hay infracción, el departamento de Pagos procede a efectivizar el pago (utilizando los servicios provistos por los medios de pagos contratados). Una vez que el pago es confirmado, el departamento de Envíos agenda el envío con la empresa de correo elegida.
 
@@ -24,6 +23,16 @@ Los requerimientos de este proyecto estan descritos en package.json. Una vez des
 npm install
 ```
 ... para conectarse al repositorio, donde los paquetes necesarios se descargaran automaticamente.
+
+## Configuracion inicial
+En /propiedades.json debe especificarse:
+* La url de conexion a SGBD.
+* Los sockets donde escucharan los servidores las conexion entrantes del monitor centralizado.
+* Algunos comportamientos propios del negocio, como cada cuanto se debe persistir el estado actual.
+
+En /scripts/propiedades.json debe especificarse:
+* El acceso al shell en el sistema operativo donde sea probado. Se ofrece precargado "ventana.lnk" que es un acceso directo a cmd.exe. No se usa directamente cmd.exe porque se desea un tamaño de ventana en especial. Esto no obedece a ninguna restriccion tecnica o de comportamiento, lo unico que se pretende es que el tamaño por defecto de la ventana sea lo suficientemente pequeña para no estorbar la vista de las demas ventanas. Tener en cuenta que el sistema totalmente desplegado en un unico equipo abre 10 ventanas (6 de servidores, 1 de monitor, 1 de BD y 2 adicionales en caso de usar "levantar_todo {}.js"), lo que ocupa gran cantidad de espacio de pantalla.
+En caso de probar en Linux/Mac, cargar en shell.terminal el path del terminal de esa plataforma.
 
 ## Ejecutar el sistema
 Clonar el proyecto https://github.com/poximan/mama_node.git o descargarlo desde el repositorio https://github.com/poximan/mama_node.

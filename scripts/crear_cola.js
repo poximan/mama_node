@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var amqp = require('amqplib/callback_api');
-var amqp_url = require("../propiedades.json").amqp.url;
+var amqp_url = require("mom-nucleo/propiedades.json").amqp.url;
 
 // ---------
 

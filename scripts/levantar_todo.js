@@ -1,4 +1,5 @@
-var shell_ejec = require('./shell_con_cb')
+var shell = require('./shell')
+var terminal = require("./propiedades.json").shell.terminal;
 var async = require('async');
 var demora = require("./demora")();
 
@@ -16,16 +17,18 @@ var argumentos = process.argv.slice(2);
 async.series([
   function(callback) {
 
-    shell_ejec.execCommand("start ventana /K \"node levantar_bd.js\" " +
+    shell.execCommand("start " + terminal + " /K \"node levantar_bd.js\" " +
       argumentos[0], function (returnvalue) {
-        demora.esperar(6000);
-        callback(null, "Activando SGBD");
       });
+
+    demora.esperar(5000);
+    callback(null, "Activando SGBD");
   },
   function(callback) {
 
-    shell_ejec.execCommand("start ventana /K \"node levantar_serv.js \"" +
+    shell.execCommand("start " + terminal + " /K \"node levantar_serv.js \"" +
       argumentos[1], function (returnvalue) {
+
         callback(null, "Activando Servidores");
       });
   }
