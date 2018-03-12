@@ -1,5 +1,6 @@
 var shell = require('./shell')
 var terminal = require("./propiedades.json").shell.terminal;
+var path_mongo = require("./propiedades.json").server_mongo.path;
 
 var async = require('async');
 var demora = require("./demora")();
@@ -31,14 +32,12 @@ var version_mongo = [];
 async.series([
   function(callback){
 
-    var p = "c:/Program Files/MongoDB/Server/";
-
-    fs.readdir(p, function (err, files) {
+    fs.readdir(path_mongo, function (err, files) {
       if (err) {
           throw err;
       }
       files.map(function (file) {
-          return path.join(p, file);
+          return path.join(path_mongo, file);
       }).filter(function (file) {
           return fs.statSync(file).isDirectory();
       }).forEach(function (file) {
@@ -51,7 +50,8 @@ async.series([
 
     version_mongo = version_mongo[version_mongo.length - 1];
     // servidor base de datos (hay que crear carpeta C:\data\db)
-    shell.execCommand("start " + terminal + " /K \"c:\ && cd Program Files && cd MongoDB && cd Server && cd " +
+    
+    shell.execCommand("start " + terminal + " /K \"c: && cd \"" +  path_mongo + "\" && cd " +
                             version_mongo + " && cd bin && mongod.exe\"", function (returnvalue) {});
 
                             demora.esperar(3000);

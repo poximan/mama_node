@@ -5,5 +5,9 @@
     "_coment_win" : "ventana.lnk es una acceso directo a cmd.exe",
     "_coment_win" : "no se usa directamente cmd.exe, porque se desea un tamaño de ventana en especial",
     "_coment_win" : "cosa que es posible creando un acceso directo a cmd.exe"
+  },
+  "server_mongo" : {
+    "path" : "c:/Program Files/MongoDB/Server/",
+    "_coment" : "agregar el path para encontrar la carpeta server de mongo"
   }
 }

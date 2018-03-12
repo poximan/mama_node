@@ -33,6 +33,8 @@ En /propiedades.json debe especificarse:
 En /scripts/propiedades.json debe especificarse:
 * El acceso al shell en el sistema operativo donde sea probado. Se ofrece precargado "ventana.lnk" que es un acceso directo a cmd.exe. No se usa directamente cmd.exe porque se desea un tamaño de ventana en especial. Esto no obedece a ninguna restriccion tecnica o de comportamiento, lo unico que se pretende es que el tamaño por defecto de la ventana sea lo suficientemente pequeña para no estorbar la vista de las demas ventanas. Tener en cuenta que el sistema totalmente desplegado en un unico equipo abre 10 ventanas (6 de servidores, 1 de monitor, 1 de BD y 2 adicionales en caso de usar "levantar_todo {}.js"), lo que ocupa gran cantidad de espacio de pantalla.
 En caso de probar en Linux/Mac, cargar en shell.terminal el path del terminal de esa plataforma.
+* El path de acceso hasta la carpeta "Server" de mongodb.
+Por ejemplo para windows seria "c:/Program Files/MongoDB/Server/"
 
 ## Ejecutar el sistema
 Clonar el proyecto https://github.com/poximan/mama_node.git o descargarlo desde el repositorio https://github.com/poximan/mama_node.
