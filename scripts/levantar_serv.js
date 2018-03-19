@@ -55,7 +55,7 @@ async.series([
                             callback(null, "servidor web activo");
   },
   function(callback) {
-    demora.esperar(3000);
+    demora.esperar(2000);
 
     shell.execCommand("start " + terminal + " /K \"cd.. && cd monitor && node monitor.js\"", function (returnvalue) {
     });
